@@ -69,11 +69,27 @@ export const AuthProvider = ({ children }) => {
         toast.success(`Welcome back, ${userProfile.username}! 👋`);
         return { success: true };
       }
-    } catch (err) {
-      const errMsg = err.response?.data?.detail || "Invalid credentials. Please try again.";
-      toast.error(errMsg);
-      return { success: false, error: errMsg };
-    }
+} catch (err) {
+  console.log("========== REGISTER ERROR ==========");
+  console.log("Status:", err.response?.status);
+  console.log("URL:", err.config?.url);
+  console.log("Payload:", err.config?.data);
+  console.log("Response:", err.response?.data);
+  console.log("====================================");
+
+  let errMsg = "Registration failed. Try again.";
+
+  if (Array.isArray(err.response?.data?.detail)) {
+    errMsg = err.response.data.detail.map(e => e.msg).join(", ");
+  } else if (typeof err.response?.data?.detail === "string") {
+    errMsg = err.response.data.detail;
+  } else if (err.response?.data?.error) {
+    errMsg = err.response.data.error;
+  }
+
+  toast.error(errMsg);
+  return { success: false, error: errMsg };
+}
   };
 
   const register = async (usernameOrDetails, email, password) => {
