@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+motor
+pymongo
+python-dotenv
+groq
+python-multipart
+aiofiles
+pydantic
+httpx
+PyJWT==2.8.0
+bcrypt==4.1.2
+email-validator==2.1.1
