@@ -92,8 +92,7 @@ function Home() {
           transition={{ duration: 0.7, delay: 0.15 }}
           className="landing-title"
         >
-          The Premium AI Assistant <br />
-          For Next-Gen Teams
+          SARVA AI — Enterprise Conversational AI Platform
         </motion.h1>
 
         <motion.p
