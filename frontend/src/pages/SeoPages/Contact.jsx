@@ -105,7 +105,7 @@ const Contact = () => {
                 Check out the SARVA AI open-source code, submit issues, or create pull requests.
               </p>
               <a
-                href="https://github.com/karangarg-9/SARVA_AI"
+                href="https://github.com/Drakowarrior/sarva-ai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="seo-social-link"

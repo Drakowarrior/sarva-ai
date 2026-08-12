@@ -595,7 +595,7 @@ App.jsx
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/sarva-ai.git
+git clone https://github.com/Drakowarrior/sarva-ai.git
 cd sarva-ai
 ```
 

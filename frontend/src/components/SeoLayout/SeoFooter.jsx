@@ -18,7 +18,7 @@ const SeoFooter = () => {
           </p>
           <div className="seo-footer-socials">
             <a
-              href="https://github.com/karangarg-9/SARVA_AI"
+              href="https://github.com/Drakowarrior/sarva-ai"
               target="_blank"
               rel="noopener noreferrer"
               className="seo-social-link"
