@@ -2,15 +2,20 @@
   <h1 align="center">🚀 SARVA AI</h1>
   <p align="center"><strong>Enterprise AI Chat & Organization Workspace Platform</strong></p>
   <p align="center">
-    <em>Secure • Premium • Scalable • Production-Ready</em>
+    <a href="https://sarva-ai-one.vercel.app/"><strong>🌐 Live Demo: https://sarva-ai-one.vercel.app/</strong></a>
+  </p>
+  <p align="center">
+    <em>Secure • Premium • Scalable • Production-Ready Conversational AI</em>
   </p>
 </p>
 
 ---
 
 > **Made by Karan Garg during internship at IGT Solutions — 2026**
-
-SARVA AI is a production-grade, enterprise AI chatbot and organization workspace management platform. It combines a premium, visually polished React frontend with a high-performance FastAPI backend and MongoDB Atlas persistence layer — delivering secure authentication, role-based access control (RBAC), real-time AI streaming, document analysis, and a complete organization approval workflow.
+>
+> 🔗 **Live Web Application:** [https://sarva-ai-one.vercel.app/](https://sarva-ai-one.vercel.app/)  
+> 🔗 **Technical Case Study:** [https://sarva-ai-one.vercel.app/case-study](https://sarva-ai-one.vercel.app/case-study)  
+> 🔗 **Architecture & Tech Stack:** [https://sarva-ai-one.vercel.app/technology](https://sarva-ai-one.vercel.app/technology)
 
 ---
 

@@ -5,6 +5,16 @@ import Auth from "./pages/Auth/Auth";
 import OrgDashboard from "./pages/OrgDashboard/OrgDashboard";
 import PendingApproval from "./pages/PendingApproval/PendingApproval";
 import NotFound from "./pages/NotFound/NotFound";
+import About from "./pages/SeoPages/About";
+import Features from "./pages/SeoPages/Features";
+import AiChatbot from "./pages/SeoPages/AiChatbot";
+import EnterpriseAi from "./pages/SeoPages/EnterpriseAi";
+import FileAnalysis from "./pages/SeoPages/FileAnalysis";
+import Security from "./pages/SeoPages/Security";
+import Technology from "./pages/SeoPages/Technology";
+import Contact from "./pages/SeoPages/Contact";
+import CaseStudy from "./pages/SeoPages/CaseStudy";
+
 import { useAuth } from "./context/AuthContext";
 import Loader from "./components/Loader/Loader";
 import FeedbackModal from "./components/FeedbackModal/FeedbackModal";
@@ -57,6 +67,42 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "features",
+        element: <Features />,
+      },
+      {
+        path: "ai-chatbot",
+        element: <AiChatbot />,
+      },
+      {
+        path: "enterprise-ai",
+        element: <EnterpriseAi />,
+      },
+      {
+        path: "file-analysis",
+        element: <FileAnalysis />,
+      },
+      {
+        path: "security",
+        element: <Security />,
+      },
+      {
+        path: "technology",
+        element: <Technology />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
+      },
+      {
+        path: "case-study",
+        element: <CaseStudy />,
       },
       {
         path: "auth",

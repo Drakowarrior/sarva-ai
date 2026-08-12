@@ -9,6 +9,7 @@ import api from "../services/api";
 import { useSession } from "./SessionContext";
 import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
+import { trackMessageSent, trackFileUploaded, trackChatStarted } from "../utils/analytics";
 
 const ChatContext = createContext();
 
@@ -76,6 +77,11 @@ export const ChatProvider = ({ children }) => {
     setMessages((prev) => [...prev, userMessage]);
     setAttachedFiles([]); // Reset uploads queue
     setLoading(true);
+
+    trackMessageSent(text.length, filesToSend.length > 0);
+    if (filesToSend.length > 0) {
+      filesToSend.forEach((f) => trackFileUploaded(f.filename || f.name || "file", f.type || f.file_type || "document"));
+    }
 
     let processedText = text;
     if (selectedLanguage !== "English") {

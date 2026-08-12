@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "../../context/SessionContext";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import { trackFeedbackPositive, trackFeedbackNegative } from "../../utils/analytics";
 import "./FeedbackModal.css";
 
 function FeedbackModal() {
@@ -140,6 +141,12 @@ function FeedbackModal() {
         sessionId: currentSession,
         userId: userId
       });
+
+      if (rating >= 4 || (!rating && message)) {
+        trackFeedbackPositive(rating, message);
+      } else {
+        trackFeedbackNegative(rating, message);
+      }
 
       setIsSuccess(true);
 

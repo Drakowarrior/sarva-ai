@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import toast from "react-hot-toast";
+import { trackLogin, trackSignUp, trackLogout } from "../utils/analytics";
 
 const AuthContext = createContext();
 
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
         setToken(userToken);
         setUser(userProfile);
         setIsAuthenticated(true);
+        trackLogin("email");
         toast.success(`Welcome back, ${userProfile.username}! 👋`);
         return { success: true };
       }
@@ -117,6 +119,7 @@ export const AuthProvider = ({ children }) => {
         setToken(userToken);
         setUser(userProfile);
         setIsAuthenticated(true);
+        trackSignUp("email");
         
         const welcomeName = userProfile.fullName || userProfile.username;
         toast.success(`Account created! Welcome, ${welcomeName}! 🚀`);
@@ -132,6 +135,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     handleLogoutDirect();
+    trackLogout();
     toast.success("Signed out successfully.");
   };
 

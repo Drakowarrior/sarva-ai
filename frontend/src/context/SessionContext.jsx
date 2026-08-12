@@ -14,6 +14,7 @@ import { getMessages } from "../services/chatService";
 import api from "../services/api";
 import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
+import { trackSessionCreated, trackChatStarted } from "../utils/analytics";
 
 const generateSessionId = () => {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -70,6 +71,9 @@ export const SessionProvider = ({ children }) => {
     try {
       const data = await getMessages(sessionId);
       setMessages(data || []);
+      if (data && data.length > 0) {
+        trackChatStarted(sessionId);
+      }
     } catch (error) {
       console.error("Failed to load messages:", error);
       setMessages([]);
@@ -163,6 +167,7 @@ export const SessionProvider = ({ children }) => {
           setCurrentSession(data.session_id);
           localStorage.setItem("currentSessionId", data.session_id);
           await loadMessages(data.session_id);
+          trackSessionCreated(data.session_id, title);
           resolve(data);
         } catch (error) {
           console.error("Failed to create new session:", error);
