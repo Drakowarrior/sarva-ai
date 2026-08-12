@@ -8,7 +8,15 @@ const Features = () => {
   useSeo({
     title: "SARVA AI Features – Conversational AI, PDF Analysis & Memory",
     description: "Discover SARVA AI features: dynamic LLM model switching, document PDF parsing, MongoDB session memory, enterprise auth, dark/light themes, and user feedback.",
-    canonicalPath: "/features"
+    canonicalPath: "/features",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Features", "item": "https://sarva-ai-one.vercel.app/features" }
+      ]
+    }
   });
 
   return (

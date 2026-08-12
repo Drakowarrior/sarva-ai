@@ -8,7 +8,15 @@ const EnterpriseAi = () => {
   useSeo({
     title: "Enterprise AI Assistant & Conversational Platform | SARVA AI",
     description: "SARVA AI delivers enterprise conversational AI with JWT authentication, session management, file processing, FastAPI microservices, and cloud infrastructure.",
-    canonicalPath: "/enterprise-ai"
+    canonicalPath: "/enterprise-ai",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Enterprise AI", "item": "https://sarva-ai-one.vercel.app/enterprise-ai" }
+      ]
+    }
   });
 
   return (

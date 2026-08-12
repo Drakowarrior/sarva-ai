@@ -8,7 +8,25 @@ const Technology = () => {
   useSeo({
     title: "SARVA AI Technology Stack | React, FastAPI & MongoDB",
     description: "Explore the SARVA AI tech stack architecture: React frontend, FastAPI async backend, MongoDB Atlas database, and Groq high-speed LLM inference engine.",
-    canonicalPath: "/technology"
+    canonicalPath: "/technology",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Technology Stack", "item": "https://sarva-ai-one.vercel.app/technology" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "SARVA AI Technology Stack",
+          "description": "Full-stack architecture overview featuring React 19, FastAPI, MongoDB Atlas, and Groq Cloud LPUs.",
+          "author": { "@type": "Person", "name": "Karan Garg" }
+        }
+      ]
+    }
   });
 
   return (

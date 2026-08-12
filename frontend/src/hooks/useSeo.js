@@ -1,36 +1,57 @@
 import { useEffect } from "react";
 
 /**
- * Hook to set page title, meta description, and canonical link dynamically for SEO
+ * Enhanced Hook to set page title, meta description, canonical link, OpenGraph tags,
+ * Twitter card tags, and JSON-LD structured data dynamically for SEO optimization.
  */
-export const useSeo = ({ title, description, canonicalPath = "" }) => {
+export const useSeo = ({ 
+  title, 
+  description, 
+  canonicalPath = "", 
+  jsonLd = null,
+  type = "website"
+}) => {
   useEffect(() => {
-    // 1. Set document title
+    const baseUrl = "https://sarva-ai-one.vercel.app";
+    const currentPath = canonicalPath || window.location.pathname;
+    const targetUrl = `${baseUrl}${currentPath === "/" ? "" : currentPath}`;
+
+    // 1. Set Document Title
     if (title) {
       document.title = title;
     }
 
-    // 2. Set meta description
-    if (description) {
-      let metaDesc = document.querySelector('meta[name="description"]');
-      if (!metaDesc) {
-        metaDesc = document.createElement("meta");
-        metaDesc.name = "description";
-        document.head.appendChild(metaDesc);
+    // Helper function to set or create meta tag
+    const setMetaTag = (selector, attributeName, attributeValue, contentValue) => {
+      let element = document.querySelector(selector);
+      if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute(attributeName, attributeValue);
+        document.head.appendChild(element);
       }
-      metaDesc.content = description;
+      element.setAttribute("content", contentValue);
+    };
 
-      // Update OG description as well
-      let ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogDesc) {
-        ogDesc.content = description;
-      }
+    // 2. Meta Description
+    if (description) {
+      setMetaTag('meta[name="description"]', 'name', 'description', description);
+      setMetaTag('meta[property="og:description"]', 'property', 'og:description', description);
+      setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', description);
     }
 
-    // 3. Set canonical URL
-    const baseUrl = "https://sarva-ai-one.vercel.app";
-    const targetUrl = canonicalPath ? `${baseUrl}${canonicalPath}` : window.location.href;
-    
+    // 3. OpenGraph Title & Twitter Title
+    if (title) {
+      setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
+      setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
+    }
+
+    // 4. OpenGraph URL & Type
+    setMetaTag('meta[property="og:url"]', 'property', 'og:url', targetUrl);
+    setMetaTag('meta[property="og:type"]', 'property', 'og:type', type);
+    setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+    setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', `${baseUrl}/logo.jpg`);
+
+    // 5. Set Canonical Link
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement("link");
@@ -38,7 +59,31 @@ export const useSeo = ({ title, description, canonicalPath = "" }) => {
       document.head.appendChild(canonical);
     }
     canonical.href = targetUrl;
-  }, [title, description, canonicalPath]);
+
+    // 6. JSON-LD Structured Data Injection
+    const scriptId = "seo-json-ld-script";
+    let existingScript = document.getElementById(scriptId);
+
+    if (jsonLd) {
+      if (!existingScript) {
+        existingScript = document.createElement("script");
+        existingScript.id = scriptId;
+        existingScript.type = "application/ld+json";
+        document.head.appendChild(existingScript);
+      }
+      existingScript.text = JSON.stringify(jsonLd);
+    } else if (existingScript) {
+      existingScript.remove();
+    }
+
+    return () => {
+      // Clean up script on unmount if needed
+      const scriptToRemove = document.getElementById(scriptId);
+      if (scriptToRemove) {
+        scriptToRemove.remove();
+      }
+    };
+  }, [title, description, canonicalPath, jsonLd, type]);
 };
 
 export default useSeo;

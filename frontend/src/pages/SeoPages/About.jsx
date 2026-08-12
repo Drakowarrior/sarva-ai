@@ -8,7 +8,15 @@ const About = () => {
   useSeo({
     title: "About SARVA AI – Enterprise Conversational AI Platform",
     description: "Learn about SARVA AI, our mission to build high-performance conversational AI, platform capabilities, and full-stack software architecture.",
-    canonicalPath: "/about"
+    canonicalPath: "/about",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://sarva-ai-one.vercel.app/about" }
+      ]
+    }
   });
 
   return (

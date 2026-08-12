@@ -8,7 +8,15 @@ const AiChatbot = () => {
   useSeo({
     title: "AI Chatbot – Intelligent Conversations | SARVA AI",
     description: "SARVA AI Chatbot provides natural context-aware conversations, dynamic model selection, persistent session history, file interactions, and enterprise privacy.",
-    canonicalPath: "/ai-chatbot"
+    canonicalPath: "/ai-chatbot",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "AI Chatbot", "item": "https://sarva-ai-one.vercel.app/ai-chatbot" }
+      ]
+    }
   });
 
   return (

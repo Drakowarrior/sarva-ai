@@ -8,7 +8,15 @@ const FileAnalysis = () => {
   useSeo({
     title: "AI File & Document Analysis | SARVA AI",
     description: "Upload PDFs, Word documents, text files, and images to SARVA AI for instant text extraction, summary generation, and contextual query answering.",
-    canonicalPath: "/file-analysis"
+    canonicalPath: "/file-analysis",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "File Analysis", "item": "https://sarva-ai-one.vercel.app/file-analysis" }
+      ]
+    }
   });
 
   return (

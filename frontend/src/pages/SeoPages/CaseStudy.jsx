@@ -8,7 +8,25 @@ const CaseStudy = () => {
   useSeo({
     title: "SARVA AI Case Study – Building a Full-Stack Conversational AI Platform",
     description: "In-depth engineering case study on SARVA AI: Problem, Solution, Architecture, React frontend, FastAPI backend, MongoDB Atlas, JWT Auth, Groq LLMs, Challenges, Results, and Future Roadmap.",
-    canonicalPath: "/case-study"
+    canonicalPath: "/case-study",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Case Study", "item": "https://sarva-ai-one.vercel.app/case-study" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "SARVA AI Case Study – Building a Full-Stack Conversational AI Platform",
+          "description": "Comprehensive 12-section technical case study detailing the engineering of SARVA AI.",
+          "author": { "@type": "Person", "name": "Karan Garg" }
+        }
+      ]
+    }
   });
 
   return (

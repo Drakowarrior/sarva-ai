@@ -8,7 +8,15 @@ const Security = () => {
   useSeo({
     title: "Enterprise Security & Privacy Architecture | SARVA AI",
     description: "Learn how SARVA AI protects user data through JWT authentication, bcrypt password encryption, MongoDB session isolation, and HTTPS transport security.",
-    canonicalPath: "/security"
+    canonicalPath: "/security",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://sarva-ai-one.vercel.app/security" }
+      ]
+    }
   });
 
   return (

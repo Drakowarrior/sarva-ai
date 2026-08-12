@@ -12,7 +12,35 @@ function Home() {
   useSeo({
     title: "SARVA AI – Enterprise Conversational AI Platform",
     description: "SARVA AI is an intelligent conversational AI platform for natural conversations, AI assistance, file analysis, and productive workflows.",
-    canonicalPath: "/"
+    canonicalPath: "/",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://sarva-ai-one.vercel.app/#website",
+          "url": "https://sarva-ai-one.vercel.app/",
+          "name": "SARVA AI",
+          "description": "Enterprise Conversational AI Platform",
+          "author": {
+            "@type": "Person",
+            "name": "Karan Garg"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://sarva-ai-one.vercel.app/#software",
+          "name": "SARVA AI Platform",
+          "operatingSystem": "Web",
+          "applicationCategory": "BusinessApplication",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }
+      ]
+    }
   });
 
   return (

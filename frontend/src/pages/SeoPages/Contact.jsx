@@ -10,7 +10,24 @@ const Contact = () => {
   useSeo({
     title: "Contact SARVA AI Team & Developer Inquiries",
     description: "Get in touch with the SARVA AI team, submit developer inquiries, request platform features, or explore open source contributions.",
-    canonicalPath: "/contact"
+    canonicalPath: "/contact",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://sarva-ai-one.vercel.app/contact" }
+          ]
+        },
+        {
+          "@type": "ContactPage",
+          "name": "Contact SARVA AI",
+          "url": "https://sarva-ai-one.vercel.app/contact"
+        }
+      ]
+    }
   });
 
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
