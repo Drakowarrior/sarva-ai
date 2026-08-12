@@ -15,6 +15,13 @@ import Technology from "./pages/SeoPages/Technology";
 import Contact from "./pages/SeoPages/Contact";
 import CaseStudy from "./pages/SeoPages/CaseStudy";
 
+import BlogHub from "./pages/Blog/BlogHub";
+import ArticleFastApiGroq from "./pages/Blog/ArticleFastApiGroq";
+import ArticleDocumentAnalysis from "./pages/Blog/ArticleDocumentAnalysis";
+import ArticleMongodbMemory from "./pages/Blog/ArticleMongodbMemory";
+import ArticleJwtSecurity from "./pages/Blog/ArticleJwtSecurity";
+import ArticleArchitectureDeployment from "./pages/Blog/ArticleArchitectureDeployment";
+
 import { useAuth } from "./context/AuthContext";
 import Loader from "./components/Loader/Loader";
 import FeedbackModal from "./components/FeedbackModal/FeedbackModal";
@@ -103,6 +110,30 @@ const router = createBrowserRouter([
       {
         path: "case-study",
         element: <CaseStudy />,
+      },
+      {
+        path: "blog",
+        element: <BlogHub />,
+      },
+      {
+        path: "blog/fastapi-groq-ai-chatbot",
+        element: <ArticleFastApiGroq />,
+      },
+      {
+        path: "blog/ai-document-analysis",
+        element: <ArticleDocumentAnalysis />,
+      },
+      {
+        path: "blog/mongodb-chat-memory",
+        element: <ArticleMongodbMemory />,
+      },
+      {
+        path: "blog/jwt-ai-chatbot-security",
+        element: <ArticleJwtSecurity />,
+      },
+      {
+        path: "blog/full-stack-ai-architecture",
+        element: <ArticleArchitectureDeployment />,
       },
       {
         path: "auth",

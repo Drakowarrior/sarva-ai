@@ -123,6 +123,13 @@ const SeoHeader = () => {
             {resourcesOpen && (
               <div className="seo-dropdown-menu">
                 <div className="seo-dropdown-header">Technical Documentation</div>
+                <Link to="/blog" className="seo-dropdown-item">
+                  <div className="seo-dropdown-icon" style={{ color: "#ec4899" }}><FiBookOpen /></div>
+                  <div>
+                    <div className="seo-dropdown-title">Engineering Blog</div>
+                    <div className="seo-dropdown-sub">Technical guides & tutorials</div>
+                  </div>
+                </Link>
                 <Link to="/technology" className="seo-dropdown-item">
                   <div className="seo-dropdown-icon" style={{ color: "#38bdf8" }}><FiLayers /></div>
                   <div>

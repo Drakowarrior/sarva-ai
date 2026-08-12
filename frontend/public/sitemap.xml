@@ -50,4 +50,34 @@
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog/fastapi-groq-ai-chatbot</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog/ai-document-analysis</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog/mongodb-chat-memory</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog/jwt-ai-chatbot-security</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://sarva-ai-one.vercel.app/blog/full-stack-ai-architecture</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
