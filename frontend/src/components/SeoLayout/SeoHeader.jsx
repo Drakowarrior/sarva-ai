@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FiMoon, FiSun, FiArrowRight, FiMenu, FiX, FiChevronDown, FiCpu, FiMessageSquare, FiFileText, FiShield, FiCode, FiLayers, FiInfo, FiMail, FiZap } from "react-icons/fi";
+import { FiMoon, FiSun, FiArrowRight, FiMenu, FiX, FiChevronDown, FiCpu, FiMessageSquare, FiFileText, FiShield, FiCode, FiLayers, FiInfo, FiMail, FiZap, FiBookOpen } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { useState, useRef, useEffect } from "react";

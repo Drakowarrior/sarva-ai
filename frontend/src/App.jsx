@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet, useRouteError, Link } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Chat from "./pages/Chat/Chat";
 import Auth from "./pages/Auth/Auth";
@@ -45,6 +45,43 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+const RootErrorBoundary = () => {
+  const error = useRouteError();
+  console.error("Router Boundary Caught Error:", error);
+
+  return (
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "var(--bg-primary, #090d16)",
+      color: "var(--text-primary, #f8fafc)",
+      padding: "24px",
+      textAlign: "center"
+    }}>
+      <h1 style={{ fontSize: "2.5rem", marginBottom: "16px" }}>Something went wrong</h1>
+      <p style={{ color: "var(--text-secondary, #94a3b8)", maxWidth: "500px", marginBottom: "24px" }}>
+        {error?.message || "An unexpected error occurred while loading this page."}
+      </p>
+      <Link
+        to="/"
+        style={{
+          padding: "10px 24px",
+          borderRadius: "9999px",
+          background: "linear-gradient(135deg, #0ea5e9, #8b5cf6)",
+          color: "#ffffff",
+          textDecoration: "none",
+          fontWeight: "600"
+        }}
+      >
+        Return to Home
+      </Link>
+    </div>
+  );
+};
+
 const RootLayout = () => {
   return (
     <>
@@ -70,6 +107,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <RootErrorBoundary />,
     children: [
       {
         path: "",
