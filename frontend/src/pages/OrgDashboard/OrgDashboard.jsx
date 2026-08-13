@@ -106,7 +106,12 @@ function OrgDashboard() {
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [transferTargetId, setTransferTargetId] = useState("");
+  // Shared Chats 2.0 States
+  const [chatSearchInput, setChatSearchInput] = useState("");
+  const [chatFilterCategory, setChatFilterCategory] = useState("all");
+  const [chatSortBy, setChatSortBy] = useState("newest");
+  const [chatViewMode, setChatViewMode] = useState(() => localStorage.getItem("sarva_shared_chats_view") || "grid");
+  const [activeContextMenuChatId, setActiveContextMenuChatId] = useState(null);
 
   // Edit Organization settings
   const [orgName, setOrgName] = useState("");
@@ -202,7 +207,12 @@ function OrgDashboard() {
 
       const chatsRes = await orgService.getSharedChats();
       if (chatsRes.success) {
-        setSharedChats(chatsRes.chats || []);
+        const rawChats = chatsRes.chats || [];
+        const uniqueChats = rawChats.filter(
+          (chat, index, self) =>
+            index === self.findIndex((c) => (c.sessionId || c._id || c.id) === (chat.sessionId || chat._id || chat.id))
+        );
+        setSharedChats(uniqueChats);
       }
     } catch (err) {
       console.error("Dashboard Load Error:", err);
@@ -2279,70 +2289,471 @@ function OrgDashboard() {
               </motion.div>
             )}
 
-            {/* Shared Chats Tab */}
+            {/* Shared Chats 2.0 Tab */}
             {activeTab === "chats" && (
               <motion.div 
                 initial={{ opacity: 0, y: 15 }} 
                 animate={{ opacity: 1, y: 0 }}
-                className="shared-chats-tab"
+                className="shared-chats-tab-v2"
+                style={{ display: "flex", flexDirection: "column", gap: "28px", maxWidth: "1440px", margin: "0 auto", width: "100%" }}
               >
-                <div className="tab-header">
-                  <h2>Organization Shared Chats</h2>
-                  <p>View and manage conversations shared within the workspace</p>
+                {/* Header & Hero */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.78rem", color: "var(--text-tertiary)" }}>
+                    <span>Workspace</span>
+                    <FiChevronRight style={{ fontSize: "0.75rem" }} />
+                    <span style={{ color: "var(--text-primary)", fontWeight: "600" }}>Shared Chats</span>
+                  </div>
+                  
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px", marginTop: "4px" }}>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                        <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "750", letterSpacing: "-0.02em" }}>Shared Chats</h1>
+                        <span style={{ fontSize: "0.75rem", fontWeight: "600", padding: "3px 10px", borderRadius: "12px", background: "rgba(56, 189, 248, 0.1)", color: "var(--accent)", border: "1px solid rgba(56, 189, 248, 0.2)" }}>
+                          ● {orgData?.organizationName || "IGT Solutions"} Workspace
+                        </span>
+                      </div>
+                      <p style={{ margin: "4px 0 0 0", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+                        Collaborate on AI conversations shared across your organization.
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => navigate("/chat")}
+                      style={{
+                        background: "linear-gradient(135deg, #38bdf8 0%, #8b5cf6 55%, #ec4899 100%)",
+                        color: "#ffffff",
+                        border: "none",
+                        borderRadius: "12px",
+                        padding: "10px 20px",
+                        fontWeight: "700",
+                        fontSize: "0.85rem",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        boxShadow: "var(--shadow-md)"
+                      }}
+                    >
+                      <FiPlus /> + Share a Chat
+                    </button>
+                  </div>
                 </div>
 
-                <div className="chats-grid">
-                  {sharedChats.length === 0 ? (
-                    <div className="empty-state glass" style={{ gridColumn: "1/-1", padding: "40px" }}>
-                      <FiShare2 style={{ fontSize: "3rem", opacity: 0.2 }} />
-                      <p>No conversations have been shared in the organization yet.</p>
-                    </div>
-                  ) : (
-                    sharedChats.map((chat) => (
-                      <div key={chat.sessionId} className="shared-chat-card glass hover-lift">
-                        <div className="card-header">
-                          <h4>{chat.title}</h4>
-                          <div className="card-controls">
-                            <button 
-                              className="chat-action-btn"
-                              onClick={async () => {
-                                try {
-                                  const res = await api.post(`/session/${chat.sessionId}/duplicate`);
-                                  if (res.data.success) {
-                                    toast.success("Chat copied to your personal workspace!");
-                                  }
-                                } catch (e) {
-                                  toast.success("Chat copied successfully!");
-                                }
-                              }}
-                              title="Copy Chat to Personal"
-                            >
-                              <FiCopy />
-                            </button>
-                            {user && (user.role === "Head" || user.role === "HR" || chat.ownerUserId === user.user_id) && (
-                              <button 
-                                className="chat-action-btn danger"
-                                onClick={() => handleDeleteSharedChat(chat.sessionId)}
-                                title="Delete Shared Chat"
-                              >
-                                <FiTrash2 />
-                              </button>
-                            )}
-                          </div>
+                {/* Analytics Statistics Strip */}
+                {(() => {
+                  const now = new Date();
+                  const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
+                  const activeThisMonth = sharedChats.filter(c => c.updatedAt && new Date(c.updatedAt) >= thirtyDaysAgo).length || sharedChats.length;
+                  const uniqueContributors = new Set(sharedChats.map(c => c.sharedBy || c.ownerUserName || "Team")).size;
+                  const uniqueDepts = new Set(sharedChats.map(c => c.department || "General")).size;
+
+                  return (
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+                      <div className="glass hover-lift" style={{ padding: "18px 20px", borderRadius: "16px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>Shared Conversations</span>
+                          <FiMessageSquare style={{ color: "var(--accent)" }} />
                         </div>
-                        <div className="card-body">
-                          <p className="last-message-preview">"{chat.lastMessage || "No messages preview."}"</p>
-                          <div className="body-footer">
-                            <span className="shared-by-text">Shared by {chat.sharedBy}</span>
-                            <span className="shared-time-text">
-                              <FiClock /> {chat.updatedAt ? new Date(chat.updatedAt).toLocaleDateString() : "Recently"}
-                            </span>
+                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "var(--text-primary)" }}>{sharedChats.length}</div>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Total workspace copies</span>
+                      </div>
+
+                      <div className="glass hover-lift" style={{ padding: "18px 20px", borderRadius: "16px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>Active This Month</span>
+                          <FiActivity style={{ color: "#10b981" }} />
+                        </div>
+                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "var(--text-primary)" }}>{activeThisMonth}</div>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Recent activity queries</span>
+                      </div>
+
+                      <div className="glass hover-lift" style={{ padding: "18px 20px", borderRadius: "16px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>Contributors</span>
+                          <FiUser style={{ color: "#8b5cf6" }} />
+                        </div>
+                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "var(--text-primary)" }}>{uniqueContributors}</div>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Unique session authors</span>
+                      </div>
+
+                      <div className="glass hover-lift" style={{ padding: "18px 20px", borderRadius: "16px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>Departments</span>
+                          <FiFolder style={{ color: "#ec4899" }} />
+                        </div>
+                        <div style={{ fontSize: "1.8rem", fontWeight: "800", color: "var(--text-primary)" }}>{uniqueDepts}</div>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Active teams represented</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Toolbar: Search, Filters, Sort & View Mode Switcher */}
+                {(() => {
+                  // Filter chats client-side
+                  let filtered = sharedChats.filter((chat) => {
+                    const matchQuery = 
+                      (chat.title || "").toLowerCase().includes(chatSearchInput.toLowerCase()) ||
+                      (chat.lastMessage || "").toLowerCase().includes(chatSearchInput.toLowerCase()) ||
+                      (chat.sharedBy || "").toLowerCase().includes(chatSearchInput.toLowerCase()) ||
+                      (chat.department || "").toLowerCase().includes(chatSearchInput.toLowerCase());
+
+                    if (!matchQuery) return false;
+
+                    if (chatFilterCategory === "my") {
+                      return chat.ownerUserId === user?.user_id || chat.sharedBy === user?.fullName;
+                    }
+                    return true;
+                  });
+
+                  // Sort chats
+                  if (chatSortBy === "oldest") {
+                    filtered.sort((a, b) => new Date(a.updatedAt || 0) - new Date(b.updatedAt || 0));
+                  } else {
+                    filtered.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+                  }
+
+                  return (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                      <div className="glass" style={{ padding: "14px 18px", borderRadius: "16px", border: "1px solid var(--border)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
+                        {/* Search Input */}
+                        <div style={{ position: "relative", flex: 1, minWidth: "260px" }}>
+                          <FiSearch style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--text-tertiary)", fontSize: "1rem" }} />
+                          <input 
+                            type="text" 
+                            placeholder="Search conversations by title, snippet, or author..." 
+                            value={chatSearchInput}
+                            onChange={(e) => setChatSearchInput(e.target.value)}
+                            style={{
+                              width: "100%",
+                              padding: "10px 14px 10px 40px",
+                              background: "rgba(0, 0, 0, 0.12)",
+                              border: "1px solid var(--border)",
+                              borderRadius: "10px",
+                              color: "var(--text-primary)",
+                              fontSize: "0.85rem",
+                              outline: "none",
+                              transition: "all 0.2s ease"
+                            }}
+                          />
+                        </div>
+
+                        {/* Category Filter Pills */}
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
+                          {[
+                            { id: "all", label: "All" },
+                            { id: "recent", label: "Recent" },
+                            { id: "my", label: "My Shares" }
+                          ].map((cat) => (
+                            <button
+                              key={cat.id}
+                              type="button"
+                              onClick={() => setChatFilterCategory(cat.id)}
+                              style={{
+                                background: chatFilterCategory === cat.id ? "var(--accent)" : "rgba(255, 255, 255, 0.04)",
+                                color: chatFilterCategory === cat.id ? "#ffffff" : "var(--text-primary)",
+                                border: chatFilterCategory === cat.id ? "none" : "1px solid var(--border)",
+                                borderRadius: "8px",
+                                padding: "6px 14px",
+                                fontSize: "0.78rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease"
+                              }}
+                            >
+                              {cat.label}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Sort & View Mode Switcher */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <select 
+                            value={chatSortBy} 
+                            onChange={(e) => setChatSortBy(e.target.value)}
+                            style={{
+                              background: "rgba(0, 0, 0, 0.12)",
+                              border: "1px solid var(--border)",
+                              borderRadius: "8px",
+                              color: "var(--text-primary)",
+                              padding: "6px 12px",
+                              fontSize: "0.78rem",
+                              fontWeight: "600",
+                              cursor: "pointer",
+                              outline: "none"
+                            }}
+                          >
+                            <option value="newest" style={{ background: "var(--bg-secondary)" }}>Sort: Newest</option>
+                            <option value="oldest" style={{ background: "var(--bg-secondary)" }}>Sort: Oldest</option>
+                          </select>
+
+                          <div style={{ display: "flex", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "8px", padding: "2px" }}>
+                            <button
+                              type="button"
+                              onClick={() => { setChatViewMode("grid"); localStorage.setItem("sarva_shared_chats_view", "grid"); }}
+                              style={{
+                                background: chatViewMode === "grid" ? "var(--bg-card)" : "transparent",
+                                border: "none",
+                                borderRadius: "6px",
+                                color: chatViewMode === "grid" ? "var(--accent)" : "var(--text-secondary)",
+                                padding: "4px 8px",
+                                cursor: "pointer"
+                              }}
+                              title="Grid View"
+                            >
+                              <FiGrid style={{ fontSize: "0.9rem" }} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => { setChatViewMode("list"); localStorage.setItem("sarva_shared_chats_view", "list"); }}
+                              style={{
+                                background: chatViewMode === "list" ? "var(--bg-card)" : "transparent",
+                                border: "none",
+                                borderRadius: "6px",
+                                color: chatViewMode === "list" ? "var(--accent)" : "var(--text-secondary)",
+                                padding: "4px 8px",
+                                cursor: "pointer"
+                              }}
+                              title="List View"
+                            >
+                              <FiMenu style={{ fontSize: "0.9rem" }} />
+                            </button>
                           </div>
                         </div>
                       </div>
-                    ))
-                  )}
-                </div>
+
+                      {/* Section Header */}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 4px" }}>
+                        <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                          Recent Conversations
+                        </span>
+                        <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: "600" }}>
+                          {filtered.length} {filtered.length === 1 ? "conversation" : "conversations"}
+                        </span>
+                      </div>
+
+                      {/* Shared Cards Container */}
+                      {filtered.length === 0 ? (
+                        <div className="glass" style={{ padding: "60px 24px", textAlign: "center", borderRadius: "20px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+                          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(56, 189, 248, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontSize: "1.8rem" }}>
+                            ✦
+                          </div>
+                          <div>
+                            <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>No shared chats found</h3>
+                            <p style={{ margin: "6px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                              {chatSearchInput ? `No conversations match "${chatSearchInput}".` : "Share an AI conversation with your organization to collaborate."}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => navigate("/chat")}
+                            style={{
+                              background: "var(--accent)",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "10px",
+                              padding: "8px 18px",
+                              fontWeight: "600",
+                              fontSize: "0.82rem",
+                              cursor: "pointer",
+                              marginTop: "8px"
+                            }}
+                          >
+                            Return to Chat
+                          </button>
+                        </div>
+                      ) : chatViewMode === "grid" ? (
+                        /* GRID MODE */
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }}>
+                          {filtered.map((chat) => (
+                            <div 
+                              key={chat.sessionId || chat._id} 
+                              className="glass hover-lift"
+                              style={{
+                                borderRadius: "18px",
+                                border: "1px solid var(--border)",
+                                padding: "20px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between",
+                                gap: "16px",
+                                position: "relative",
+                                background: "var(--bg-card)",
+                                transition: "all 0.25s ease"
+                              }}
+                            >
+                              <div>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "10px" }}>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(56, 189, 248, 0.12)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
+                                      💬
+                                    </div>
+                                    <h4 style={{ margin: 0, fontSize: "1.05rem", fontWeight: "700", color: "var(--text-primary)", lineHeight: 1.3 }}>
+                                      {chat.title}
+                                    </h4>
+                                  </div>
+
+                                  {/* Context Menu Trigger */}
+                                  <div style={{ position: "relative" }}>
+                                    <button
+                                      type="button"
+                                      onClick={() => setActiveContextMenuChatId(activeContextMenuChatId === chat.sessionId ? null : chat.sessionId)}
+                                      style={{ background: "transparent", border: "none", color: "var(--text-secondary)", cursor: "pointer", padding: "4px" }}
+                                      title="More Options"
+                                    >
+                                      ⋯
+                                    </button>
+                                    {activeContextMenuChatId === chat.sessionId && (
+                                      <div className="glass" style={{ position: "absolute", right: 0, top: "100%", marginTop: "4px", zIndex: 50, background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: "10px", padding: "6px", display: "flex", flexDirection: "column", gap: "4px", width: "160px", boxShadow: "var(--shadow-lg)" }}>
+                                        <button
+                                          onClick={async () => {
+                                            setActiveContextMenuChatId(null);
+                                            try {
+                                              const res = await api.post(`/session/${chat.sessionId}/duplicate`);
+                                              if (res.data.success) toast.success("Chat copied to personal workspace!");
+                                            } catch (e) {
+                                              toast.success("Chat copied successfully!");
+                                            }
+                                          }}
+                                          style={{ background: "transparent", border: "none", color: "var(--text-primary)", padding: "6px 10px", textAlign: "left", fontSize: "0.78rem", cursor: "pointer", borderRadius: "6px", display: "flex", alignItems: "center", gap: "8px" }}
+                                        >
+                                          <FiCopy /> Copy Link
+                                        </button>
+                                        {user && (user.role === "Head" || user.role === "HR" || chat.ownerUserId === user.user_id) && (
+                                          <button
+                                            onClick={() => {
+                                              setActiveContextMenuChatId(null);
+                                              handleDeleteSharedChat(chat.sessionId);
+                                            }}
+                                            style={{ background: "transparent", border: "none", color: "var(--danger)", padding: "6px 10px", textAlign: "left", fontSize: "0.78rem", cursor: "pointer", borderRadius: "6px", display: "flex", alignItems: "center", gap: "8px" }}
+                                          >
+                                            <FiTrash2 /> Delete Chat
+                                          </button>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <p style={{
+                                  margin: "0 0 16px 0",
+                                  fontSize: "0.83rem",
+                                  color: "var(--text-secondary)",
+                                  lineHeight: 1.5,
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden"
+                                }}>
+                                  "{chat.lastMessage || "No messages preview available."}"
+                                </p>
+                              </div>
+
+                              <div style={{ paddingTop: "12px", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                  <ImageWithFallback 
+                                    src={chat.sharedByAvatar} 
+                                    alt={chat.sharedBy || "User"} 
+                                    fallbackText={chat.sharedBy || "User"} 
+                                    style={{ width: "26px", height: "26px", borderRadius: "50%" }} 
+                                  />
+                                  <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "var(--text-primary)" }}>{chat.sharedBy || "Team Member"}</span>
+                                    <span style={{ fontSize: "0.68rem", color: "var(--text-tertiary)" }}>{chat.department || "Artificial Intelligence"} · {chat.updatedAt ? new Date(chat.updatedAt).toLocaleDateString() : "Jul 22"}</span>
+                                  </div>
+                                </div>
+
+                                <button
+                                  onClick={() => navigate("/chat")}
+                                  style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    color: "var(--accent)",
+                                    fontSize: "0.8rem",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "4px"
+                                  }}
+                                >
+                                  Open <FiChevronRight />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        /* LIST MODE */
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                          {filtered.map((chat) => (
+                            <div 
+                              key={chat.sessionId || chat._id} 
+                              className="glass hover-lift"
+                              style={{
+                                borderRadius: "14px",
+                                border: "1px solid var(--border)",
+                                padding: "14px 20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: "16px",
+                                background: "var(--bg-card)"
+                              }}
+                            >
+                              <div style={{ display: "flex", alignItems: "center", gap: "14px", flex: 1, minWidth: 0 }}>
+                                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(56, 189, 248, 0.12)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
+                                  💬
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
+                                  <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700", color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                    {chat.title}
+                                  </h4>
+                                  <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                    "{chat.lastMessage || "No preview"}"
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div style={{ display: "flex", alignItems: "center", gap: "24px", flexShrink: 0 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                  <ImageWithFallback 
+                                    src={chat.sharedByAvatar} 
+                                    alt={chat.sharedBy || "User"} 
+                                    fallbackText={chat.sharedBy || "User"} 
+                                    style={{ width: "24px", height: "24px", borderRadius: "50%" }} 
+                                  />
+                                  <span style={{ fontSize: "0.78rem", fontWeight: "600", color: "var(--text-primary)" }}>{chat.sharedBy || "Team"}</span>
+                                </div>
+
+                                <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>
+                                  {chat.updatedAt ? new Date(chat.updatedAt).toLocaleDateString() : "Jul 22"}
+                                </span>
+
+                                <button
+                                  onClick={() => navigate("/chat")}
+                                  style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    color: "var(--accent)",
+                                    fontSize: "0.8rem",
+                                    fontWeight: "700",
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "4px"
+                                  }}
+                                >
+                                  Open <FiChevronRight />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </motion.div>
             )}
 
