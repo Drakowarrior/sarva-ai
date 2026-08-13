@@ -57,7 +57,6 @@
   width: 8px !important;
   height: 8px !important;
   background-color: #38bdf8 !important;
-  border-radius: 50 !important;
   border-radius: 50% !important;
   animation: pulse-ring 1.8s infinite !important;
 }
@@ -301,4 +300,97 @@
 .demo-send-btn:disabled {
   opacity: 0.4 !important;
   cursor: not-allowed !important;
+}
+
+/* Demo Completion Overlay Callout */
+.demo-cta-overlay {
+  padding: 32px 24px !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%) !important;
+  border-top: 1px solid rgba(56, 189, 248, 0.25) !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+.demo-cta-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  max-width: 620px !important;
+  margin: 0 auto !important;
+}
+
+.demo-cta-check-icon {
+  font-size: 2.2rem !important;
+  color: #10b981 !important;
+  margin-bottom: 4px !important;
+}
+
+.demo-cta-content h3 {
+  font-size: 1.45rem !important;
+  font-weight: 800 !important;
+  color: #f8fafc !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+}
+
+.demo-cta-content p {
+  font-size: 0.92rem !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.55 !important;
+}
+
+.demo-cta-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  margin-top: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.demo-signup-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 26px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  font-size: 0.92rem !important;
+  font-weight: 750 !important;
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.25) !important;
+  transition: all 0.2s ease !important;
+}
+
+.demo-signup-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.demo-secondary-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 22px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #f8fafc !important;
+  font-size: 0.9rem !important;
+  font-weight: 650 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.demo-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
 }
