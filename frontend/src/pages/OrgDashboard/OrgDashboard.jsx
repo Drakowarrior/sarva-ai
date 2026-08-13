@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { 
   FiBriefcase, FiFolder, FiUser, FiShield, FiPlus, FiCopy, FiCheckCircle, 
   FiMail, FiX, FiSearch, FiEdit3, FiTrash2, FiActivity, FiLayers, 
-  FiChevronRight, FiGrid, FiSend, FiLoader, FiSliders, FiArrowLeft, FiClock, FiCheck, FiInfo, FiBookOpen, FiShare2, FiMenu
+  FiChevronRight, FiGrid, FiSend, FiLoader, FiSliders, FiArrowLeft, FiClock, FiCheck, FiInfo, FiBookOpen, FiShare2, FiMenu, FiMessageSquare
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
