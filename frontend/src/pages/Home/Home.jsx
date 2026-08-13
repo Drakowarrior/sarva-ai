@@ -13,7 +13,6 @@ import PublicDemo from "../../components/PublicDemo/PublicDemo";
 import { 
   ChatPreview, 
   DocumentPreview, 
-  WorkspacePreview, 
   TechnicalPreview, 
   ArchitectureDiagramMockup 
 } from "../../components/ProductMockups/ProductMockups";
@@ -258,32 +257,10 @@ function Home() {
           </div>
         </div>
 
-        {/* SHOWCASE C: TEAM KNOWLEDGE & WORKSPACE */}
+        {/* SHOWCASE C: TECHNICAL WORKFLOWS */}
         <div className="sarva-showcase-row">
           <div className="sarva-showcase-text">
-            <span className="sarva-showcase-tag">03 · ORGANIZATION WORKSPACE</span>
-            <h2 className="sarva-showcase-title">Move from individual chats to team intelligence.</h2>
-            <p className="sarva-showcase-desc">
-              Connect your teammates in an Executive Organization Workspace. Manage member permissions, invite collaborators via secure codes, and share conversation threads.
-            </p>
-            <div className="sarva-showcase-bullets">
-              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Role-Based Access Control (Head, Team Lead, HR, Member)</div>
-              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Workspace invite codes & member management</div>
-              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Department organization & shared workspace chats</div>
-            </div>
-          </div>
-          <div>
-            <WorkspacePreview />
-          </div>
-        </div>
-
-        {/* SHOWCASE D: TECHNICAL WORKFLOWS */}
-        <div className="sarva-showcase-row reverse">
-          <div>
-            <TechnicalPreview />
-          </div>
-          <div className="sarva-showcase-text">
-            <span className="sarva-showcase-tag">04 · TECHNICAL WORKFLOWS</span>
+            <span className="sarva-showcase-tag">03 · TECHNICAL WORKFLOWS</span>
             <h2 className="sarva-showcase-title">Engineered for software & AI developers.</h2>
             <p className="sarva-showcase-desc">
               Debug complex code, inspect stack trace errors, format API endpoints, and export conversation transcripts directly to Markdown, Plain Text, or PDF.
@@ -293,6 +270,9 @@ function Home() {
               <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Transcript exports (Markdown, TXT, PDF, JSON)</div>
               <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> FastAPI & MongoDB Atlas execution pipeline</div>
             </div>
+          </div>
+          <div>
+            <TechnicalPreview />
           </div>
         </div>
       </section>
