@@ -355,8 +355,8 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
 
         {/* Message Actions */}
         <div className="message-actions">
-          <button onClick={handleCopy} className="message-action-btn" title="Copy Message">
-            {copied ? <FiCheck style={{ color: "#10b981" }} /> : <FiCopy />}
+          <button onClick={handleCopy} className={`message-action-btn ${copied ? "success" : ""}`} title="Copy Message">
+            {copied ? <FiCheck /> : <FiCopy />}
             <span>{copied ? "Copied" : "Copy"}</span>
           </button>
           

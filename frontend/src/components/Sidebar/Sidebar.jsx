@@ -150,11 +150,11 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
           src="/logo.jpg" 
           alt="SARVA AI Logo" 
           style={{ 
-            width: "32px", 
-            height: "32px", 
+            width: "30px", 
+            height: "30px", 
             borderRadius: "8px", 
             border: "1px solid var(--border)",
-            boxShadow: "0 2px 8px rgba(14, 165, 233, 0.1)"
+            boxShadow: "var(--shadow-xs)"
           }} 
         />
         <span className="sidebar-logo">SARVA AI</span>
@@ -167,7 +167,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
         </button>
       </div>
 
-      <div style={{ padding: "16px 20px 0 20px" }}>
+      <div style={{ padding: "var(--space-4) var(--space-5) 0" }}>
         <button className="new-chat-btn" onClick={handleCreateChat}>
           <FiPlus /> New Chat
         </button>
@@ -202,8 +202,19 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
         </div>
       </div>
 
-      <div className="sidebar-sorting" style={{ padding: "0 20px 10px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: "500" }}>Sort by</span>
+      <div style={{
+        padding: "0 var(--space-5) var(--space-2)",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}>
+        <span style={{
+          fontSize: "0.7rem",
+          color: "var(--text-tertiary)",
+          fontWeight: "600",
+          textTransform: "uppercase",
+          letterSpacing: "0.06em"
+        }}>Sort by</span>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -211,7 +222,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
             background: "transparent",
             border: "none",
             color: "var(--accent)",
-            fontSize: "0.75rem",
+            fontSize: "0.72rem",
             fontWeight: "600",
             cursor: "pointer",
             outline: "none"
@@ -226,7 +237,12 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
       {/* Sessions list */}
       <div className="sidebar-sessions">
         {sortedSessions.length === 0 ? (
-          <p style={{ textAlign: "center", color: "var(--text-secondary)", fontSize: "0.85rem", marginTop: "20px" }}>
+          <p style={{
+            textAlign: "center",
+            color: "var(--text-secondary)",
+            fontSize: "0.85rem",
+            marginTop: "20px"
+          }}>
             {searchQuery ? "No matches found" : "No sessions yet"}
           </p>
         ) : (
@@ -244,13 +260,13 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "stretch",
-                  gap: "4px",
-                  padding: "10px 12px"
+                  gap: "3px",
+                  padding: "8px 12px"
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
                   <div className="session-title-wrapper" style={{ flex: 1, marginRight: "8px" }}>
-                    <FiMessageSquare style={{ flexShrink: 0, fontSize: "0.95rem" }} />
+                    <FiMessageSquare style={{ flexShrink: 0, fontSize: "0.9rem", opacity: 0.7 }} />
                     {isEditing ? (
                       <input
                         type="text"
@@ -265,52 +281,47 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                         autoFocus
                       />
                     ) : (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "2px", overflow: "hidden" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "1px", overflow: "hidden" }}>
                         <span className="session-title" style={{ fontWeight: isActive ? "600" : "400" }}>{session.title}</span>
                         {session.isShared && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: "2px", marginTop: "2px" }}>
-                            <span style={{
-                              fontSize: "0.65rem",
-                              background: "rgba(168, 85, 247, 0.15)",
-                              color: "#c084fc",
-                              border: "1px solid rgba(168, 85, 247, 0.3)",
-                              padding: "1px 4px",
-                              borderRadius: "4px",
-                              fontWeight: "600",
-                              alignSelf: "flex-start",
-                              display: "inline-block"
-                            }}>
-                              🟣 Shared Copy
-                            </span>
-                            {session.sharedBy && (
-                              <span style={{ fontSize: "0.65rem", color: "var(--text-secondary)", fontStyle: "italic" }}>
-                                Shared by {session.sharedBy}
-                              </span>
-                            )}
-                          </div>
+                          <span style={{
+                            fontSize: "0.62rem",
+                            background: "rgba(168, 85, 247, 0.12)",
+                            color: "#c084fc",
+                            border: "1px solid rgba(168, 85, 247, 0.2)",
+                            padding: "1px 5px",
+                            borderRadius: "var(--sarva-radius-xs)",
+                            fontWeight: "600",
+                            alignSelf: "flex-start",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "3px"
+                          }}>
+                            🟣 Shared{session.sharedBy ? ` by ${session.sharedBy}` : ""}
+                          </span>
                         )}
                       </div>
                     )}
                   </div>
 
-                  {/* Badges and actions indicator */}
+                  {/* Badges and timestamp */}
                   {!isEditing && (
-                    <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
-                      {session.pinned && <FiBookmark style={{ fontSize: "0.8rem", color: "var(--accent)" }} title="Pinned" />}
-                      {session.favorite && <FiStar style={{ fontSize: "0.8rem", color: "#f59e0b" }} title="Favorite" />}
-                      <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+                      {session.pinned && <FiBookmark style={{ fontSize: "0.72rem", color: "var(--accent)" }} title="Pinned" />}
+                      {session.favorite && <FiStar style={{ fontSize: "0.72rem", color: "#f59e0b" }} title="Favorite" />}
+                      <span style={{ fontSize: "0.65rem", color: "var(--text-tertiary)" }}>
                         {formatRelativeTime(session.updated_at)}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Last Message Preview & Relative time */}
+                {/* Last Message Preview */}
                 {!isEditing && (
                   <div style={{
-                    fontSize: "0.75rem",
-                    color: "var(--text-secondary)",
-                    paddingLeft: "26px",
+                    fontSize: "0.72rem",
+                    color: "var(--text-tertiary)",
+                    paddingLeft: "24px",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap"
@@ -321,7 +332,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
 
                 {/* Rename actions row */}
                 {isEditing && (
-                  <div className="session-actions" style={{ opacity: 1, paddingLeft: "26px" }}>
+                  <div className="session-actions" style={{ opacity: 1, paddingLeft: "24px" }}>
                     <button
                       className="session-action-btn"
                       onClick={(e) => saveRename(e, session.session_id)}
@@ -353,76 +364,89 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
             top: `${contextMenu.y}px`,
             left: `${contextMenu.x}px`,
             zIndex: 1000,
-            width: "160px",
+            width: "165px",
             background: "var(--bg-secondary)",
             border: "1px solid var(--border)",
-            borderRadius: "10px",
-            boxShadow: "var(--shadow-lg)",
+            borderRadius: "var(--sarva-radius-md)",
+            boxShadow: "var(--shadow-xl)",
             overflow: "hidden",
             padding: "4px"
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <button
-            className="session-item"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}
-            onClick={() => {
-              togglePinSession(contextMenu.session.session_id, contextMenu.session.pinned);
-              setContextMenu(null);
-            }}
-          >
-            <FiBookmark style={{ fontSize: "0.9rem", color: contextMenu.session.pinned ? "var(--accent)" : "inherit" }} />
-            {contextMenu.session.pinned ? "Unpin Session" : "Pin Session"}
-          </button>
-          <button
-            className="session-item"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}
-            onClick={() => {
-              toggleFavoriteSession(contextMenu.session.session_id, contextMenu.session.favorite);
-              setContextMenu(null);
-            }}
-          >
-            <FiStar style={{ fontSize: "0.9rem", color: contextMenu.session.favorite ? "#f59e0b" : "inherit" }} />
-            {contextMenu.session.favorite ? "Unfavorite" : "Favorite Session"}
-          </button>
-          <button
-            className="session-item"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}
-            onClick={() => startEditing(contextMenu.session)}
-          >
-            <FiEdit3 style={{ fontSize: "0.9rem" }} />
-            Rename Session
-          </button>
-          <button
-            className="session-item"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}
-            onClick={() => {
-              onOpenShare(contextMenu.session.session_id);
-              setContextMenu(null);
-            }}
-          >
-            <FiShare2 style={{ fontSize: "0.9rem" }} />
-            Share Chat
-          </button>
-          <button
-            className="session-item"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}
-            onClick={() => {
-              duplicateSession(contextMenu.session.session_id);
-              setContextMenu(null);
-            }}
-          >
-            <FiCopy style={{ fontSize: "0.9rem" }} />
-            Duplicate Chat
-          </button>
+          {[
+            {
+              icon: <FiBookmark style={{ fontSize: "0.85rem", color: contextMenu.session.pinned ? "var(--accent)" : "inherit" }} />,
+              label: contextMenu.session.pinned ? "Unpin Session" : "Pin Session",
+              onClick: () => { togglePinSession(contextMenu.session.session_id, contextMenu.session.pinned); setContextMenu(null); }
+            },
+            {
+              icon: <FiStar style={{ fontSize: "0.85rem", color: contextMenu.session.favorite ? "#f59e0b" : "inherit" }} />,
+              label: contextMenu.session.favorite ? "Unfavorite" : "Favorite Session",
+              onClick: () => { toggleFavoriteSession(contextMenu.session.session_id, contextMenu.session.favorite); setContextMenu(null); }
+            },
+            {
+              icon: <FiEdit3 style={{ fontSize: "0.85rem" }} />,
+              label: "Rename Session",
+              onClick: () => startEditing(contextMenu.session)
+            },
+            {
+              icon: <FiShare2 style={{ fontSize: "0.85rem" }} />,
+              label: "Share Chat",
+              onClick: () => { onOpenShare(contextMenu.session.session_id); setContextMenu(null); }
+            },
+            {
+              icon: <FiCopy style={{ fontSize: "0.85rem" }} />,
+              label: "Duplicate Chat",
+              onClick: () => { duplicateSession(contextMenu.session.session_id); setContextMenu(null); }
+            }
+          ].map(({ icon, label, onClick }) => (
+            <button
+              key={label}
+              style={{
+                width: "100%",
+                textAlign: "left",
+                padding: "7px 12px",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: "0.82rem",
+                color: "var(--text-primary)",
+                borderRadius: "var(--sarva-radius-sm)",
+                transition: "background 0.15s ease"
+              }}
+              onClick={onClick}
+              onMouseEnter={(e) => e.currentTarget.style.background = "var(--sarva-surface-hover)"}
+              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+            >
+              {icon} {label}
+            </button>
+          ))}
           <div style={{ height: "1px", background: "var(--border)", margin: "4px 0" }} />
           <button
-            className="session-item delete"
-            style={{ width: "100%", textAlign: "left", padding: "8px 12px", border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "var(--danger)" }}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              padding: "7px 12px",
+              border: "none",
+              background: "transparent",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "0.82rem",
+              color: "var(--danger)",
+              borderRadius: "var(--sarva-radius-sm)",
+              transition: "background 0.15s ease"
+            }}
             onClick={() => handleDelete(contextMenu.session.session_id)}
+            onMouseEnter={(e) => e.currentTarget.style.background = "var(--danger-soft)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
           >
-            <FiTrash style={{ fontSize: "0.9rem" }} />
-            Delete Session
+            <FiTrash style={{ fontSize: "0.85rem" }} /> Delete Session
           </button>
         </div>
       )}
@@ -433,9 +457,9 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "rgba(0,0,0,0.15)",
+            background: "var(--sarva-surface-hover)",
             padding: "8px 12px",
-            borderRadius: "8px",
+            borderRadius: "var(--sarva-radius-md)",
             border: "1px solid var(--border)"
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden", flex: 1 }}>
@@ -443,22 +467,35 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                 width: "28px",
                 height: "28px",
                 borderRadius: "50%",
-                background: "var(--accent)",
+                background: "var(--accent-gradient)",
                 color: "#ffffff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: "bold",
-                fontSize: "0.8rem",
+                fontSize: "0.75rem",
                 flexShrink: 0
               }}>
                 {user.username ? user.username[0].toUpperCase() : "U"}
               </div>
               <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
-                <span style={{ fontSize: "0.8rem", fontWeight: "600", color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                <span style={{
+                  fontSize: "0.78rem",
+                  fontWeight: "600",
+                  color: "var(--text-primary)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }}>
                   {user.username}
                 </span>
-                <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                <span style={{
+                  fontSize: "0.68rem",
+                  color: "var(--text-tertiary)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis"
+                }}>
                   {user.email}
                 </span>
               </div>
@@ -479,13 +516,14 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                 padding: "4px",
                 borderRadius: "4px",
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
+                transition: "color 0.15s ease"
               }}
               title="Sign Out"
               onMouseEnter={(e) => e.currentTarget.style.color = "var(--danger)"}
               onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
             >
-              <FiLogOut style={{ fontSize: "1rem" }} />
+              <FiLogOut style={{ fontSize: "0.95rem" }} />
             </button>
           </div>
         )}
@@ -494,29 +532,30 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
             className="new-chat-btn" 
             onClick={() => navigate("/org-dashboard")}
             style={{ 
-              background: "rgba(56, 189, 248, 0.1)", 
-              border: "1px solid rgba(56, 189, 248, 0.2)",
+              background: "var(--accent-soft)", 
+              border: "1px solid var(--border-accent)",
               color: "var(--accent)",
               marginBottom: "8px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "8px"
+              gap: "8px",
+              boxShadow: "none"
             }}
           >
             🏢 Org Dashboard
           </button>
         )}
-        <div style={{ display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
               SARVA AI Client v1.1
             </span>
             <button className="sidebar-footer-btn" onClick={onOpenSettings} title="Settings">
-              <FiSettings style={{ fontSize: "1.2rem" }} />
+              <FiSettings style={{ fontSize: "1.1rem" }} />
             </button>
           </div>
-          <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)", opacity: 0.8, textAlign: "left" }}>
+          <span style={{ fontSize: "0.65rem", color: "var(--text-tertiary)", opacity: 0.7, textAlign: "left" }}>
             Made by Karan Garg (Intern at IGT Solutions)
           </span>
         </div>

@@ -51,14 +51,11 @@ function Chat() {
         onOpenShare={handleOpenShare}
       />
 
-      {/* Overlay to close mobile sidebar drawer */}
-      {sidebarOpen && (
-        <div
-          className="modal-overlay"
-          style={{ zIndex: 90, background: "rgba(0,0,0,0.4)" }}
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Mobile sidebar backdrop */}
+      <div
+        className={`sidebar-backdrop ${sidebarOpen ? "visible" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
 
       <main className="chat-main">
         <Navbar

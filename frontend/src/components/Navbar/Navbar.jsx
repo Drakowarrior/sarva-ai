@@ -41,8 +41,8 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
   };
 
   return (
-    <nav className="navbar glass">
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
+    <nav className="navbar">
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1, minWidth: 0 }}>
         <button
           className="menu-toggle-btn"
           onClick={onToggleSidebar}
@@ -52,12 +52,31 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
         </button>
         
         {!searchOpen ? (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: "0.95rem", fontWeight: "600", color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <span style={{
+              fontSize: "0.92rem",
+              fontWeight: "600",
+              color: "var(--text-primary)",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }}>
               {activeTitle}
             </span>
-            <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "4px", marginTop: "2px" }}>
-              <FiCpu style={{ fontSize: "0.85rem" }} /> {MODEL_LABELS[selectedModel] || selectedModel}
+            <span style={{
+              fontSize: "0.72rem",
+              color: "var(--text-secondary)",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              marginTop: "2px"
+            }}>
+              <span className="model-status-dot" />
+              <FiCpu style={{ fontSize: "0.8rem" }} />
+              {MODEL_LABELS[selectedModel] || selectedModel}
             </span>
           </div>
         ) : (
@@ -71,13 +90,16 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
                 width: "100%",
                 background: "var(--bg-primary)",
                 border: "1px solid var(--border)",
-                borderRadius: "8px",
+                borderRadius: "var(--sarva-radius-sm)",
                 padding: "6px 32px 6px 12px",
                 color: "var(--text-primary)",
                 fontSize: "0.85rem",
-                outline: "none"
+                outline: "none",
+                transition: "border-color 0.2s ease"
               }}
               autoFocus
+              onFocus={(e) => { e.target.style.borderColor = "var(--border-accent)"; }}
+              onBlur={(e) => { e.target.style.borderColor = "var(--border)"; }}
             />
             {messageSearchQuery && (
               <button
@@ -100,16 +122,15 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
         )}
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
         {currentSession && (
           <>
             <button
               className="chat-input-action-btn"
               onClick={onOpenShare}
               title="Share Chat"
-              style={{ padding: "8px" }}
             >
-              <FiShare2 style={{ fontSize: "1.2rem" }} />
+              <FiShare2 style={{ fontSize: "1.1rem" }} />
             </button>
             
             <div style={{ position: "relative" }}>
@@ -117,62 +138,52 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
                 className="chat-input-action-btn"
                 onClick={() => setDownloadMenuOpen(!downloadMenuOpen)}
                 title="Download / Export Chat"
-                style={{ padding: "8px", color: downloadMenuOpen ? "var(--accent)" : "inherit" }}
+                style={{ color: downloadMenuOpen ? "var(--accent)" : undefined }}
               >
-                <FiDownload style={{ fontSize: "1.2rem" }} />
+                <FiDownload style={{ fontSize: "1.1rem" }} />
               </button>
               {downloadMenuOpen && (
                 <div style={{
                   position: "absolute",
                   top: "100%",
                   right: 0,
-                  marginTop: "8px",
+                  marginTop: "6px",
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border)",
-                  borderRadius: "8px",
+                  borderRadius: "var(--sarva-radius-md)",
                   boxShadow: "var(--shadow-lg)",
                   zIndex: 100,
-                  width: "160px",
+                  width: "170px",
                   padding: "4px",
                   display: "flex",
                   flexDirection: "column"
                 }}>
-                  <button
-                    style={{ background: "transparent", border: "none", color: "var(--text-primary)", textAlign: "left", padding: "8px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "0.85rem" }}
-                    onClick={() => {
-                      exportChatAsPDF();
-                      setDownloadMenuOpen(false);
-                    }}
-                  >
-                    📄 Export as PDF
-                  </button>
-                  <button
-                    style={{ background: "transparent", border: "none", color: "var(--text-primary)", textAlign: "left", padding: "8px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "0.85rem" }}
-                    onClick={() => {
-                      exportChatAsMarkdown(activeTitle);
-                      setDownloadMenuOpen(false);
-                    }}
-                  >
-                    Ⓜ️ Export Markdown
-                  </button>
-                  <button
-                    style={{ background: "transparent", border: "none", color: "var(--text-primary)", textAlign: "left", padding: "8px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "0.85rem" }}
-                    onClick={() => {
-                      exportChatAsJSON(activeTitle);
-                      setDownloadMenuOpen(false);
-                    }}
-                  >
-                    {"{ }"} Export JSON
-                  </button>
-                  <button
-                    style={{ background: "transparent", border: "none", color: "var(--text-primary)", textAlign: "left", padding: "8px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "0.85rem" }}
-                    onClick={() => {
-                      exportChatAsTXT(activeTitle);
-                      setDownloadMenuOpen(false);
-                    }}
-                  >
-                    📝 Export Plain Text
-                  </button>
+                  {[
+                    { label: "📄 Export as PDF", handler: () => exportChatAsPDF() },
+                    { label: "Ⓜ️ Export Markdown", handler: () => exportChatAsMarkdown(activeTitle) },
+                    { label: "{ } Export JSON", handler: () => exportChatAsJSON(activeTitle) },
+                    { label: "📝 Export Plain Text", handler: () => exportChatAsTXT(activeTitle) }
+                  ].map(({ label, handler }) => (
+                    <button
+                      key={label}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "var(--text-primary)",
+                        textAlign: "left",
+                        padding: "8px 12px",
+                        borderRadius: "var(--sarva-radius-sm)",
+                        cursor: "pointer",
+                        fontSize: "0.82rem",
+                        transition: "background 0.15s ease"
+                      }}
+                      onClick={() => { handler(); setDownloadMenuOpen(false); }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "var(--sarva-surface-hover)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -181,9 +192,8 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
               className={`chat-input-action-btn ${searchOpen ? "active" : ""}`}
               onClick={toggleSearch}
               title="Search Messages"
-              style={{ padding: "8px", color: searchOpen ? "var(--accent)" : "inherit" }}
             >
-              {searchOpen ? <FiX style={{ fontSize: "1.2rem" }} /> : <FiSearch style={{ fontSize: "1.2rem" }} />}
+              {searchOpen ? <FiX style={{ fontSize: "1.1rem" }} /> : <FiSearch style={{ fontSize: "1.1rem" }} />}
             </button>
           </>
         )}
@@ -193,9 +203,9 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
             className="chat-input-action-btn"
             onClick={() => navigate("/org-dashboard")}
             title="Organization Dashboard"
-            style={{ padding: "8px", color: "var(--accent)" }}
+            style={{ color: "var(--accent)" }}
           >
-            <FiBriefcase style={{ fontSize: "1.2rem" }} />
+            <FiBriefcase style={{ fontSize: "1.1rem" }} />
           </button>
         )}
 
@@ -203,9 +213,8 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
           className="chat-input-action-btn"
           onClick={onOpenSettings}
           title="Settings & Preferences"
-          style={{ padding: "8px" }}
         >
-          <FiSettings style={{ fontSize: "1.2rem" }} />
+          <FiSettings style={{ fontSize: "1.1rem" }} />
         </button>
       </div>
     </nav>

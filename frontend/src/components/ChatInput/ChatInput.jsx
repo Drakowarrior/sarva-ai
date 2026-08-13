@@ -111,7 +111,8 @@ function ChatInput() {
             className="send-btn"
             disabled={(!text.trim() && !attachedFiles.length) || loading}
           >
-            <FiSend /> {loading ? "Generating..." : "Send"}
+            {loading ? <FiSend className="spin" /> : <FiSend />} 
+            <span>{loading ? "Generating..." : "Send"}</span>
           </button>
         </div>
       </form>

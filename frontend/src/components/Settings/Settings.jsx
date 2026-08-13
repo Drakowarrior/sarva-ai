@@ -189,12 +189,19 @@ function Settings({ isOpen, onClose }) {
   const activeSessionObj = sessions.find((s) => s.session_id === currentSession);
   const activeTitle = activeSessionObj?.title || "Active Chat";
 
+  const [confirmingClearAll, setConfirmingClearAll] = useState(false);
+
   const handleClearAll = async () => {
-    if (window.confirm("Are you absolutely sure you want to delete all chats? This action is irreversible.")) {
-      await clearAllSessions();
-      toast.success("All chat sessions deleted!");
-      onClose();
+    if (!confirmingClearAll) {
+      setConfirmingClearAll(true);
+      toast("Click 'Confirm Delete All' within 4s to erase all chats.", { icon: "⚠️" });
+      setTimeout(() => setConfirmingClearAll(false), 4000);
+      return;
     }
+    await clearAllSessions();
+    toast.success("All chat sessions deleted!");
+    setConfirmingClearAll(false);
+    onClose();
   };
 
   const exportJSON = () => {
@@ -757,8 +764,12 @@ function Settings({ isOpen, onClose }) {
                     <button className="settings-btn" onClick={exportJSON} style={{ flex: 1 }}>
                       <FiDownload /> Export All (JSON)
                     </button>
-                    <button className="settings-btn danger" onClick={handleClearAll} style={{ flex: 1 }}>
-                      <FiTrash2 /> Delete All Chats
+                    <button 
+                      className={`settings-btn danger ${confirmingClearAll ? "active" : ""}`} 
+                      onClick={handleClearAll} 
+                      style={{ flex: 1, background: confirmingClearAll ? "var(--danger)" : undefined, color: confirmingClearAll ? "#fff" : undefined }}
+                    >
+                      <FiTrash2 /> {confirmingClearAll ? "Confirm Delete All?" : "Delete All Chats"}
                     </button>
                   </div>
                 </div>
