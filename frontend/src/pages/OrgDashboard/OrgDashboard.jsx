@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { 
   FiBriefcase, FiFolder, FiUser, FiShield, FiPlus, FiCopy, FiCheckCircle, 
   FiMail, FiX, FiSearch, FiEdit3, FiTrash2, FiActivity, FiLayers, 
-  FiChevronRight, FiGrid, FiSend, FiLoader, FiSliders, FiArrowLeft, FiClock, FiCheck, FiInfo, FiBookOpen, FiShare2, FiMenu, FiMessageSquare
+  FiChevronRight, FiGrid, FiSend, FiLoader, FiSliders, FiArrowLeft, FiClock, FiCheck, FiInfo, FiBookOpen, FiShare2, FiMenu, FiMessageSquare,
+  FiLock, FiUploadCloud, FiEye, FiAlertTriangle, FiZap
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
@@ -113,6 +114,10 @@ function OrgDashboard() {
   const [chatViewMode, setChatViewMode] = useState(() => localStorage.getItem("sarva_shared_chats_view") || "grid");
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState(null);
 
+  // Settings 2.0 Navigation & Dirty States
+  const [initialSettings, setInitialSettings] = useState(null);
+  const [activeSettingsSection, setActiveSettingsSection] = useState("sec-profile");
+
   // Edit Organization settings
   const [orgName, setOrgName] = useState("");
   const [orgDesc, setOrgDesc] = useState("");
@@ -167,20 +172,48 @@ function OrgDashboard() {
         setAnalytics(orgRes.analytics);
         
         // Populate settings fields
-        setOrgName(o.organizationName || "");
-        setOrgDesc(o.description || "");
-        setOrgIndustry(o.industry || "");
-        setOrgWebsite(o.website || "");
-        setOrgLogo(o.logo || "");
-        setOrgBanner(o.banner || "");
-        setOrgFavicon(o.favicon || "");
+        const nameVal = o.organizationName || "";
+        const descVal = o.description || "";
+        const indVal = o.industry || "";
+        const webVal = o.website || "";
+        const logoVal = o.logo || "";
+        const bannerVal = o.banner || "";
+        const favVal = o.favicon || "";
         
         const settings = o.settings || {};
-        setOrgBrandingColor(settings.branding?.primaryColor || "#0ea5e9");
-        setOrgDefaultRole(settings.generalSettings?.defaultRole || "Student");
-        setAllowLeadInvite(settings.invitationRules?.allowTeamLeadInvite || false);
-        setShowAllDepts(settings.memberVisibility?.showAllDepartments || true);
-        setAllowExtSharing(settings.chatSharingPolicies?.allowExternalSharing || false);
+        const brandColorVal = settings.branding?.primaryColor || "#0ea5e9";
+        const defaultRoleVal = settings.generalSettings?.defaultRole || "Student";
+        const leadInviteVal = settings.invitationRules?.allowTeamLeadInvite || false;
+        const allDeptsVal = settings.memberVisibility?.showAllDepartments ?? true;
+        const extSharingVal = settings.chatSharingPolicies?.allowExternalSharing || false;
+
+        setOrgName(nameVal);
+        setOrgDesc(descVal);
+        setOrgIndustry(indVal);
+        setOrgWebsite(webVal);
+        setOrgLogo(logoVal);
+        setOrgBanner(bannerVal);
+        setOrgFavicon(favVal);
+        setOrgBrandingColor(brandColorVal);
+        setOrgDefaultRole(defaultRoleVal);
+        setAllowLeadInvite(leadInviteVal);
+        setShowAllDepts(allDeptsVal);
+        setAllowExtSharing(extSharingVal);
+
+        setInitialSettings({
+          orgName: nameVal,
+          orgDesc: descVal,
+          orgIndustry: indVal,
+          orgWebsite: webVal,
+          orgLogo: logoVal,
+          orgBanner: bannerVal,
+          orgFavicon: favVal,
+          orgBrandingColor: brandColorVal,
+          orgDefaultRole: defaultRoleVal,
+          allowLeadInvite: leadInviteVal,
+          showAllDepts: allDeptsVal,
+          allowExtSharing: extSharingVal
+        });
       }
 
       const membersRes = await orgService.getMembers();
@@ -794,7 +827,6 @@ function OrgDashboard() {
         </header>
 
         {loading ? (
-          /* Premium Shimmer Skeleton Loader Dashboard */
           <div className="dashboard-view-container skeleton-container">
             <div className="tab-header">
               <div className="skeleton-loader" style={{ width: "220px", height: "28px", borderRadius: "6px", marginBottom: "8px" }} />
@@ -2563,7 +2595,6 @@ function OrgDashboard() {
                           </button>
                         </div>
                       ) : chatViewMode === "grid" ? (
-                        /* GRID MODE */
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }}>
                           {filtered.map((chat) => (
                             <div 
@@ -2684,7 +2715,6 @@ function OrgDashboard() {
                           ))}
                         </div>
                       ) : (
-                        /* LIST MODE */
                         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                           {filtered.map((chat) => (
                             <div 
@@ -2808,121 +2838,279 @@ function OrgDashboard() {
               </motion.div>
             )}
 
-            {/* Settings Tab */}
-            {activeTab === "settings" && (
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }} 
-                animate={{ opacity: 1, y: 0 }}
-                className="settings-tab"
-              >
-                <div className="tab-header">
-                  <h2>Organization Settings</h2>
-                  <p>Modify workspace info, settings policies, and configure general administration rules</p>
-                </div>
+            {/* Organization Settings 2.0 Tab */}
+            {activeTab === "settings" && (() => {
+              const isDirty = initialSettings ? (
+                orgName !== initialSettings.orgName ||
+                orgDesc !== initialSettings.orgDesc ||
+                orgIndustry !== initialSettings.orgIndustry ||
+                orgWebsite !== initialSettings.orgWebsite ||
+                orgLogo !== initialSettings.orgLogo ||
+                orgBanner !== initialSettings.orgBanner ||
+                orgFavicon !== initialSettings.orgFavicon ||
+                orgBrandingColor !== initialSettings.orgBrandingColor ||
+                orgDefaultRole !== initialSettings.orgDefaultRole ||
+                allowLeadInvite !== initialSettings.allowLeadInvite ||
+                showAllDepts !== initialSettings.showAllDepts ||
+                allowExtSharing !== initialSettings.allowExtSharing
+              ) : false;
 
-                <div className="settings-layout">
-                  <div className="settings-card glass">
-                    <h3>Workspace Profile</h3>
-                    <form onSubmit={handleSaveSettings} className="settings-form">
-                      {/* Logo Upload & Preview */}
-                      <div className="form-group">
-                        <label>Organization Logo URL or Upload</label>
-                        <div style={{ display: "flex", gap: "16px", alignItems: "center", marginTop: "4px" }}>
-                          {orgLogo ? (
-                            <img src={orgLogo} alt="Workspace Logo" style={{ width: "56px", height: "56px", borderRadius: "12px", objectFit: "cover", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }} />
-                          ) : (
-                            <div className="branding-fallback-avatar" style={{ width: "56px", height: "56px", fontSize: "1.4rem" }}>
-                              {orgName ? orgName[0].toUpperCase() : "O"}
-                            </div>
-                          )}
-                          <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
-                            <input 
-                              type="text" 
-                              placeholder="Paste logo URL..." 
-                              value={orgLogo} 
-                              onChange={(e) => setOrgLogo(e.target.value)} 
-                              disabled={user.role !== "Head" && user.role !== "HR"}
-                            />
-                            {user && (user.role === "Head" || user.role === "HR") && (
-                              <div style={{ display: "flex", gap: "10px" }}>
-                                <label style={{
-                                  background: "rgba(255, 255, 255, 0.05)",
-                                  border: "1px solid var(--border)",
-                                  padding: "6px 12px",
-                                  borderRadius: "6px",
-                                  fontSize: "0.75rem",
-                                  fontWeight: "600",
-                                  cursor: "pointer",
-                                  textAlign: "center"
-                                }}>
-                                  Upload File
-                                  <input 
-                                    type="file" 
-                                    accept="image/*" 
-                                    onChange={(e) => {
-                                      const file = e.target.files[0];
-                                      if (file) {
-                                        const r = new FileReader();
-                                        r.onloadend = () => setOrgLogo(r.result);
-                                        r.readAsDataURL(file);
-                                      }
-                                    }} 
-                                    style={{ display: "none" }} 
-                                  />
-                                </label>
-                                {orgLogo && (
-                                  <button
-                                    type="button"
-                                    onClick={() => setOrgLogo("")}
-                                    style={{
-                                      background: "transparent",
-                                      border: "1px solid var(--border)",
-                                      color: "var(--danger)",
-                                      padding: "6px 12px",
-                                      borderRadius: "6px",
-                                      fontSize: "0.75rem",
-                                      fontWeight: "600",
-                                      cursor: "pointer"
-                                    }}
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              </div>
-                            )}
-                          </div>
+              const handleDiscardChanges = () => {
+                if (!initialSettings) return;
+                setOrgName(initialSettings.orgName);
+                setOrgDesc(initialSettings.orgDesc);
+                setOrgIndustry(initialSettings.orgIndustry);
+                setOrgWebsite(initialSettings.orgWebsite);
+                setOrgLogo(initialSettings.orgLogo);
+                setOrgBanner(initialSettings.orgBanner);
+                setOrgFavicon(initialSettings.orgFavicon);
+                setOrgBrandingColor(initialSettings.orgBrandingColor);
+                setOrgDefaultRole(initialSettings.orgDefaultRole);
+                setAllowLeadInvite(initialSettings.allowLeadInvite);
+                setShowAllDepts(initialSettings.showAllDepts);
+                setAllowExtSharing(initialSettings.allowExtSharing);
+              };
+
+              return (
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }} 
+                  animate={{ opacity: 1, y: 0 }}
+                  className="settings-tab-v2"
+                  style={{ display: "flex", flexDirection: "column", gap: "28px", maxWidth: "1200px", margin: "0 auto", width: "100%", position: "relative" }}
+                >
+                  {/* Breadcrumb & Header Surface */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.78rem", color: "var(--text-tertiary)" }}>
+                      <span>Workspace</span>
+                      <FiChevronRight style={{ fontSize: "0.75rem" }} />
+                      <span style={{ color: "var(--text-primary)", fontWeight: "600" }}>Settings</span>
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px", marginTop: "4px" }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                          <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "750", letterSpacing: "-0.02em" }}>Organization Settings</h1>
+                          <span style={{ fontSize: "0.75rem", fontWeight: "600", padding: "3px 10px", borderRadius: "12px", background: "rgba(16, 185, 129, 0.1)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+                            ● Workspace Active
+                          </span>
                         </div>
+                        <p style={{ margin: "4px 0 0 0", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+                          Manage your workspace identity, branding, member defaults, and collaboration policies.
+                        </p>
                       </div>
 
-                      {/* Banner Upload & Preview */}
-                      <div className="form-group">
-                        <label>Organization Banner URL or Upload</label>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "4px" }}>
-                          {orgBanner && (
-                            <img src={orgBanner} alt="Workspace Banner" style={{ width: "100%", height: "100px", borderRadius: "8px", objectFit: "cover", border: "1px solid var(--border)" }} />
-                          )}
-                          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                            <input 
-                              type="text" 
-                              placeholder="Paste banner URL..." 
-                              value={orgBanner} 
-                              onChange={(e) => setOrgBanner(e.target.value)} 
-                              disabled={user.role !== "Head" && user.role !== "HR"}
-                              style={{ flex: 1 }}
+                      {/* Unsaved Changes Header Action */}
+                      {isDirty && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <button
+                            type="button"
+                            onClick={handleDiscardChanges}
+                            style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text-secondary)", padding: "8px 16px", borderRadius: "10px", fontSize: "0.82rem", fontWeight: "600", cursor: "pointer" }}
+                          >
+                            Discard
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleSaveSettings}
+                            disabled={submitting}
+                            style={{ background: "var(--accent)", color: "#ffffff", border: "none", padding: "8px 18px", borderRadius: "10px", fontSize: "0.82rem", fontWeight: "700", cursor: "pointer", boxShadow: "var(--shadow-sm)" }}
+                          >
+                            {submitting ? "Saving..." : "Save Changes"}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 2-Column Settings Layout */}
+                  <div style={{ display: "grid", gridTemplateColumns: "220px minmax(0, 1fr)", gap: "32px", alignItems: "start" }}>
+                    {/* Left Sticky Sidebar Navigation */}
+                    <div className="glass" style={{ position: "sticky", top: "24px", borderRadius: "16px", border: "1px solid var(--border)", padding: "12px", display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "var(--text-tertiary)", textTransform: "uppercase", padding: "8px 12px", letterSpacing: "0.5px" }}>SETTINGS</span>
+                      
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-profile"); document.getElementById("sec-profile")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-profile" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-profile" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiUser /> Workspace Profile
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-branding"); document.getElementById("sec-branding")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-branding" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-branding" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiSliders /> Branding & Colors
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-details"); document.getElementById("sec-details")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-details" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-details" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiBriefcase /> Details & Info
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-defaults"); document.getElementById("sec-defaults")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-defaults" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-defaults" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiShield /> Member Defaults
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-policies"); document.getElementById("sec-policies")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-policies" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-policies" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiCheckCircle /> Collaboration
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setActiveSettingsSection("sec-security"); document.getElementById("sec-security")?.scrollIntoView({ behavior: "smooth" }); }}
+                        style={{
+                          display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                          border: "none", background: activeSettingsSection === "sec-security" ? "rgba(56, 189, 248, 0.12)" : "transparent",
+                          color: activeSettingsSection === "sec-security" ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                        }}
+                      >
+                        <FiLock /> Security & Access
+                      </button>
+
+                      {user && user.role === "Head" && (
+                        <button
+                          type="button"
+                          onClick={() => { setActiveSettingsSection("sec-danger"); document.getElementById("sec-danger")?.scrollIntoView({ behavior: "smooth" }); }}
+                          style={{
+                            display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", fontSize: "0.83rem", fontWeight: "600",
+                            border: "none", background: activeSettingsSection === "sec-danger" ? "rgba(239, 68, 68, 0.12)" : "transparent",
+                            color: activeSettingsSection === "sec-danger" ? "var(--danger)" : "var(--text-secondary)", cursor: "pointer", textAlign: "left"
+                          }}
+                        >
+                          <FiTrash2 /> Danger Zone
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Content Panels */}
+                    <form onSubmit={handleSaveSettings} style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+                      {/* Section 1: Workspace Profile (Logo, Banner, Favicon) */}
+                      <div id="sec-profile" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "20px" }}>
+                        <div>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Workspace Profile</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            Manage how your organization avatar and identity appear throughout SARVA AI.
+                          </p>
+                        </div>
+
+                        {/* Visual Logo Uploader */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Workspace Logo</label>
+                          <div style={{ display: "flex", gap: "20px", alignItems: "center", padding: "16px", background: "rgba(0,0,0,0.12)", borderRadius: "14px", border: "1px solid var(--border)" }}>
+                            <ImageWithFallback 
+                              src={orgLogo} 
+                              alt={orgName} 
+                              fallbackText={orgName} 
+                              style={{ width: "64px", height: "64px", borderRadius: "14px", objectFit: "cover", border: "2px solid var(--border)", flexShrink: 0 }} 
                             />
-                            {user && (user.role === "Head" || user.role === "HR") && (
-                              <div style={{ display: "flex", gap: "10px" }}>
-                                <label style={{
-                                  background: "rgba(255, 255, 255, 0.05)",
-                                  border: "1px solid var(--border)",
-                                  padding: "8px 12px",
-                                  borderRadius: "6px",
-                                  fontSize: "0.75rem",
-                                  fontWeight: "600",
-                                  cursor: "pointer",
-                                  whiteSpace: "nowrap"
-                                }}>
-                                  Upload Banner
+                            <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+                              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>Upload PNG, JPG, or WEBP (Max 5MB) or enter URL.</span>
+                              <input 
+                                type="text" 
+                                placeholder="Paste logo image URL..." 
+                                value={orgLogo} 
+                                onChange={(e) => setOrgLogo(e.target.value)}
+                                disabled={user.role !== "Head" && user.role !== "HR"}
+                                style={{ padding: "8px 12px", background: "rgba(0,0,0,0.15)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--text-primary)", fontSize: "0.82rem" }}
+                              />
+                              {user && (user.role === "Head" || user.role === "HR") && (
+                                <div style={{ display: "flex", gap: "10px", marginTop: "2px" }}>
+                                  <label style={{ background: "var(--accent)", color: "#ffffff", padding: "6px 14px", borderRadius: "8px", fontSize: "0.78rem", fontWeight: "600", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <FiUploadCloud /> Upload Logo
+                                    <input 
+                                      type="file" 
+                                      accept="image/*" 
+                                      onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                          const r = new FileReader();
+                                          r.onloadend = () => setOrgLogo(r.result);
+                                          r.readAsDataURL(file);
+                                        }
+                                      }}
+                                      style={{ display: "none" }} 
+                                    />
+                                  </label>
+                                  {orgLogo && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setOrgLogo("")}
+                                      style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--danger)", padding: "6px 12px", borderRadius: "8px", fontSize: "0.78rem", fontWeight: "600", cursor: "pointer" }}
+                                    >
+                                      Remove
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Banner Preview & Uploader */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Workspace Banner</label>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "16px", background: "rgba(0,0,0,0.12)", borderRadius: "14px", border: "1px solid var(--border)" }}>
+                            <div style={{
+                              height: "100px",
+                              borderRadius: "10px",
+                              backgroundImage: orgBanner ? "url(" + orgBanner + ")" : "linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)",
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              border: "1px solid var(--border)",
+                              display: "flex",
+                              alignItems: "center",
+                              justify: "center",
+                              color: "var(--text-secondary)",
+                              fontSize: "0.85rem",
+                              fontWeight: "600"
+                            }}>
+                              {!orgBanner && "Banner Preview (Gradient Fallback)"}
+                            </div>
+                            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                              <input 
+                                type="text" 
+                                placeholder="Paste banner image URL..." 
+                                value={orgBanner} 
+                                onChange={(e) => setOrgBanner(e.target.value)}
+                                disabled={user.role !== "Head" && user.role !== "HR"}
+                                style={{ flex: 1, padding: "8px 12px", background: "rgba(0,0,0,0.15)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--text-primary)", fontSize: "0.82rem" }}
+                              />
+                              {user && (user.role === "Head" || user.role === "HR") && (
+                                <label style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--text-primary)", padding: "8px 14px", borderRadius: "8px", fontSize: "0.78rem", fontWeight: "600", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>
+                                  <FiUploadCloud /> Upload Banner
                                   <input 
                                     type="file" 
                                     accept="image/*" 
@@ -2933,279 +3121,380 @@ function OrgDashboard() {
                                         r.onloadend = () => setOrgBanner(r.result);
                                         r.readAsDataURL(file);
                                       }
-                                    }} 
+                                    }}
                                     style={{ display: "none" }} 
                                   />
                                 </label>
-                                {orgBanner && (
-                                  <button
-                                    type="button"
-                                    onClick={() => setOrgBanner("")}
-                                    style={{
-                                      background: "transparent",
-                                      border: "1px solid var(--border)",
-                                      color: "var(--danger)",
-                                      padding: "8px 12px",
-                                      borderRadius: "6px",
-                                      fontSize: "0.75rem",
-                                      fontWeight: "600",
-                                      cursor: "pointer"
-                                    }}
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Favicon URL */}
-                      <div className="form-group">
-                        <label>Organization Favicon (Optional)</label>
-                        <input 
-                          type="text" 
-                          placeholder="Paste favicon URL..." 
-                          value={orgFavicon} 
-                          onChange={(e) => setOrgFavicon(e.target.value)} 
-                          disabled={user.role !== "Head" && user.role !== "HR"}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Organization Name</label>
-                        <input 
-                          type="text" 
-                          value={orgName} 
-                          onChange={(e) => setOrgName(e.target.value)} 
-                          disabled={user.role !== "Head" && user.role !== "HR"}
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Description</label>
-                        <textarea 
-                          value={orgDesc} 
-                          onChange={(e) => setOrgDesc(e.target.value)} 
-                          disabled={user.role !== "Head" && user.role !== "HR"}
-                          rows={3}
-                        />
-                      </div>
-
-                      <div className="form-row">
-                        <div className="form-group flex-1">
-                          <label>Industry</label>
+                        {/* Favicon URL */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Favicon Icon (Optional)</label>
                           <input 
                             type="text" 
-                            value={orgIndustry} 
-                            onChange={(e) => setOrgIndustry(e.target.value)} 
+                            placeholder="Paste favicon URL..." 
+                            value={orgFavicon} 
+                            onChange={(e) => setOrgFavicon(e.target.value)} 
                             disabled={user.role !== "Head" && user.role !== "HR"}
-                          />
-                        </div>
-                        <div className="form-group flex-1">
-                          <label>Website</label>
-                          <input 
-                            type="text" 
-                            value={orgWebsite} 
-                            onChange={(e) => setOrgWebsite(e.target.value)} 
-                            disabled={user.role !== "Head" && user.role !== "HR"}
+                            style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem" }}
                           />
                         </div>
                       </div>
 
-                      {/* Settings Policies (Restricted to Head) */}
-                      <h3 style={{ marginTop: "32px", borderTop: "1px solid var(--border)", paddingTop: "24px" }}>Collaboration Policies</h3>
-
-                      <div className="form-row">
-                        <div className="form-group flex-1">
-                          <label>Default Role for New Users</label>
-                          <select 
-                            value={orgDefaultRole} 
-                            onChange={(e) => setOrgDefaultRole(e.target.value)}
-                            disabled={user.role !== "Head"}
-                          >
-                            <option value="Student">Student</option>
-                            <option value="Intern">Intern</option>
-                            <option value="Executive">Executive</option>
-                            <option value="Team Lead">Team Lead</option>
-                            <option value="HR">HR</option>
-                          </select>
+                      {/* Section 2: Branding & Colors */}
+                      <div id="sec-branding" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "20px" }}>
+                        <div>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Workspace Branding</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            Customize primary branding colors and view real-time interactive previews.
+                          </p>
                         </div>
-                        <div className="form-group flex-1">
-                          <label>Primary Branding Color</label>
-                          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+
+                        {/* Swatch & Presets */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Primary Brand Color</label>
+                          
+                          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                             <input 
                               type="color" 
                               value={orgBrandingColor} 
                               onChange={(e) => setOrgBrandingColor(e.target.value)}
                               disabled={user.role !== "Head"}
-                              style={{ height: "42px", width: "48px", padding: "2px", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "8px" }}
+                              style={{ width: "48px", height: "44px", padding: "2px", borderRadius: "10px", border: "1px solid var(--border)", cursor: "pointer", background: "transparent" }}
                             />
                             <input 
                               type="text" 
                               value={orgBrandingColor} 
-                              onChange={(e) => setOrgBrandingColor(e.target.value)}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.startsWith("#") && val.length <= 9) setOrgBrandingColor(val);
+                              }}
                               disabled={user.role !== "Head"}
-                              style={{ width: "100px", fontFamily: "monospace" }}
+                              style={{ width: "120px", padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontFamily: "monospace", fontSize: "0.9rem", fontWeight: "600" }}
                             />
-                            <div style={{
-                              background: orgBrandingColor,
-                              color: "#ffffff",
-                              padding: "6px 14px",
-                              borderRadius: "8px",
-                              fontSize: "0.75rem",
-                              fontWeight: "700",
-                              boxShadow: "var(--shadow-sm)"
-                            }}>
-                              Primary Button Preview
+                          </div>
+
+                          {/* Quick Presets */}
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginTop: "4px" }}>
+                            <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)", fontWeight: "600" }}>Presets:</span>
+                            {[
+                              { name: "Cyan", hex: "#38bdf8" },
+                              { name: "Indigo", hex: "#6366f1" },
+                              { name: "Violet", hex: "#8b5cf6" },
+                              { name: "Pink", hex: "#ec4899" },
+                              { name: "Emerald", hex: "#10b981" },
+                              { name: "Amber", hex: "#f59e0b" }
+                            ].map((preset) => (
+                              <button
+                                key={preset.hex}
+                                type="button"
+                                onClick={() => setOrgBrandingColor(preset.hex)}
+                                disabled={user.role !== "Head"}
+                                style={{
+                                  display: "flex", alignItems: "center", gap: "6px", padding: "4px 10px", borderRadius: "8px",
+                                  background: "rgba(0,0,0,0.12)", border: orgBrandingColor === preset.hex ? `2px solid ${preset.hex}` : "1px solid var(--border)",
+                                  color: "var(--text-primary)", fontSize: "0.75rem", fontWeight: "600", cursor: "pointer"
+                                }}
+                              >
+                                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: preset.hex }} />
+                                {preset.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Live Workspace Interactive Preview Card */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "8px" }}>
+                          <span style={{ fontSize: "0.78rem", fontWeight: "700", color: "var(--text-tertiary)", textTransform: "uppercase" }}>Live Preview</span>
+                          <div style={{ padding: "20px", borderRadius: "14px", background: "rgba(0,0,0,0.2)", border: `1px solid ${orgBrandingColor}`, display: "flex", flexDirection: "column", gap: "14px" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: orgBrandingColor, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "0.8rem" }}>
+                                  S
+                                </div>
+                                <span style={{ fontWeight: "700", fontSize: "0.9rem", color: "var(--text-primary)" }}>{orgName || "SARVA Workspace"}</span>
+                              </div>
+                              <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "10px", background: orgBrandingColor + "22", color: orgBrandingColor, fontWeight: "700" }}>
+                                ● Active Color
+                              </span>
                             </div>
+                            <button
+                              type="button"
+                              style={{ background: orgBrandingColor, color: "#ffffff", border: "none", padding: "8px 16px", borderRadius: "8px", fontSize: "0.82rem", fontWeight: "700", width: "fit-content", cursor: "default" }}
+                            >
+                              Primary CTA Button
+                            </button>
                           </div>
                         </div>
                       </div>
 
-                      <div className="checkbox-policies" style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
-                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-                          <div className="label-text">
-                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Enable Team Lead Invitations</span>
-                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Allows Team Leads to send workspace invitations to new members</span>
-                          </div>
-                          <button
-                            type="button"
-                            disabled={user.role !== "Head"}
-                            onClick={() => setAllowLeadInvite(!allowLeadInvite)}
-                            style={{
-                              width: "48px",
-                              height: "26px",
-                              borderRadius: "14px",
-                              background: allowLeadInvite ? "var(--accent)" : "var(--border)",
-                              border: "none",
-                              position: "relative",
-                              cursor: "pointer",
-                              transition: "all 0.2s ease"
-                            }}
-                          >
-                            <div style={{
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "50%",
-                              background: "#ffffff",
-                              position: "absolute",
-                              top: "3px",
-                              left: allowLeadInvite ? "25px" : "3px",
-                              transition: "all 0.2s ease"
-                            }} />
-                          </button>
+                      {/* Section 3: Organization Details */}
+                      <div id="sec-details" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "20px" }}>
+                        <div>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Organization Details</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            General business parameters and information visible across workspace.
+                          </p>
                         </div>
 
-                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-                          <div className="label-text">
-                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Show All Departments to Members</span>
-                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Allows members to view coworkers from other departments in directory</span>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                            <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Organization Name</label>
+                            <input 
+                              type="text" 
+                              value={orgName} 
+                              onChange={(e) => setOrgName(e.target.value)} 
+                              disabled={user.role !== "Head" && user.role !== "HR"}
+                              style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem" }}
+                              required
+                            />
                           </div>
-                          <button
-                            type="button"
-                            disabled={user.role !== "Head"}
-                            onClick={() => setShowAllDepts(!showAllDepts)}
-                            style={{
-                              width: "48px",
-                              height: "26px",
-                              borderRadius: "14px",
-                              background: showAllDepts ? "var(--accent)" : "var(--border)",
-                              border: "none",
-                              position: "relative",
-                              cursor: "pointer",
-                              transition: "all 0.2s ease"
-                            }}
-                          >
-                            <div style={{
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "50%",
-                              background: "#ffffff",
-                              position: "absolute",
-                              top: "3px",
-                              left: showAllDepts ? "25px" : "3px",
-                              transition: "all 0.2s ease"
-                            }} />
-                          </button>
+
+                          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                            <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Industry</label>
+                            <input 
+                              type="text" 
+                              value={orgIndustry} 
+                              onChange={(e) => setOrgIndustry(e.target.value)} 
+                              disabled={user.role !== "Head" && user.role !== "HR"}
+                              style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem" }}
+                            />
+                          </div>
                         </div>
 
-                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
-                          <div className="label-text">
-                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Allow External Chat Sharing</span>
-                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Enables chat sharing with users outside the organization workspace</span>
-                          </div>
-                          <button
-                            type="button"
-                            disabled={user.role !== "Head"}
-                            onClick={() => setAllowExtSharing(!allowExtSharing)}
-                            style={{
-                              width: "48px",
-                              height: "26px",
-                              borderRadius: "14px",
-                              background: allowExtSharing ? "var(--accent)" : "var(--border)",
-                              border: "none",
-                              position: "relative",
-                              cursor: "pointer",
-                              transition: "all 0.2s ease"
-                            }}
-                          >
-                            <div style={{
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "50%",
-                              background: "#ffffff",
-                              position: "absolute",
-                              top: "3px",
-                              left: allowExtSharing ? "25px" : "3px",
-                              transition: "all 0.2s ease"
-                            }} />
-                          </button>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Website URL</label>
+                          <input 
+                            type="text" 
+                            value={orgWebsite} 
+                            onChange={(e) => setOrgWebsite(e.target.value)} 
+                            disabled={user.role !== "Head" && user.role !== "HR"}
+                            style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem" }}
+                          />
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Description</label>
+                          <textarea 
+                            value={orgDesc} 
+                            onChange={(e) => setOrgDesc(e.target.value)} 
+                            disabled={user.role !== "Head" && user.role !== "HR"}
+                            rows={3}
+                            style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem", resize: "none" }}
+                          />
                         </div>
                       </div>
 
-                      {user && (user.role === "Head" || user.role === "HR") && (
-                        <button type="submit" className="save-settings-btn" disabled={submitting} style={{ marginTop: "24px" }}>
-                          Save Workspace Settings
-                        </button>
+                      {/* Section 4: Member Defaults */}
+                      <div id="sec-defaults" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "16px" }}>
+                        <div>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Member Defaults</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            Default role automatically assigned when a new member joins the organization.
+                          </p>
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", maxWidth: "320px" }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: "700", color: "var(--text-primary)" }}>Default New User Role</label>
+                          <select 
+                            value={orgDefaultRole} 
+                            onChange={(e) => setOrgDefaultRole(e.target.value)}
+                            disabled={user.role !== "Head"}
+                            style={{ padding: "10px 14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text-primary)", fontSize: "0.85rem", outline: "none" }}
+                          >
+                            <option value="Student" style={{ background: "var(--bg-secondary)" }}>Student</option>
+                            <option value="Intern" style={{ background: "var(--bg-secondary)" }}>Intern</option>
+                            <option value="Executive" style={{ background: "var(--bg-secondary)" }}>Executive</option>
+                            <option value="Team Lead" style={{ background: "var(--bg-secondary)" }}>Team Lead</option>
+                            <option value="HR" style={{ background: "var(--bg-secondary)" }}>HR</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Section 5: Collaboration Policies */}
+                      <div id="sec-policies" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "20px" }}>
+                        <div>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Collaboration Policies</h3>
+                          <p style={{ margin: "4px 0 0 0", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            Control invitation permissions, department visibility, and workspace sharing boundaries.
+                          </p>
+                        </div>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                          {/* Toggle 1: Lead Invite */}
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", background: "rgba(0,0,0,0.12)", borderRadius: "14px", border: "1px solid var(--border)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(56, 189, 248, 0.15)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>
+                                <FiMail />
+                              </div>
+                              <div>
+                                <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: "700" }}>Enable Team Lead Invitations</h4>
+                                <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>Allows Team Leads to send workspace invitations to new members</span>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={allowLeadInvite}
+                              disabled={user.role !== "Head"}
+                              onClick={() => setAllowLeadInvite(!allowLeadInvite)}
+                              style={{
+                                width: "50px", height: "28px", borderRadius: "14px", background: allowLeadInvite ? "var(--accent)" : "var(--border)",
+                                border: "none", position: "relative", cursor: "pointer", transition: "all 0.2s ease"
+                              }}
+                            >
+                              <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#ffffff", position: "absolute", top: "3px", left: allowLeadInvite ? "25px" : "3px", transition: "all 0.2s ease" }} />
+                            </button>
+                          </div>
+
+                          {/* Toggle 2: Show Depts */}
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", background: "rgba(0,0,0,0.12)", borderRadius: "14px", border: "1px solid var(--border)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(139, 92, 246, 0.15)", color: "#8b5cf6", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>
+                                <FiBriefcase />
+                              </div>
+                              <div>
+                                <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: "700" }}>Show All Departments to Members</h4>
+                                <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>Allows members to view coworkers from other departments in directory</span>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={showAllDepts}
+                              disabled={user.role !== "Head"}
+                              onClick={() => setShowAllDepts(!showAllDepts)}
+                              style={{
+                                width: "50px", height: "28px", borderRadius: "14px", background: showAllDepts ? "var(--accent)" : "var(--border)",
+                                border: "none", position: "relative", cursor: "pointer", transition: "all 0.2s ease"
+                              }}
+                            >
+                              <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#ffffff", position: "absolute", top: "3px", left: showAllDepts ? "25px" : "3px", transition: "all 0.2s ease" }} />
+                            </button>
+                          </div>
+
+                          {/* Toggle 3: External Sharing */}
+                          <div id="sec-sharing" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px", background: "rgba(0,0,0,0.12)", borderRadius: "14px", border: "1px solid var(--border)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(236, 72, 153, 0.15)", color: "#ec4899", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem" }}>
+                                <FiShare2 />
+                              </div>
+                              <div>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                  <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: "700" }}>Allow External Chat Sharing</h4>
+                                  {allowExtSharing && (
+                                    <span style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(245, 158, 11, 0.15)", color: "#f59e0b", fontWeight: "700" }}>
+                                      ⚠️ External Enabled
+                                    </span>
+                                  )}
+                                </div>
+                                <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>Enables chat sharing with users outside the organization workspace</span>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={allowExtSharing}
+                              disabled={user.role !== "Head"}
+                              onClick={() => setAllowExtSharing(!allowExtSharing)}
+                              style={{
+                                width: "50px", height: "28px", borderRadius: "14px", background: allowExtSharing ? "var(--accent)" : "var(--border)",
+                                border: "none", position: "relative", cursor: "pointer", transition: "all 0.2s ease"
+                              }}
+                            >
+                              <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#ffffff", position: "absolute", top: "3px", left: allowExtSharing ? "25px" : "3px", transition: "all 0.2s ease" }} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Section 6: Security & Access */}
+                      <div id="sec-security" className="glass" style={{ padding: "24px", borderRadius: "18px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "14px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <FiLock style={{ color: "var(--accent)", fontSize: "1.2rem" }} />
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750" }}>Security & Access</h3>
+                        </div>
+                        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                          All workspace communications are encrypted using SHA-256 JWT authorization tokens. Member access levels are governed by strict RBAC middleware.
+                        </p>
+                      </div>
+
+                      {/* Section 7: Danger Zone (Head only) */}
+                      {user && user.role === "Head" && (
+                        <div id="sec-danger" className="glass danger-card" style={{ padding: "24px", borderRadius: "18px", border: "1px solid rgba(239, 68, 68, 0.3)", background: "rgba(239, 68, 68, 0.04)", display: "flex", flexDirection: "column", gap: "14px" }}>
+                          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "750", color: "var(--danger)" }}>Danger Zone</h3>
+                          <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            Transfer workspace ownership or revoke administrative credentials. This action requires strict confirmation.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setShowTransferModal(true)}
+                            className="danger-action-btn"
+                            style={{ width: "fit-content", background: "var(--danger)", color: "#fff", border: "none", padding: "8px 18px", borderRadius: "10px", fontSize: "0.82rem", fontWeight: "700", cursor: "pointer" }}
+                          >
+                            Transfer Ownership
+                          </button>
+                        </div>
                       )}
                     </form>
                   </div>
 
-                  {/* Danger Zone (Head only) */}
-                  {user && user.role === "Head" && (
-                    <div className="settings-card glass danger-card">
-                      <h3>Danger Zone</h3>
-                      <p>Critical actions regarding workspace ownership and data preservation</p>
-                      
-                      <div className="danger-actions-list" style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
-                        <div className="danger-action-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(239, 68, 68, 0.15)", paddingBottom: "16px" }}>
-                          <div className="action-info">
-                            <strong>Transfer Workspace Ownership</strong>
-                            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Change owner credentials and demote your profile role to Team Lead</p>
-                          </div>
-                          <button className="danger-action-btn" onClick={() => setShowTransferModal(true)}>
-                            Transfer Ownership
+                  {/* Sticky Bottom Save Bar (`isDirty`) */}
+                  <AnimatePresence>
+                    {isDirty && (
+                      <motion.div
+                        initial={{ y: 80, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 80, opacity: 0 }}
+                        className="glass"
+                        style={{
+                          position: "fixed",
+                          bottom: "24px",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          zIndex: 200,
+                          width: "90%",
+                          maxWidth: "800px",
+                          padding: "14px 24px",
+                          borderRadius: "16px",
+                          border: "1px solid var(--accent)",
+                          background: "var(--bg-secondary)",
+                          display: "flex",
+                          justify: "space-between",
+                          alignItems: "center",
+                          boxShadow: "var(--shadow-xl)"
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "var(--accent)" }} />
+                          <span style={{ fontSize: "0.88rem", fontWeight: "700", color: "var(--text-primary)" }}>You have unsaved changes</span>
+                        </div>
+                        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                          <button
+                            type="button"
+                            onClick={handleDiscardChanges}
+                            style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text-secondary)", padding: "8px 16px", borderRadius: "10px", fontSize: "0.82rem", fontWeight: "600", cursor: "pointer" }}
+                          >
+                            Discard
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleSaveSettings}
+                            disabled={submitting}
+                            style={{ background: "var(--accent)", color: "#ffffff", border: "none", padding: "8px 18px", borderRadius: "10px", fontSize: "0.82rem", fontWeight: "700", cursor: "pointer", boxShadow: "var(--shadow-md)" }}
+                          >
+                            {submitting ? "Saving..." : "Save Changes"}
                           </button>
                         </div>
-
-                        <div className="danger-action-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <div className="action-info">
-                            <strong>Delete Workspace Organization</strong>
-                            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Permanently delete this organization, codes, and demote all member accounts</p>
-                          </div>
-                          <button className="danger-action-btn delete" onClick={handleDeleteOrg}>
-                            Delete Workspace
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })()}
           </div>
         )}
       </main>
