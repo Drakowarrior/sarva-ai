@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiMessageSquare, FiCpu, FiFileText, FiDatabase, FiLock, FiCheckCircle, FiCopy, FiCheck, FiDownload, FiTerminal, FiLayers } from "react-icons/fi";
+import { FiMessageSquare, FiCpu, FiFileText, FiDatabase, FiLock, FiCheckCircle, FiCopy, FiCheck, FiDownload, FiTerminal, FiLayers, FiCode } from "react-icons/fi";
 import "./ProductMockups.css";
 
 export const ChatInterfaceMockup = () => {
