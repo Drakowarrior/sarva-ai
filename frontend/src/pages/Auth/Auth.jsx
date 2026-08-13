@@ -1,10 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { FiMail, FiLock, FiUser, FiArrowLeft, FiLoader, FiKey, FiCheckCircle, FiLayers, FiBriefcase, FiFolder, FiShield, FiEye, FiEyeOff } from "react-icons/fi";
+import { useTheme } from "../../context/ThemeContext";
+import { 
+  FiMail, FiLock, FiUser, FiArrowLeft, FiLoader, FiKey, 
+  FiCheck, FiCheckCircle, FiLayers, FiBriefcase, FiShield, 
+  FiEye, FiEyeOff, FiMoon, FiSun, FiZap, FiArrowRight 
+} from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import "./Auth.css";
 
 function Auth() {
   const [authMode, setAuthMode] = useState("login"); // "login" | "register" | "forgot" | "reset"
@@ -18,8 +24,14 @@ function Auth() {
   const [demoToken, setDemoToken] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Robot Mascot Interaction States
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isBlinking, setIsBlinking] = useState(false);
+  const [confetti, setConfetti] = useState([]);
 
   // Workspace Collaboration States
   const [accountType, setAccountType] = useState("personal"); // "personal" | "organization"
@@ -33,8 +45,29 @@ function Auth() {
   const [inviteCode, setInviteCode] = useState("");
 
   const { login, register, isAuthenticated, checkingAuth } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
+  // Mouse Parallax Eye Tracking
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+      const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+      setMousePos({ x: x * 7, y: y * 7 });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Random Robot Blinking Interval (4-7s)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsBlinking(true);
+      setTimeout(() => setIsBlinking(false), 180);
+    }, 4800);
+    return () => clearInterval(interval);
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -46,13 +79,24 @@ function Auth() {
   // Auto sync role state based on orgFlow selection
   useEffect(() => {
     if (accountType === "organization") {
-      if (orgFlow === "create") {
-        setRole("Head");
-      } else {
-        setRole("Student");
-      }
+      setRole(orgFlow === "create" ? "Head" : "Student");
     }
   }, [accountType, orgFlow]);
+
+  // Trigger Confetti Micro-burst
+  const triggerConfetti = () => {
+    const colors = ["#38bdf8", "#8b5cf6", "#ec4899", "#10b981", "#f59e0b"];
+    const particles = Array.from({ length: 36 }).map((_, i) => ({
+      id: i,
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      tx: (Math.random() - 0.5) * 600,
+      ty: (Math.random() - 0.5) * 600 - 100,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    }));
+    setConfetti(particles);
+    setTimeout(() => setConfetti([]), 1100);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,9 +112,12 @@ function Auth() {
       const res = await login(email, password);
       if (!res.success) {
         setError(res.error);
+        setLoading(false);
+      } else {
+        setSubmitSuccess(true);
+        triggerConfetti();
       }
     } else if (authMode === "register") {
-      // Validate workspace fields
       if (accountType === "personal") {
         if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
           setError("All fields are required.");
@@ -113,7 +160,7 @@ function Auth() {
         password: password,
         accountType: accountType,
         orgFlow: accountType === "organization" ? orgFlow : undefined,
-        organizationName: (accountType === "organization" && orgFlow === "create") ? organizationName.strip ? organizationName.strip() : organizationName.trim() : undefined,
+        organizationName: (accountType === "organization" && orgFlow === "create") ? organizationName.trim() : undefined,
         description: (accountType === "organization" && orgFlow === "create") ? orgDescription.trim() : undefined,
         industry: (accountType === "organization" && orgFlow === "create") ? orgIndustry.trim() : undefined,
         department: accountType === "organization" ? department.trim() : undefined,
@@ -124,6 +171,10 @@ function Auth() {
       const res = await register(payload);
       if (!res.success) {
         setError(res.error);
+        setLoading(false);
+      } else {
+        setSubmitSuccess(true);
+        triggerConfetti();
       }
     } else if (authMode === "forgot") {
       if (!email.trim()) {
@@ -142,6 +193,7 @@ function Auth() {
       } catch (err) {
         setError(err.response?.data?.detail || "An error occurred while requesting reset.");
       }
+      setLoading(false);
     } else if (authMode === "reset") {
       if (!email.trim() || !resetToken || !newPassword || !confirmNewPassword) {
         setError("All fields are required.");
@@ -177,153 +229,95 @@ function Auth() {
       } catch (err) {
         setError(err.response?.data?.detail || "An error occurred while resetting password.");
       }
+      setLoading(false);
     }
-    setLoading(false);
   };
+
+  const isEmailValid = email.includes("@") && email.includes(".");
 
   if (checkingAuth) {
     return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--bg-primary)"
-      }}>
-        <FiLoader className="spin" style={{ fontSize: "2rem", color: "var(--accent)" }} />
+      <div style={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-primary)" }}>
+        <FiLoader className="spin" style={{ fontSize: "2.4rem", color: "var(--accent)" }} />
       </div>
     );
   }
 
   return (
-    <div style={{
-      position: "relative",
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "flex-start",
-      background: "var(--bg-primary)",
-      overflowY: "auto",
-      padding: "40px 24px"
-    }}>
-      {/* Background glow effects */}
-      <div style={{
-        position: "absolute",
-        top: "20%",
-        left: "15%",
-        width: "50vw",
-        height: "50vw",
-        background: "radial-gradient(circle, rgba(56, 189, 248, 0.07) 0%, rgba(0,0,0,0) 70%)",
-        pointerEvents: "none",
-        zIndex: 0
-      }} />
-      <div style={{
-        position: "absolute",
-        bottom: "10%",
-        right: "15%",
-        width: "40vw",
-        height: "40vw",
-        background: "radial-gradient(circle, rgba(244, 114, 182, 0.04) 0%, rgba(0,0,0,0) 70%)",
-        pointerEvents: "none",
-        zIndex: 0
-      }} />
+    <div className="auth-page-wrapper">
+      {/* Grain texture overlay */}
+      <div className="auth-noise-overlay" />
 
-      <Link
-        to="/"
-        style={{
-          position: "absolute",
-          top: "24px",
-          left: "24px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          color: "var(--text-secondary)",
-          textDecoration: "none",
-          fontSize: "0.9rem",
-          zIndex: 10,
-          transition: "color 0.2s ease"
-        }}
-        onMouseEnter={(e) => e.target.style.color = "var(--text-primary)"}
-        onMouseLeave={(e) => e.target.style.color = "var(--text-secondary)"}
-      >
-        <FiArrowLeft /> Back to Home
-      </Link>
+      {/* Animated Drifting Background Gradient Mesh Blobs */}
+      <div className="auth-blob auth-blob-1" />
+      <div className="auth-blob auth-blob-2" />
+      <div className="auth-blob auth-blob-3" />
 
-      {/* Side-by-Side Flex Layout Grid */}
-      <div className="auth-grid-container" style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "64px",
-        width: "100%",
-        maxWidth: "960px",
-        margin: "auto 0",
-        zIndex: 5,
-        position: "relative"
-      }}>
-        {/* Waving 3D-feel Assistant Robot */}
-        <div className="auth-character-column" style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          flex: 1,
-          maxWidth: "380px"
-        }}>
-          {/* Animated Speech Bubble */}
+      {/* Confetti Micro-Burst Overlay */}
+      {confetti.length > 0 && (
+        <div className="auth-confetti-container">
+          {confetti.map((p) => (
+            <div
+              key={p.id}
+              className="confetti-particle"
+              style={{
+                left: `${p.x}px`,
+                top: `${p.y}px`,
+                backgroundColor: p.color,
+                "--tx": `${p.tx}px`,
+                "--ty": `${p.ty}px`
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Top Bar Navigation Actions */}
+      <header className="auth-top-nav">
+        <Link to="/" className="auth-back-btn">
+          <FiArrowLeft /> Back to Home
+        </Link>
+
+        <button 
+          onClick={toggleTheme} 
+          className="auth-theme-toggle"
+          aria-label="Toggle Theme Mode"
+          title="Toggle Theme Mode"
+        >
+          {theme === "light" ? <FiMoon /> : <FiSun />}
+        </button>
+      </header>
+
+      {/* Main Side-by-Side Content */}
+      <main className="auth-main-container">
+        {/* Robot Mascot Column */}
+        <div className="auth-mascot-column">
+          {/* Speech Bubble */}
           <AnimatePresence mode="wait">
             <motion.div
               key={authMode}
-              initial={{ opacity: 0, scale: 0.8, y: 15 }}
+              initial={{ opacity: 0, scale: 0.7, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 15 }}
-              transition={{ duration: 0.4, cubicBezier: [0.16, 1, 0.3, 1] }}
-              style={{
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: "20px",
-                padding: "16px 20px",
-                color: "var(--text-primary)",
-                fontSize: "0.95rem",
-                fontWeight: "500",
-                maxWidth: "300px",
-                boxShadow: "var(--shadow-md)",
-                marginBottom: "24px",
-                position: "relative",
-                textAlign: "center"
-              }}
+              exit={{ opacity: 0, scale: 0.7, y: 15 }}
+              transition={{ type: "spring", stiffness: 350, damping: 22 }}
+              className="auth-speech-bubble"
             >
-              {authMode === "login" && "Welcome back! Sign in to access your secure space. 👋"}
-              {authMode === "register" && "Hey! Let's get you set up to start saving secure chats. 🚀"}
-              {authMode === "forgot" && "Don't worry! Let's verify your identity and get you back in. 🔑"}
-              {authMode === "reset" && "Almost there! Create a strong password you can remember. 🔒"}
-              {/* Triangle bubble pointer */}
-              <div style={{
-                position: "absolute",
-                bottom: "-8px",
-                left: "50%",
-                transform: "translateX(-50%) rotate(45deg)",
-                width: "16px",
-                height: "16px",
-                background: "var(--bg-card)",
-                borderRight: "1px solid var(--border)",
-                borderBottom: "1px solid var(--border)"
-              }} />
+              {authMode === "login" && "Let's get you back in 👋"}
+              {authMode === "register" && "Let me help you setup your space! 🚀"}
+              {authMode === "forgot" && "No worries! Let's verify your identity 🔑"}
+              {authMode === "reset" && "Almost done! Create your new password 🔒"}
+              <div className="auth-speech-tail" />
             </motion.div>
           </AnimatePresence>
 
-          {/* Interactive SVG Waving Character */}
+          {/* Interactive SVG Robot Mascot with Cursor Eye Tracking */}
           <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            style={{ width: "320px", height: "320px" }}
+            animate={{ y: [0, -8, 0], scale: [1, 1.02, 1] }}
+            transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+            style={{ width: "300px", height: "300px" }}
           >
             <svg width="100%" height="100%" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0.9" />
-                </linearGradient>
                 <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#1e293b" />
                   <stop offset="100%" stopColor="#0f172a" />
@@ -338,7 +332,7 @@ function Auth() {
                 </filter>
               </defs>
 
-              {/* Antenna */}
+              {/* Pulsing Antenna */}
               <rect x="146" y="10" width="8" height="35" rx="4" fill="#38bdf8" />
               <motion.circle
                 cx="150"
@@ -346,8 +340,8 @@ function Auth() {
                 r="8"
                 fill="#38bdf8"
                 filter="url(#glow)"
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.1, 0.9] }}
+                transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
               />
 
               {/* Neck */}
@@ -356,7 +350,7 @@ function Auth() {
               {/* Body */}
               <rect x="90" y="150" width="120" height="110" rx="30" fill="url(#bodyGrad)" stroke="var(--border)" strokeWidth="2" />
               
-              {/* Chest circular screen */}
+              {/* Chest orb */}
               <rect x="110" y="170" width="80" height="70" rx="15" fill="#020617" stroke="rgba(255,255,255,0.05)" />
               <motion.circle
                 cx="150"
@@ -370,46 +364,51 @@ function Auth() {
                 transition={{ repeat: Infinity, duration: 6, ease: "linear" }}
                 style={{ transformOrigin: "150px 205px" }}
               />
-              <circle cx="150" cy="205" r="8" fill="#ec4899" filter="url(#glow)" />
+              <motion.circle
+                cx="150"
+                cy="205"
+                r="8"
+                fill="#ec4899"
+                filter="url(#glow)"
+                animate={{ scale: [0.85, 1.15, 0.85] }}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              />
 
               {/* Head */}
               <rect x="70" y="40" width="160" height="100" rx="35" fill="url(#bodyGrad)" stroke="var(--border)" strokeWidth="2.5" />
               <rect x="82" y="52" width="136" height="76" rx="23" fill="#020617" />
 
-              {/* Glowing blinking eyes */}
-              <g>
+              {/* Cursor Tracking Eyes with Blinking Animation */}
+              <g style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}>
                 <motion.ellipse
                   cx="122"
                   cy="90"
                   rx="14"
-                  ry="20"
+                  ry={submitSuccess ? "4" : isBlinking ? "2" : "20"}
                   fill="url(#eyeGrad)"
                   filter="url(#glow)"
-                  animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
-                  transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", repeatDelay: 1 }}
+                  transition={{ duration: 0.15 }}
                   style={{ transformOrigin: "122px 90px" }}
                 />
                 <motion.ellipse
                   cx="178"
                   cy="90"
                   rx="14"
-                  ry="20"
+                  ry={submitSuccess ? "4" : isBlinking ? "2" : "20"}
                   fill="url(#eyeGrad)"
                   filter="url(#glow)"
-                  animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
-                  transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", repeatDelay: 1 }}
+                  transition={{ duration: 0.15 }}
                   style={{ transformOrigin: "178px 90px" }}
                 />
               </g>
 
               {/* Left Arm */}
               <rect x="52" y="165" width="26" height="75" rx="13" fill="url(#bodyGrad)" stroke="var(--border)" strokeWidth="1.5" />
-              <circle cx="65" cy="175" r="8" fill="#475569" />
 
-              {/* Right Arm (Waving!) */}
+              {/* Right Arm (Waving on success or idle wave) */}
               <motion.g
-                animate={{ rotate: [0, -25, 0] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+                animate={submitSuccess ? { rotate: [-10, -45, -10] } : { rotate: [0, -20, 0] }}
+                transition={submitSuccess ? { repeat: 4, duration: 0.4 } : { repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
                 style={{ transformOrigin: "235px 175px" }}
               >
                 <rect
@@ -423,16 +422,6 @@ function Auth() {
                   strokeWidth="1.5"
                   style={{ transform: "rotate(-20deg)", transformOrigin: "235px 175px" }}
                 />
-                <circle cx="235" cy="175" r="8" fill="#475569" />
-                <motion.circle
-                  cx="246"
-                  cy="115"
-                  r="6"
-                  fill="#38bdf8"
-                  filter="url(#glow)"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.1 }}
-                />
               </motion.g>
 
               {/* Base shadow */}
@@ -443,123 +432,70 @@ function Auth() {
                 ry="8"
                 fill="rgba(56, 189, 248, 0.15)"
                 filter="url(#glow)"
-                animate={{ rx: [50, 65, 50], opacity: [0.6, 0.9, 0.6] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                animate={{ rx: [50, 65, 50], opacity: [0.5, 0.85, 0.5] }}
+                transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
               />
             </svg>
           </motion.div>
         </div>
 
-        {/* Form Card Column */}
-        <div className="auth-card-column" style={{
-          flex: 1,
-          maxWidth: "460px",
-          width: "100%"
-        }}>
+        {/* Glassmorphism Auth Card Column */}
+        <div className="auth-card-column">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="glass-card"
-            style={{
-              padding: "40px",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-lg)"
-            }}
+            className="auth-glass-card"
           >
             {/* Header */}
-            <div style={{ textAlign: "center", marginBottom: "32px" }}>
-              <h2 style={{
-                fontSize: "2rem",
-                fontWeight: "800",
-                marginBottom: "8px",
-                background: "linear-gradient(135deg, var(--accent), #f472b6)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent"
-              }}>
+            <div>
+              <h2 className="auth-gradient-title">
                 {authMode === "login" && "Welcome Back"}
                 {authMode === "register" && "Create Account"}
                 {authMode === "forgot" && "Forgot Password"}
                 {authMode === "reset" && "Reset Password"}
               </h2>
-              <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
-                {authMode === "login" && "Sign in to access your secure chats"}
-                {authMode === "register" && "Register to start private sessions"}
+              <p className="auth-subtitle">
+                {authMode === "login" && "Sign in to access your secure AI sessions"}
+                {authMode === "register" && "Register to unlock unlimited features"}
                 {authMode === "forgot" && "Verify your email to reset credentials"}
                 {authMode === "reset" && "Enter security code and new password"}
               </p>
             </div>
 
-            {/* Switch Tabs / Back Action */}
+            {/* Sliding Pill Tab Switcher */}
             {(authMode === "login" || authMode === "register") ? (
-              <div style={{
-                display: "flex",
-                background: "rgba(0, 0, 0, 0.2)",
-                padding: "4px",
-                borderRadius: "8px",
-                border: "1px solid var(--border)",
-                marginBottom: "24px"
-              }}>
+              <div className={`auth-tab-switcher ${authMode === "register" ? "register-mode" : ""}`}>
+                <div className="auth-pill-indicator" />
                 <button
                   type="button"
                   onClick={() => { setAuthMode("login"); setError(""); }}
-                  style={{
-                    flex: 1,
-                    padding: "10px",
-                    border: "none",
-                    borderRadius: "6px",
-                    background: authMode === "login" ? "var(--accent)" : "transparent",
-                    color: authMode === "login" ? "#ffffff" : "var(--text-secondary)",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
+                  className={`auth-tab-btn ${authMode === "login" ? "active" : ""}`}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
                   onClick={() => { setAuthMode("register"); setError(""); }}
-                  style={{
-                    flex: 1,
-                    padding: "10px",
-                    border: "none",
-                    borderRadius: "6px",
-                    background: authMode === "register" ? "var(--accent)" : "transparent",
-                    color: authMode === "register" ? "#ffffff" : "var(--text-secondary)",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
+                  className={`auth-tab-btn ${authMode === "register" ? "active" : ""}`}
                 >
                   Sign Up
                 </button>
               </div>
             ) : (
-              <div style={{ marginBottom: "24px" }}>
+              <div style={{ margin: "20px 0 10px" }}>
                 <button
                   type="button"
                   onClick={() => { setAuthMode("login"); setError(""); setDemoToken(""); }}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    background: "transparent",
-                    border: "none",
-                    color: "var(--text-secondary)",
-                    fontSize: "0.85rem",
-                    cursor: "pointer"
-                  }}
+                  className="auth-back-btn"
+                  style={{ background: "transparent" }}
                 >
-                  <FiArrowLeft /> Back to Sign In
+                  <FiArrowLeft /> Return to Sign In
                 </button>
               </div>
             )}
 
-            {/* Error Message */}
+            {/* Error Feedback */}
             <AnimatePresence>
               {error && (
                 <motion.div
@@ -567,12 +503,12 @@ function Auth() {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   style={{
-                    background: "rgba(239, 68, 68, 0.1)",
-                    border: "1px solid rgba(239, 68, 68, 0.2)",
+                    background: "rgba(239, 68, 68, 0.12)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
                     color: "var(--danger)",
                     padding: "10px 14px",
-                    borderRadius: "8px",
-                    fontSize: "0.85rem",
+                    borderRadius: "12px",
+                    fontSize: "0.86rem",
                     marginBottom: "16px",
                     textAlign: "left"
                   }}
@@ -583,666 +519,295 @@ function Auth() {
             </AnimatePresence>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              {/* Workspace Selection (Register only) */}
+            <form onSubmit={handleSubmit}>
+              {/* Workspace Selection (Register Mode) */}
               {authMode === "register" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem", marginBottom: "8px", display: "block" }}>Select Workspace Type</label>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "8px" }}>
+                <div style={{ marginBottom: "16px" }}>
+                  <label style={{ fontSize: "0.78rem", fontWeight: "700", color: "var(--text-secondary)", display: "block", marginBottom: "8px" }}>
+                    WORKSPACE TYPE
+                  </label>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                     <div 
                       onClick={() => setAccountType("personal")}
                       style={{
-                        padding: "12px",
-                        borderRadius: "10px",
-                        background: accountType === "personal" ? "rgba(56, 189, 248, 0.12)" : "rgba(0, 0, 0, 0.15)",
-                        border: accountType === "personal" ? "2px solid var(--accent)" : "1px solid var(--border)",
+                        padding: "10px",
+                        borderRadius: "12px",
+                        background: accountType === "personal" ? "rgba(56, 189, 248, 0.14)" : "rgba(0,0,0,0.15)",
+                        border: accountType === "personal" ? "2px solid #38bdf8" : "1px solid var(--border)",
                         cursor: "pointer",
-                        textAlign: "center",
-                        transition: "all 0.2s ease"
+                        textAlign: "center"
                       }}
                     >
-                      <FiUser style={{ fontSize: "1.3rem", color: accountType === "personal" ? "var(--accent)" : "var(--text-secondary)", marginBottom: "4px" }} />
-                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)" }}>Personal Workspace</div>
+                      <FiUser style={{ color: accountType === "personal" ? "#38bdf8" : "var(--text-secondary)" }} />
+                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)", marginTop: "2px" }}>Personal</div>
                     </div>
                     <div 
                       onClick={() => setAccountType("organization")}
                       style={{
-                        padding: "12px",
-                        borderRadius: "10px",
-                        background: accountType === "organization" ? "rgba(56, 189, 248, 0.12)" : "rgba(0, 0, 0, 0.15)",
-                        border: accountType === "organization" ? "2px solid var(--accent)" : "1px solid var(--border)",
+                        padding: "10px",
+                        borderRadius: "12px",
+                        background: accountType === "organization" ? "rgba(56, 189, 248, 0.14)" : "rgba(0,0,0,0.15)",
+                        border: accountType === "organization" ? "2px solid #38bdf8" : "1px solid var(--border)",
                         cursor: "pointer",
-                        textAlign: "center",
-                        transition: "all 0.2s ease"
+                        textAlign: "center"
                       }}
                     >
-                      <FiLayers style={{ fontSize: "1.3rem", color: accountType === "organization" ? "var(--accent)" : "var(--text-secondary)", marginBottom: "4px" }} />
-                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)" }}>Organization Workspace</div>
+                      <FiLayers style={{ color: accountType === "organization" ? "#38bdf8" : "var(--text-secondary)" }} />
+                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)", marginTop: "2px" }}>Organization</div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Organization Workspace Options (Register + Org only) */}
+              {/* Organization Mode Selection */}
               {authMode === "register" && accountType === "organization" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem", marginBottom: "8px", display: "block" }}>Organization Mode</label>
-                  <div style={{ display: "flex", background: "rgba(0, 0, 0, 0.15)", padding: "4px", borderRadius: "8px", border: "1px solid var(--border)", marginBottom: "8px" }}>
+                <div style={{ marginBottom: "16px" }}>
+                  <div style={{ display: "flex", gap: "8px" }}>
                     <button
                       type="button"
-                      onClick={() => { setOrgFlow("create"); setRole("Head"); }}
+                      onClick={() => setOrgFlow("create")}
                       style={{
                         flex: 1,
                         padding: "8px",
-                        border: "none",
-                        borderRadius: "6px",
+                        borderRadius: "8px",
+                        border: "1px solid var(--border)",
                         background: orgFlow === "create" ? "var(--accent)" : "transparent",
-                        color: orgFlow === "create" ? "#ffffff" : "var(--text-secondary)",
+                        color: orgFlow === "create" ? "#fff" : "var(--text-secondary)",
                         fontWeight: "600",
                         fontSize: "0.8rem",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
+                        cursor: "pointer"
                       }}
                     >
-                      Create Organization
+                      Create Org
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setOrgFlow("join"); setRole("Student"); }}
+                      onClick={() => setOrgFlow("join")}
                       style={{
                         flex: 1,
                         padding: "8px",
-                        border: "none",
-                        borderRadius: "6px",
+                        borderRadius: "8px",
+                        border: "1px solid var(--border)",
                         background: orgFlow === "join" ? "var(--accent)" : "transparent",
-                        color: orgFlow === "join" ? "#ffffff" : "var(--text-secondary)",
+                        color: orgFlow === "join" ? "#fff" : "var(--text-secondary)",
                         fontWeight: "600",
                         fontSize: "0.8rem",
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
+                        cursor: "pointer"
                       }}
                     >
-                      Join Organization
+                      Join Org
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Full Name Field (Register only) */}
+              {/* Full Name (Register only) */}
               {authMode === "register" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem" }}>Full Name</label>
-                  <div style={{ position: "relative" }}>
-                    <FiUser style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-secondary)"
-                    }} />
-                    <input
-                      type="text"
-                      placeholder="Karan Garg"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px 10px 36px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
-                    />
-                  </div>
+                <div className="auth-input-group">
+                  <input
+                    type="text"
+                    id="fullName"
+                    className="auth-input-field"
+                    placeholder=" "
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="fullName" className="auth-floating-label">Full Name</label>
+                  <FiUser className="auth-field-icon" />
                 </div>
               )}
 
               {/* Create Org Fields */}
               {authMode === "register" && accountType === "organization" && orgFlow === "create" && (
                 <>
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Organization Name</label>
-                    <div style={{ position: "relative" }}>
-                      <FiBriefcase style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "var(--text-secondary)"
-                      }} />
-                      <input
-                        type="text"
-                        placeholder="e.g. IGT Solutions"
-                        value={organizationName}
-                        onChange={(e) => setOrganizationName(e.target.value)}
-                        required
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          background: "rgba(0, 0, 0, 0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem"
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Organization Description (Optional)</label>
+                  <div className="auth-input-group">
                     <input
                       type="text"
-                      placeholder="e.g. Enterprise AI Services"
-                      value={orgDescription}
-                      onChange={(e) => setOrgDescription(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
+                      id="orgName"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={organizationName}
+                      onChange={(e) => setOrganizationName(e.target.value)}
+                      required
                     />
-                  </div>
-
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Industry (Optional)</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Technology"
-                      value={orgIndustry}
-                      onChange={(e) => setOrgIndustry(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
-                    />
+                    <label htmlFor="orgName" className="auth-floating-label">Organization Name</label>
+                    <FiBriefcase className="auth-field-icon" />
                   </div>
                 </>
               )}
 
-              {/* Join Org Invite Code Field */}
+              {/* Join Org Invite Code */}
               {authMode === "register" && accountType === "organization" && orgFlow === "join" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem" }}>Invitation / Invite Code</label>
-                  <div style={{ position: "relative" }}>
-                    <FiShield style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-secondary)"
-                    }} />
-                    <input
-                      type="text"
-                      placeholder="e.g. INV-ABCDEF"
-                      value={inviteCode}
-                      onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px 10px 36px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem",
-                        letterSpacing: "1px"
-                      }}
-                    />
-                  </div>
+                <div className="auth-input-group">
+                  <input
+                    type="text"
+                    id="inviteCode"
+                    className="auth-input-field"
+                    placeholder=" "
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                    required
+                  />
+                  <label htmlFor="inviteCode" className="auth-floating-label">Invitation Code</label>
+                  <FiShield className="auth-field-icon" />
                 </div>
               )}
 
-              {/* Department & Role Fields (Org Register only) */}
+              {/* Department (Register Org) */}
               {authMode === "register" && accountType === "organization" && (
-                <>
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Department</label>
-                    <div style={{ position: "relative" }}>
-                      <FiFolder style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "var(--text-secondary)"
-                      }} />
-                      <input
-                        type="text"
-                        placeholder="e.g. Artificial Intelligence"
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
-                        required
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          background: "rgba(0, 0, 0, 0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem"
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {orgFlow === "create" ? (
-                    <div style={{
-                      background: "rgba(14, 165, 233, 0.1)",
-                      border: "1px solid rgba(14, 165, 233, 0.2)",
-                      borderRadius: "8px",
-                      padding: "12px 14px",
-                      fontSize: "0.85rem",
-                      color: "var(--text-primary)",
-                      marginBottom: "16px",
-                      lineHeight: "1.4"
-                    }}>
-                      ℹ️ <strong>Head & Organization Owner</strong> will be automatically assigned to your account. This role has full administrative control over the organization.
-                    </div>
-                  ) : (
-                    <div className="settings-group" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                      <label className="settings-label" style={{ fontSize: "0.8rem" }}>Your Role</label>
-                      <select
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                        required
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px",
-                          background: "rgba(0, 0, 0, 0.45)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem"
-                        }}
-                      >
-                        <option value="HR">HR</option>
-                        <option value="Team Lead">Team Lead</option>
-                        <option value="Executive">Executive</option>
-                        <option value="Intern">Intern</option>
-                        <option value="Student">Student</option>
-                      </select>
-                      <div style={{
-                        background: "rgba(245, 158, 11, 0.08)",
-                        border: "1px solid rgba(245, 158, 11, 0.2)",
-                        borderRadius: "8px",
-                        padding: "12px 14px",
-                        fontSize: "0.85rem",
-                        color: "var(--text-secondary)",
-                        lineHeight: "1.4"
-                      }}>
-                        ℹ️ Your account will remain pending until it is approved by your organization's Head or HR. You will not be able to access the organization workspace until approval is granted.
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Email (Always show, except Reset screen) */}
-              {authMode !== "reset" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem" }}>Email Address</label>
-                  <div style={{ position: "relative" }}>
-                    <FiMail style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-secondary)"
-                    }} />
-                    <input
-                      type="email"
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px 10px 36px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
-                    />
-                  </div>
+                <div className="auth-input-group">
+                  <input
+                    type="text"
+                    id="department"
+                    className="auth-input-field"
+                    placeholder=" "
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="department" className="auth-floating-label">Department Name</label>
+                  <FiBriefcase className="auth-field-icon" />
                 </div>
               )}
 
-              {/* Password (Login / Register only) */}
+              {/* Email Address */}
+              <div className={`auth-input-group ${error && !email ? "shake" : ""}`}>
+                <input
+                  type="email"
+                  id="email"
+                  className="auth-input-field"
+                  placeholder=" "
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <label htmlFor="email" className="auth-floating-label">Email Address</label>
+                <FiMail className="auth-field-icon" />
+                {isEmailValid && <FiCheck className="auth-valid-check" />}
+              </div>
+
+              {/* Password Field (Login & Register) */}
               {(authMode === "login" || authMode === "register") && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem" }}>Password</label>
-                  <div style={{ position: "relative" }}>
-                    <FiLock style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-secondary)"
-                    }} />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "10px 40px 10px 36px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "transparent",
-                        border: "none",
-                        color: "var(--text-secondary)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        padding: 0
-                      }}
-                    >
-                      {showPassword ? <FiEyeOff /> : <FiEye />}
-                    </button>
-                  </div>
-                  {authMode === "login" && (
-                    <div style={{ textAlign: "right", marginTop: "8px" }}>
-                      <button
-                        type="button"
-                        onClick={() => { setAuthMode("forgot"); setError(""); }}
-                        style={{
-                          background: "transparent",
-                          border: "none",
-                          color: "var(--accent)",
-                          fontSize: "0.8rem",
-                          cursor: "pointer",
-                          textDecoration: "underline",
-                          padding: 0
-                        }}
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Confirm Password (Register only) */}
-              {authMode === "register" && (
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.8rem" }}>Confirm Password</label>
-                  <div style={{ position: "relative" }}>
-                    <FiLock style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-secondary)"
-                    }} />
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "10px 40px 10px 36px",
-                        background: "rgba(0, 0, 0, 0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.9rem"
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "transparent",
-                        border: "none",
-                        color: "var(--text-secondary)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        padding: 0
-                      }}
-                    >
-                      {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Demo security token alert box (Forgot screen only) */}
-              {authMode === "forgot" && demoToken && (
-                <div style={{
-                  background: "rgba(168, 85, 247, 0.08)",
-                  border: "1px solid rgba(168, 85, 247, 0.3)",
-                  borderRadius: "12px",
-                  padding: "14px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginTop: "8px",
-                  textAlign: "center"
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--accent)", fontWeight: "600", fontSize: "0.85rem" }}>
-                    <FiCheckCircle /> Demo Security Code Generated
-                  </div>
-                  <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--text-primary)", letterSpacing: "2px" }}>
-                    {demoToken}
-                  </div>
-                  <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-                    Copy this code to proceed. In production, this would be sent to your email.
-                  </span>
+                <div className={`auth-input-group ${error && !password ? "shake" : ""}`}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    className="auth-input-field"
+                    placeholder=" "
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="password" className="auth-floating-label">Password</label>
+                  <FiLock className="auth-field-icon" />
                   <button
                     type="button"
-                    onClick={() => setAuthMode("reset")}
-                    style={{
-                      background: "var(--accent)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "6px",
-                      padding: "6px 12px",
-                      fontSize: "0.8rem",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                      marginTop: "4px"
-                    }}
+                    className="auth-right-icon-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    tabIndex="-1"
                   >
-                    Proceed to Reset
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
               )}
 
-              {/* Reset Screen Fields */}
+              {/* Confirm Password (Register) */}
+              {authMode === "register" && (
+                <div className="auth-input-group">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    className="auth-input-field"
+                    placeholder=" "
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <label htmlFor="confirmPassword" className="auth-floating-label">Confirm Password</label>
+                  <FiLock className="auth-field-icon" />
+                  <button
+                    type="button"
+                    className="auth-right-icon-btn"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    tabIndex="-1"
+                  >
+                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                  </button>
+                </div>
+              )}
+
+              {/* Reset Password Token & Passwords */}
               {authMode === "reset" && (
                 <>
-                  {/* Security Reset Code */}
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Security Code</label>
-                    <div style={{ position: "relative" }}>
-                      <FiKey style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "var(--text-secondary)"
-                      }} />
-                      <input
-                        type="text"
-                        placeholder="ENTER CODE"
-                        value={resetToken}
-                        onChange={(e) => setResetToken(e.target.value.toUpperCase())}
-                        required
-                        maxLength={6}
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          background: "rgba(0, 0, 0, 0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem",
-                          letterSpacing: "1px"
-                        }}
-                      />
-                    </div>
+                  <div className="auth-input-group">
+                    <input
+                      type="text"
+                      id="resetToken"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={resetToken}
+                      onChange={(e) => setResetToken(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="resetToken" className="auth-floating-label">Security Reset Code</label>
+                    <FiKey className="auth-field-icon" />
                   </div>
 
-                  {/* New Password */}
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>New Password</label>
-                    <div style={{ position: "relative" }}>
-                      <FiLock style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "var(--text-secondary)"
-                      }} />
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          background: "rgba(0, 0, 0, 0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem"
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Confirm New Password */}
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.8rem" }}>Confirm New Password</label>
-                    <div style={{ position: "relative" }}>
-                      <FiLock style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "var(--text-secondary)"
-                      }} />
-                      <input
-                        type="password"
-                        placeholder="••••••••"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        required
-                        style={{
-                          width: "100%",
-                          padding: "10px 12px 10px 36px",
-                          background: "rgba(0, 0, 0, 0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "8px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.9rem"
-                        }}
-                      />
-                    </div>
+                  <div className="auth-input-group">
+                    <input
+                      type="password"
+                      id="newPassword"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="newPassword" className="auth-floating-label">New Password</label>
+                    <FiLock className="auth-field-icon" />
                   </div>
                 </>
               )}
 
-              {/* Submit Button */}
-              <button
+              {/* Forgot password link */}
+              {authMode === "login" && (
+                <div style={{ textAlign: "right", marginTop: "-8px", marginBottom: "16px" }}>
+                  <button
+                    type="button"
+                    onClick={() => { setAuthMode("forgot"); setError(""); }}
+                    style={{ background: "transparent", border: "none", color: "#38bdf8", fontSize: "0.82rem", cursor: "pointer", fontWeight: "600" }}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+              )}
+
+              {/* Submit CTA Button */}
+              <motion.button
                 type="submit"
-                disabled={loading || (authMode === "forgot" && demoToken)}
-                className="new-chat-btn"
-                style={{
-                  marginTop: "12px",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  fontWeight: "600",
-                  fontSize: "0.9rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  cursor: (loading || (authMode === "forgot" && demoToken)) ? "not-allowed" : "pointer"
-                }}
+                disabled={loading}
+                whileTap={{ scale: 0.97 }}
+                className="auth-submit-btn"
               >
                 {loading ? (
-                  <>
-                    <FiLoader className="spin" />
-                    {authMode === "login" && "Signing In..."}
-                    {authMode === "register" && "Signing Up..."}
-                    {authMode === "forgot" && "Generating Code..."}
-                    {authMode === "reset" && "Updating Password..."}
-                  </>
+                  <FiLoader className="spin" style={{ fontSize: "1.2rem" }} />
+                ) : submitSuccess ? (
+                  <><FiCheckCircle /> Success!</>
                 ) : (
                   <>
                     {authMode === "login" && "Sign In"}
-                    {authMode === "register" && "Sign Up"}
-                    {authMode === "forgot" && "Request Security Code"}
+                    {authMode === "register" && "Create Account"}
+                    {authMode === "forgot" && "Send Reset Code"}
                     {authMode === "reset" && "Update Password"}
+                    <FiArrowRight />
                   </>
                 )}
-              </button>
+              </motion.button>
             </form>
-
-            <div style={{
-              textAlign: "center",
-              marginTop: "24px",
-              fontSize: "0.85rem",
-              color: "var(--text-secondary)"
-            }}>
-              🛡️ Secure authentication powered by end-to-end token encryption.
-            </div>
           </motion.div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
