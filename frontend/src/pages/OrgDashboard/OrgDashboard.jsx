@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import * as orgService from "../../services/orgService";
 import api from "../../services/api";
+import ImageWithFallback from "../../components/Common/ImageWithFallback";
 import "./OrgDashboard.css";
 
 const ROLE_BADGE_COLORS = {
@@ -2464,55 +2465,135 @@ function OrgDashboard() {
                         </div>
                         <div className="form-group flex-1">
                           <label>Primary Branding Color</label>
-                          <input 
-                            type="color" 
-                            value={orgBrandingColor} 
-                            onChange={(e) => setOrgBrandingColor(e.target.value)}
-                            disabled={user.role !== "Head"}
-                            style={{ height: "42px", padding: "2px", cursor: "pointer" }}
-                          />
+                          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                            <input 
+                              type="color" 
+                              value={orgBrandingColor} 
+                              onChange={(e) => setOrgBrandingColor(e.target.value)}
+                              disabled={user.role !== "Head"}
+                              style={{ height: "42px", width: "48px", padding: "2px", cursor: "pointer", border: "1px solid var(--border)", borderRadius: "8px" }}
+                            />
+                            <input 
+                              type="text" 
+                              value={orgBrandingColor} 
+                              onChange={(e) => setOrgBrandingColor(e.target.value)}
+                              disabled={user.role !== "Head"}
+                              style={{ width: "100px", fontFamily: "monospace" }}
+                            />
+                            <div style={{
+                              background: orgBrandingColor,
+                              color: "#ffffff",
+                              padding: "6px 14px",
+                              borderRadius: "8px",
+                              fontSize: "0.75rem",
+                              fontWeight: "700",
+                              boxShadow: "var(--shadow-sm)"
+                            }}>
+                              Primary Button Preview
+                            </div>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="checkbox-policies" style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "12px" }}>
-                        <label className="checkbox-policy-label">
-                          <input 
-                            type="checkbox" 
-                            checked={allowLeadInvite} 
-                            onChange={(e) => setAllowLeadInvite(e.target.checked)} 
-                            disabled={user.role !== "Head"}
-                          />
+                      <div className="checkbox-policies" style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
                           <div className="label-text">
-                            <span>Enable Team Lead Invitations</span>
-                            <span className="desc">Allows Team Leads to send workspace invitations to new members</span>
+                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Enable Team Lead Invitations</span>
+                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Allows Team Leads to send workspace invitations to new members</span>
                           </div>
-                        </label>
+                          <button
+                            type="button"
+                            disabled={user.role !== "Head"}
+                            onClick={() => setAllowLeadInvite(!allowLeadInvite)}
+                            style={{
+                              width: "48px",
+                              height: "26px",
+                              borderRadius: "14px",
+                              background: allowLeadInvite ? "var(--accent)" : "var(--border)",
+                              border: "none",
+                              position: "relative",
+                              cursor: "pointer",
+                              transition: "all 0.2s ease"
+                            }}
+                          >
+                            <div style={{
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "50%",
+                              background: "#ffffff",
+                              position: "absolute",
+                              top: "3px",
+                              left: allowLeadInvite ? "25px" : "3px",
+                              transition: "all 0.2s ease"
+                            }} />
+                          </button>
+                        </div>
 
-                        <label className="checkbox-policy-label">
-                          <input 
-                            type="checkbox" 
-                            checked={showAllDepts} 
-                            onChange={(e) => setShowAllDepts(e.target.checked)} 
-                            disabled={user.role !== "Head"}
-                          />
+                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
                           <div className="label-text">
-                            <span>Show All Departments to Members</span>
-                            <span className="desc">Allows members to view coworkers from other departments in directory</span>
+                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Show All Departments to Members</span>
+                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Allows members to view coworkers from other departments in directory</span>
                           </div>
-                        </label>
+                          <button
+                            type="button"
+                            disabled={user.role !== "Head"}
+                            onClick={() => setShowAllDepts(!showAllDepts)}
+                            style={{
+                              width: "48px",
+                              height: "26px",
+                              borderRadius: "14px",
+                              background: showAllDepts ? "var(--accent)" : "var(--border)",
+                              border: "none",
+                              position: "relative",
+                              cursor: "pointer",
+                              transition: "all 0.2s ease"
+                            }}
+                          >
+                            <div style={{
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "50%",
+                              background: "#ffffff",
+                              position: "absolute",
+                              top: "3px",
+                              left: showAllDepts ? "25px" : "3px",
+                              transition: "all 0.2s ease"
+                            }} />
+                          </button>
+                        </div>
 
-                        <label className="checkbox-policy-label">
-                          <input 
-                            type="checkbox" 
-                            checked={allowExtSharing} 
-                            onChange={(e) => setAllowExtSharing(e.target.checked)} 
-                            disabled={user.role !== "Head"}
-                          />
+                        <div className="checkbox-policy-label" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "rgba(0,0,0,0.1)", borderRadius: "12px", border: "1px solid var(--border)" }}>
                           <div className="label-text">
-                            <span>Allow External Chat Sharing</span>
-                            <span className="desc">Enables chat sharing with users outside the organization workspace</span>
+                            <span style={{ fontWeight: "600", fontSize: "0.9rem" }}>Allow External Chat Sharing</span>
+                            <span className="desc" style={{ display: "block", fontSize: "0.75rem", color: "var(--text-secondary)" }}>Enables chat sharing with users outside the organization workspace</span>
                           </div>
-                        </label>
+                          <button
+                            type="button"
+                            disabled={user.role !== "Head"}
+                            onClick={() => setAllowExtSharing(!allowExtSharing)}
+                            style={{
+                              width: "48px",
+                              height: "26px",
+                              borderRadius: "14px",
+                              background: allowExtSharing ? "var(--accent)" : "var(--border)",
+                              border: "none",
+                              position: "relative",
+                              cursor: "pointer",
+                              transition: "all 0.2s ease"
+                            }}
+                          >
+                            <div style={{
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "50%",
+                              background: "#ffffff",
+                              position: "absolute",
+                              top: "3px",
+                              left: allowExtSharing ? "25px" : "3px",
+                              transition: "all 0.2s ease"
+                            }} />
+                          </button>
+                        </div>
                       </div>
 
                       {user && (user.role === "Head" || user.role === "HR") && (

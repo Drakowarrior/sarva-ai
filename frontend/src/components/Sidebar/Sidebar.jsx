@@ -8,6 +8,7 @@ import { useSession } from "../../context/SessionContext";
 import { useAuth } from "../../context/AuthContext";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import toast from "react-hot-toast";
+import ImageWithFallback from "../Common/ImageWithFallback";
 
 // Helper function to format relative timestamps cleanly
 const formatRelativeTime = (isoString) => {
@@ -462,22 +463,13 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
             borderRadius: "var(--sarva-radius-md)",
             border: "1px solid var(--border)"
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden", flex: 1 }}>
-              <div style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                background: "var(--accent-gradient)",
-                color: "#ffffff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: "bold",
-                fontSize: "0.75rem",
-                flexShrink: 0
-              }}>
-                {user.username ? user.username[0].toUpperCase() : "U"}
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, flex: 1 }}>
+              <ImageWithFallback
+                src={user?.avatar}
+                alt={user?.fullName || user?.username}
+                fallbackText={user?.fullName || user?.username || "User"}
+                style={{ width: "32px", height: "32px", borderRadius: "50%" }}
+              />
               <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
                 <span style={{
                   fontSize: "0.78rem",

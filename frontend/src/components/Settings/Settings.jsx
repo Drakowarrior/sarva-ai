@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import ImageWithFallback from "../Common/ImageWithFallback";
 
 const MODELS = [
   { id: "meta-llama/llama-4-scout-17b-16e-instruct", name: "Llama 4 Scout (17B) — Latest", desc: "Meta's newest architecture for high quality responses" },
@@ -320,99 +321,123 @@ function Settings({ isOpen, onClose }) {
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.25 }}
           className="modal-content"
-          style={{ maxWidth: "580px" }}
+          className="modal-content settings-command-center"
+          style={{ maxWidth: "860px", width: "92vw", padding: "0", overflow: "hidden", borderRadius: "20px" }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="modal-header" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "stretch", paddingBottom: "10px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h3 className="modal-title">Preferences & Settings</h3>
-              <button className="modal-close-btn" onClick={onClose}>
-                <FiX />
-              </button>
-            </div>
-            
-            {/* Navigation Tabs */}
-            <div style={{ display: "flex", gap: "12px", borderBottom: "1px solid var(--border)", marginTop: "10px", overflowX: "auto", paddingBottom: "2px" }}>
-              <button
-                type="button"
-                onClick={() => { setActiveTab("profile"); setInvitationResult(""); }}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  borderBottom: activeTab === "profile" ? "2px solid var(--accent)" : "2px solid transparent",
-                  color: activeTab === "profile" ? "var(--accent)" : "var(--text-secondary)",
-                  padding: "8px 4px",
-                  fontWeight: "600",
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                My Profile
-              </button>
-              <button
-                type="button"
-                onClick={() => { setActiveTab("preferences"); setInvitationResult(""); }}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  borderBottom: activeTab === "preferences" ? "2px solid var(--accent)" : "2px solid transparent",
-                  color: activeTab === "preferences" ? "var(--accent)" : "var(--text-secondary)",
-                  padding: "8px 4px",
-                  fontWeight: "600",
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                Preferences
-              </button>
+          {/* Top Header */}
+          <div className="modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid var(--border)", background: "var(--bg-secondary)" }}>
+            <h3 className="modal-title" style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>Preferences & Settings</h3>
+            <button className="modal-close-btn" onClick={onClose} aria-label="Close Modal">
+              <FiX />
+            </button>
+          </div>
+          
+          {/* Two Column Layout Container */}
+          <div className="settings-split-container" style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "480px", maxHeight: "75vh", overflow: "hidden" }}>
+            {/* Left Vertical Navigation */}
+            <div className="settings-nav-sidebar" style={{ background: "rgba(0, 0, 0, 0.1)", borderRight: "1px solid var(--border)", padding: "18px 14px", display: "flex", flexDirection: "column", gap: "16px", overflowY: "auto" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.8px", paddingLeft: "10px" }}>Personal</span>
+                <button
+                  type="button"
+                  onClick={() => { setActiveTab("profile"); setInvitationResult(""); }}
+                  className={`settings-nav-btn ${activeTab === "profile" ? "active" : ""}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "10px 12px",
+                    borderRadius: "10px",
+                    border: "none",
+                    background: activeTab === "profile" ? "var(--accent)" : "transparent",
+                    color: activeTab === "profile" ? "#ffffff" : "var(--text-primary)",
+                    fontWeight: activeTab === "profile" ? "700" : "500",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  <FiUser /> My Profile
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setActiveTab("preferences"); setInvitationResult(""); }}
+                  className={`settings-nav-btn ${activeTab === "preferences" ? "active" : ""}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "10px 12px",
+                    borderRadius: "10px",
+                    border: "none",
+                    background: activeTab === "preferences" ? "var(--accent)" : "transparent",
+                    color: activeTab === "preferences" ? "#ffffff" : "var(--text-primary)",
+                    fontWeight: activeTab === "preferences" ? "700" : "500",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  <FiCpu /> Preferences
+                </button>
+              </div>
+
               {user && user.accountType === "organization" && (
-                <>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.8px", paddingLeft: "10px" }}>Workspace</span>
                   <button
                     type="button"
                     onClick={() => { setActiveTab("orgProfile"); setInvitationResult(""); }}
+                    className={`settings-nav-btn ${activeTab === "orgProfile" ? "active" : ""}`}
                     style={{
-                      background: "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "10px 12px",
+                      borderRadius: "10px",
                       border: "none",
-                      borderBottom: activeTab === "orgProfile" ? "2px solid var(--accent)" : "2px solid transparent",
-                      color: activeTab === "orgProfile" ? "var(--accent)" : "var(--text-secondary)",
-                      padding: "8px 4px",
-                      fontWeight: "600",
+                      background: activeTab === "orgProfile" ? "var(--accent)" : "transparent",
+                      color: activeTab === "orgProfile" ? "#ffffff" : "var(--text-primary)",
+                      fontWeight: activeTab === "orgProfile" ? "700" : "500",
                       fontSize: "0.85rem",
                       cursor: "pointer",
-                      whiteSpace: "nowrap",
+                      textAlign: "left",
                       transition: "all 0.2s ease"
                     }}
                   >
-                    Organization Profile
+                    <FiBriefcase /> Organization Profile
                   </button>
                   <button
                     type="button"
                     onClick={() => { setActiveTab("directory"); setInvitationResult(""); }}
+                    className={`settings-nav-btn ${activeTab === "directory" ? "active" : ""}`}
                     style={{
-                      background: "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "10px 12px",
+                      borderRadius: "10px",
                       border: "none",
-                      borderBottom: activeTab === "directory" ? "2px solid var(--accent)" : "2px solid transparent",
-                      color: activeTab === "directory" ? "var(--accent)" : "var(--text-secondary)",
-                      padding: "8px 4px",
-                      fontWeight: "600",
+                      background: activeTab === "directory" ? "var(--accent)" : "transparent",
+                      color: activeTab === "directory" ? "#ffffff" : "var(--text-primary)",
+                      fontWeight: activeTab === "directory" ? "700" : "500",
                       fontSize: "0.85rem",
                       cursor: "pointer",
-                      whiteSpace: "nowrap",
+                      textAlign: "left",
                       transition: "all 0.2s ease"
                     }}
                   >
-                    Member Directory
+                    <FiLayers /> Member Directory
                   </button>
-                </>
+                </div>
               )}
             </div>
-          </div>
 
-          <div className="modal-body" style={{ maxHeight: "70vh", overflowY: "auto", padding: "16px 24px" }}>
+            {/* Right Main Content Panel */}
+            <div className="modal-body" style={{ overflowY: "auto", overflowX: "hidden", padding: "24px", boxSizing: "border-box" }}>
             {activeTab === "profile" && (
               <form onSubmit={handleSaveProfile} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                 {/* Profile Picture Upload Section */}
@@ -1212,6 +1237,7 @@ function Settings({ isOpen, onClose }) {
               </div>
             )}
           </div>
+        </div>
         </motion.div>
       </div>
     </AnimatePresence>
