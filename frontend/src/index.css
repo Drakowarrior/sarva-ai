@@ -255,6 +255,25 @@ a:focus-visible {
   border-radius: var(--sarva-radius-sm);
 }
 
+.skeleton-text {
+  height: 14px;
+  width: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+  margin-bottom: 8px;
+}
+
+.skeleton-card {
+  height: 80px;
+  width: 100%;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
 /* Hover Lift */
 .hover-lift {
   transition: transform var(--sarva-transition), box-shadow var(--sarva-transition);
