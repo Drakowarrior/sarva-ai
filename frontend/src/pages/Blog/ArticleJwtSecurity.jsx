@@ -1,33 +1,24 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiShield, FiLock } from "react-icons/fi";
+import { FiClock, FiShield, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import useSeo from "../../hooks/useSeo";
+import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleJwtSecurity = () => {
   useSeo({
-    title: "Designing JWT Authentication for AI Chatbot Applications | SARVA AI",
-    description: "Enforcing security compliance, bcrypt password hashing, token validation, and multi-tenant user data isolation in production AI platforms.",
-    canonicalPath: "/blog/jwt-ai-chatbot-security",
+    title: "How JWT Authentication Works in AI Chatbot Applications | SARVA AI",
+    description: "Designing secure JWT authentication, bcrypt password hashing, token validation, and user session isolation in AI platforms.",
+    canonicalPath: "/blog/jwt-ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
-            { "@type": "ListItem", "position": 3, "name": "JWT AI Chatbot Security", "item": "https://sarva-ai-one.vercel.app/blog/jwt-ai-chatbot-security" }
-          ]
-        },
-        {
-          "@type": "TechArticle",
-          "headline": "Designing JWT Authentication for AI Chatbot Applications",
-          "description": "Security engineering guide on bearer token auth and bcrypt password protection in AI platforms.",
-          "author": { "@type": "Person", "name": "Karan Garg" },
-          "datePublished": "2026-08-05"
-        }
-      ]
+      "@type": "TechArticle",
+      "headline": "How JWT Authentication Works in AI Chatbot Applications",
+      "description": "Technical guide on implementing JWT bearer security in AI chatbot applications.",
+      "author": { "@type": "Person", "name": "Karan Garg" },
+      "publisher": { "@type": "Organization", "name": "SARVA AI" },
+      "datePublished": "2026-08-05"
     }
   });
 
@@ -35,34 +26,89 @@ const ArticleJwtSecurity = () => {
     <div className="seo-page-container">
       <SeoHeader />
 
-      <main className="seo-page-content" style={{ maxWidth: "880px" }}>
-        <div className="seo-hero-badge">🔒 Security Engineering</div>
-        <h1 className="seo-page-title" style={{ fontSize: "2.4rem" }}>
-          Designing JWT Authentication for AI Chatbot Applications
-        </h1>
-        
-        <div style={{ display: "flex", gap: "16px", color: "var(--text-secondary)", fontSize: "0.88rem", marginBottom: "30px" }}>
-          <span>By Karan Garg</span> • <span>August 05, 2026</span> • <span>6 min read</span>
+      <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
+          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
+          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
+          <span>JWT AI Chatbot Security</span>
         </div>
 
-        <section className="seo-card" style={{ marginBottom: "28px" }}>
-          <h2 className="seo-card-title">Token Bearer Security Model</h2>
-          <p className="seo-card-text">
-            Security in AI chat platforms requires isolating session threads and protecting proprietary document uploads. SARVA AI implements JSON Web Token (JWT) bearer validation. Passwords are salted and hashed using <code>bcrypt</code> before database storage.
-          </p>
-        </section>
+        <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
+          How JWT Authentication Works in AI Chatbot Applications
+        </h1>
 
-        <section className="seo-card" style={{ textAlign: "center", marginTop: "36px" }}>
-          <h3 className="seo-card-title">Learn More About SARVA AI Security</h3>
-          <p className="seo-card-text" style={{ marginBottom: "20px" }}>
-            Explore our enterprise security architecture and data privacy standards.
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "16px 0 32px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
+          <span>By <strong>Karan Garg</strong></span>
+          <span>•</span>
+          <span>August 05, 2026</span>
+          <span>•</span>
+          <span><FiClock /> 6 min read</span>
+        </div>
+
+        <div className="article-body-content" style={{ fontSize: "1.05rem", lineHeight: "1.75", color: "var(--text-primary)" }}>
+          <p>
+            Securing AI application user sessions requires stateless authentication that protects private chat histories and uploaded document contents without introducing database lookup overhead on every streaming HTTP request.
           </p>
-          <div style={{ display: "flex", gap: "14px", justifyContent: "center" }}>
-            <Link to="/security" className="seo-cta-btn" style={{ padding: "10px 22px" }}>
-              Explore Security & Privacy <FiArrowRight />
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            1. Token Generation & Password Hashing
+          </h2>
+          <p>
+            Passwords are hashed using `passlib` with `bcrypt`. Upon successful login, FastAPI encodes a signed JSON Web Token (JWT) containing the user subject and expiration timestamp:
+          </p>
+
+          <pre style={{ background: "#090d16", padding: "16px", borderRadius: "12px", border: "1px solid var(--border)", fontSize: "0.88rem", overflowX: "auto", color: "#a855f7" }}>
+{`from datetime import datetime, timedelta
+import jwt
+
+def create_access_token(data: dict, expires_delta: timedelta = None):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=1440))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")`}
+          </pre>
+
+          {/* SARVA AI Funnel CTA Banner */}
+          <div style={{ 
+            background: "linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(56, 189, 248, 0.15))", 
+            border: "1px solid rgba(168, 85, 247, 0.4)", 
+            borderRadius: "16px", 
+            padding: "24px", 
+            margin: "40px 0",
+            textAlign: "center"
+          }}>
+            <h3 style={{ fontSize: "1.3rem", color: "var(--text-primary)", marginBottom: "8px" }}>
+              Experience Protected AI Sessions in SARVA AI
+            </h3>
+            <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
+              SARVA AI isolates all chat threads and file uploads behind encrypted JWT bearer authentication.
+            </p>
+            <Link
+              to="/auth"
+              onClick={() => trackCtaClick("article_jwt_security", "Try SARVA AI")}
+              className="seo-cta-btn"
+              style={{ padding: "10px 24px", fontSize: "0.95rem", display: "inline-flex" }}
+            >
+              Try SARVA AI Free →
             </Link>
           </div>
-        </section>
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            2. Multi-Tenant Session Isolation
+          </h2>
+          <p>
+            Every database query for session records filtering matches against the decoded JWT user ID parameter, guaranteeing multi-tenant privacy compliance.
+          </p>
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            Security Documentation
+          </h2>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
+            <Link to="/security" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
+              ← SARVA AI Security Platform Spec
+            </Link>
+          </div>
+        </div>
       </main>
 
       <SeoFooter />

@@ -14,6 +14,7 @@ from routes.auth_routes import router as auth_router
 from routes.feedback_routes import router as feedback_router
 from routes.share_routes import router as share_router
 from routes.org_routes import router as org_router
+from routes.demo_routes import router as demo_router
 
 
 app = FastAPI(
@@ -99,6 +100,7 @@ app.include_router(user_router)
 app.include_router(feedback_router)
 app.include_router(share_router)
 app.include_router(org_router)
+app.include_router(demo_router)
 
 
 @app.on_event("startup")

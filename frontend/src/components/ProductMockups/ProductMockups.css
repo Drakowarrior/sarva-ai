@@ -1,0 +1,310 @@
+/* Product Mockups CSS */
+.mockup-window {
+  width: 100%;
+  max-width: 900px;
+  margin: 32px auto;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.mockup-header {
+  background: rgba(15, 23, 42, 0.9);
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mockup-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #f59e0b; }
+.dot.green { background: #10b981; }
+
+.mockup-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mockup-model-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.mockup-body {
+  display: flex;
+  min-height: 320px;
+}
+
+.mockup-sidebar {
+  width: 220px;
+  background: rgba(2, 6, 23, 0.6);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .mockup-sidebar {
+    display: none;
+  }
+}
+
+.mockup-sidebar-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary, #94a3b8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.mockup-thread-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.mockup-thread-item.active {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.mockup-chat-feed {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.mockup-msg {
+  display: flex;
+  gap: 12px;
+  max-width: 90%;
+}
+
+.mockup-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.mockup-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #38bdf8;
+  color: #000;
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mockup-avatar.ai {
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1rem;
+}
+
+.mockup-bubble {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.mockup-bubble.user {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  border: none;
+}
+
+.mockup-attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.mockup-code-box {
+  background: #090d16;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+
+.mockup-code-header {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.mockup-copy-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+}
+
+.mockup-code-box pre {
+  padding: 12px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  color: #38bdf8;
+}
+
+.mockup-highlights {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: #10b981;
+}
+
+.mockup-highlights span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Architecture Flow Card */
+.arch-diagram-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 32px auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.arch-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.arch-header h3 {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.arch-header p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.arch-flow-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.arch-node {
+  flex: 1;
+  min-width: 140px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.arch-node:hover {
+  transform: translateY(-4px);
+  border-color: #38bdf8;
+}
+
+.arch-icon {
+  font-size: 1.5rem;
+  color: #38bdf8;
+  margin-bottom: 8px;
+}
+
+.arch-node h4 {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+
+.arch-node span {
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 600;
+  display: block;
+}
+
+.arch-node p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.arch-arrow {
+  font-size: 1.2rem;
+  color: var(--text-tertiary, #64748b);
+}
+
+@media (max-width: 820px) {
+  .arch-flow-grid {
+    flex-direction: column;
+  }
+  .arch-arrow {
+    transform: rotate(90deg);
+  }
+}

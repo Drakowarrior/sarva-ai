@@ -6,19 +6,19 @@ import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
-const ArticleDocumentAnalysis = () => {
+const ArticleChatWithPdf = () => {
   useSeo({
-    title: "How to Build an AI Document Analysis System | SARVA AI",
-    description: "Learn how to parse PDF reports, Word documents, and text archives on the backend and feed context into LLMs.",
-    canonicalPath: "/blog/ai-document-analysis",
+    title: "How to Chat With PDF Documents Using AI | SARVA AI",
+    description: "Learn how to parse PDF files, extract text buffers, and feed structured context into Large Language Model prompts for accurate Q&A.",
+    canonicalPath: "/blog/chat-with-pdf",
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "How to Build an AI Document Analysis System",
-      "description": "Technical guide explaining multi-format document extraction and summarization.",
+      "headline": "How to Chat With PDF Documents Using AI",
+      "description": "Technical guide explaining PDF parsing, context window injection, and document Q&A architectures.",
       "author": { "@type": "Person", "name": "Karan Garg" },
       "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-10"
+      "datePublished": "2026-08-13"
     }
   });
 
@@ -30,48 +30,62 @@ const ArticleDocumentAnalysis = () => {
         <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
           <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
           <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>AI Document Analysis System</span>
+          <span>Chat with PDF AI</span>
         </div>
 
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
-          How to Build an AI Document Analysis System
+          How to Chat With PDF Documents Using AI
         </h1>
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "16px 0 32px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
           <span>By <strong>Karan Garg</strong></span>
           <span>•</span>
-          <span>August 10, 2026</span>
+          <span>August 13, 2026</span>
           <span>•</span>
-          <span><FiClock /> 6 min read</span>
+          <span><FiClock /> 7 min read</span>
         </div>
 
         <div className="article-body-content" style={{ fontSize: "1.05rem", lineHeight: "1.75", color: "var(--text-primary)" }}>
           <p>
-            Modern enterprise workflows demand document comprehension systems capable of extracting structured intelligence from unstructured PDFs, DOCX files, code repositories, and financial spreadsheets.
+            Enabling users to upload PDF documents and ask questions about their content requires an automated processing pipeline capable of extracting clean text from multi-page PDF binaries, handling layout artifacts, and injecting extracted text into LLM system prompts.
           </p>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            1. Document Upload & Extraction Engine
+            1. Extracting Text from PDF Streams
           </h2>
           <p>
-            The backend validates file MIME types, sanitizes filenames, and routes files to specific parser modules depending on file extension:
+            When a PDF file is uploaded via HTTP POST to FastAPI, the server saves the file to a secure directory and uses libraries like `pypdf` or `pdfplumber` to extract text blocks line by line:
           </p>
 
           <pre style={{ background: "#090d16", padding: "16px", borderRadius: "12px", border: "1px solid var(--border)", fontSize: "0.88rem", overflowX: "auto", color: "#ec4899" }}>
-{`async def extract_text_from_file(file_path: str) -> str:
-    ext = os.path.splitext(file_path)[1].lower()
-    if ext == ".pdf":
-        return await extract_pdf(file_path)
-    elif ext in [".docx", ".doc"]:
-        return await extract_docx(file_path)
-    elif ext in [".txt", ".py", ".js", ".json"]:
-        return await read_plain_text(file_path)
-    return ""` }
+{`import pypdf
+
+async def extract_pdf_text(file_path: str) -> str:
+    reader = pypdf.PdfReader(file_path)
+    extracted_pages = []
+    for idx, page in enumerate(reader.pages):
+        text = page.extract_text()
+        if text:
+            extracted_pages.append(f"[Page {idx+1}]\n{text.strip()}")
+    return "\n\n".join(extracted_pages)`}
           </pre>
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            2. Context Injection & Prompt Construction
+          </h2>
+          <p>
+            The extracted text is formatted into system prompt context so the AI model answers questions grounded strictly in the document content:
+          </p>
+
+          <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px", margin: "20px 0" }}>
+            <code style={{ color: "#38bdf8", fontSize: "0.88rem" }}>
+              "You are an AI Document Assistant. Use the following PDF content to answer user questions:\n\n[Content of attached file: quarterly_report.pdf]\n...\n[End of file content]\n\nUser Question: {`{user_query}`}"
+            </code>
+          </div>
 
           {/* SARVA AI Funnel CTA Banner */}
           <div style={{ 
-            background: "linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(56, 189, 248, 0.15))", 
+            background: "linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(14, 165, 233, 0.15))", 
             border: "1px solid rgba(236, 72, 153, 0.4)", 
             borderRadius: "16px", 
             padding: "24px", 
@@ -79,14 +93,14 @@ const ArticleDocumentAnalysis = () => {
             textAlign: "center"
           }}>
             <h3 style={{ fontSize: "1.3rem", color: "var(--text-primary)", marginBottom: "8px" }}>
-              Try Document Analysis in SARVA AI
+              Want to try AI-powered document conversations yourself?
             </h3>
             <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
-              Upload any PDF report or text archive directly to SARVA AI and receive detailed summaries instantly.
+              SARVA AI includes built-in drag-and-drop PDF parsing, resume screening, and automatic document context injection.
             </p>
             <Link
               to="/auth"
-              onClick={() => trackCtaClick("article_doc_analysis", "Try SARVA AI")}
+              onClick={() => trackCtaClick("article_pdf_chat", "Try SARVA AI")}
               className="seo-cta-btn"
               style={{ padding: "10px 24px", fontSize: "0.95rem", display: "inline-flex" }}
             >
@@ -95,21 +109,21 @@ const ArticleDocumentAnalysis = () => {
           </div>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            2. Structured Output Generation
+            3. Context Window Boundaries & Safety
           </h2>
           <p>
-            By combining extracted file text with clear prompt directives, the LLM produces Markdown tables, bulleted executive summaries, and action item lists automatically.
+            For ultra-large documents, truncating or selecting top matching chunks prevents exceeding model token bounds while maintaining response accuracy.
           </p>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            Internal Resources
+            Internal Resources & Guides
           </h2>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
             <Link to="/file-analysis" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
-              ← View File Analysis Details
+              ← Platform File Analysis Capabilities
             </Link>
-            <Link to="/blog/chat-with-pdf" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
-              Read Chat With PDF Article →
+            <Link to="/blog/ai-document-analysis" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
+              Read AI Document Analysis System →
             </Link>
           </div>
         </div>
@@ -120,4 +134,4 @@ const ArticleDocumentAnalysis = () => {
   );
 };
 
-export default ArticleDocumentAnalysis;
+export default ArticleChatWithPdf;

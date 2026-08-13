@@ -22,56 +22,107 @@ html, body {
   min-height: 100vh;
 }
 
-/* Base Themes */
+/* Base Themes & SARVA AI Design Tokens */
 :root {
-  /* Dark Theme Default */
+  /* Core Dark Theme */
   --bg-primary: #020617;
   --bg-secondary: #0f172a;
-  --bg-card: rgba(15, 23, 42, 0.7);
+  --bg-card: rgba(15, 23, 42, 0.75);
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
   --accent: #38bdf8;
   --accent-hover: #0ea5e9;
+  --accent-soft: rgba(56, 189, 248, 0.12);
   --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(15, 23, 42, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
-  --chat-user-bg: #38bdf8;
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.45);
+  --chat-user-bg: #0ea5e9;
   --chat-user-text: #ffffff;
-  --chat-ai-bg: rgba(30, 41, 59, 0.6);
+  --chat-ai-bg: rgba(30, 41, 59, 0.65);
   --scrollbar-track: #020617;
   --scrollbar-thumb: #1e293b;
   --scrollbar-thumb-hover: #334155;
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --success: #10b981;
+  --warning: #f59e0b;
+
+  /* Universal SARVA Token Mapping */
+  --sarva-bg: var(--bg-primary);
+  --sarva-surface: var(--bg-secondary);
+  --sarva-surface-elevated: var(--bg-card);
+  --sarva-surface-hover: rgba(56, 189, 248, 0.08);
+  --sarva-text-primary: var(--text-primary);
+  --sarva-text-secondary: var(--text-secondary);
+  --sarva-text-muted: var(--text-tertiary);
+  --sarva-accent: var(--accent);
+  --sarva-accent-hover: var(--accent-hover);
+  --sarva-accent-soft: var(--accent-soft);
+  --sarva-border: var(--border);
+  --sarva-border-strong: var(--border-strong);
+  --sarva-success: var(--success);
+  --sarva-warning: var(--warning);
+  --sarva-error: var(--danger);
+
+  --sarva-radius-sm: 6px;
+  --sarva-radius-md: 10px;
+  --sarva-radius-lg: 16px;
+  --sarva-radius-xl: 24px;
+  --sarva-radius-full: 9999px;
+
+  --sarva-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --sarva-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --sarva-transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="light"] {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card: rgba(255, 255, 255, 0.88);
   --text-primary: #0f172a;
   --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
   --accent: #0ea5e9;
   --accent-hover: #0284c7;
+  --accent-soft: rgba(14, 165, 233, 0.1);
   --border: rgba(0, 0, 0, 0.08);
-  --glass-bg: rgba(255, 255, 255, 0.75);
+  --border-strong: rgba(0, 0, 0, 0.16);
+  --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(0, 0, 0, 0.08);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.12);
   --chat-user-bg: #0ea5e9;
   --chat-user-text: #ffffff;
-  --chat-ai-bg: rgba(241, 245, 249, 0.8);
+  --chat-ai-bg: rgba(241, 245, 249, 0.9);
   --scrollbar-track: #f8fafc;
   --scrollbar-thumb: #cbd5e1;
   --scrollbar-thumb-hover: #94a3b8;
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --success: #10b981;
+  --warning: #f59e0b;
+
+  --sarva-bg: var(--bg-primary);
+  --sarva-surface: var(--bg-secondary);
+  --sarva-surface-elevated: var(--bg-card);
+  --sarva-surface-hover: rgba(14, 165, 233, 0.08);
+  --sarva-text-primary: var(--text-primary);
+  --sarva-text-secondary: var(--text-secondary);
+  --sarva-text-muted: var(--text-tertiary);
+  --sarva-accent: var(--accent);
+  --sarva-accent-hover: var(--accent-hover);
+  --sarva-accent-soft: var(--accent-soft);
+  --sarva-border: var(--border);
+  --sarva-border-strong: var(--border-strong);
+  --sarva-success: var(--success);
+  --sarva-warning: var(--warning);
+  --sarva-error: var(--danger);
 }
 
 body {

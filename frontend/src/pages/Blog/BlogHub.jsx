@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { FiCode, FiLayers, FiShield, FiFileText, FiCpu, FiArrowRight, FiClock, FiBookOpen } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
@@ -6,61 +7,88 @@ import useSeo from "../../hooks/useSeo";
 
 export const articlesData = [
   {
-    slug: "fastapi-groq-ai-chatbot",
-    title: "How I Built a Full-Stack AI Chatbot with React, FastAPI and Groq",
-    description: "A step-by-step engineering deep dive into building an ultra-fast conversational AI platform with 300+ tokens/sec LLM streaming.",
-    category: "Full-Stack AI",
-    date: "August 12, 2026",
+    slug: "react-fastapi-ai-chatbot",
+    title: "How to Build an AI Chatbot with React and FastAPI",
+    description: "A step-by-step engineering deep dive into building an ultra-fast full-stack conversational AI platform with React 19 and FastAPI.",
+    category: "React + FastAPI",
+    targetKeyword: "React FastAPI AI chatbot",
+    date: "August 13, 2026",
     readTime: "8 min read",
-    icon: FiCpu,
+    icon: FiCode,
     iconColor: "#38bdf8"
   },
   {
-    slug: "ai-document-analysis",
-    title: "Building AI PDF & Document Analysis with FastAPI",
-    description: "Learn how to parse PDF reports, DOCX files, and text archives on the backend and feed prompt context into LLM context windows.",
-    category: "Document AI",
-    date: "August 10, 2026",
-    readTime: "6 min read",
+    slug: "fastapi-groq-chatbot",
+    title: "How to Build an AI Chatbot with Groq and LLaMA",
+    description: "Learn how to integrate Groq LPUs for 300+ tokens/sec LLM streaming with Llama 3.3 70B models.",
+    category: "Groq & LLaMA",
+    targetKeyword: "Groq AI chatbot",
+    date: "August 12, 2026",
+    readTime: "8 min read",
+    icon: FiCpu,
+    iconColor: "#a855f7"
+  },
+  {
+    slug: "chat-with-pdf",
+    title: "How to Chat With PDF Documents Using AI",
+    description: "Parse multi-page PDF files, extract clean text streams, and inject document context into LLM context windows.",
+    category: "PDF Processing",
+    targetKeyword: "chat with PDF AI",
+    date: "August 13, 2026",
+    readTime: "7 min read",
     icon: FiFileText,
     iconColor: "#ec4899"
   },
   {
-    slug: "mongodb-chat-memory",
-    title: "How MongoDB Stores Conversational AI Session Memory",
-    description: "Designing a high-performance MongoDB Atlas database schema for multi-turn chat threads, user profiles, and session trajectories.",
-    category: "Database & State",
-    date: "August 08, 2026",
-    readTime: "7 min read",
+    slug: "ai-document-analysis",
+    title: "How to Build an AI Document Analysis System",
+    description: "Build automated document processing pipelines for PDF reports, DOCX files, and resume screening.",
+    category: "Document AI",
+    targetKeyword: "AI document analysis chatbot",
+    date: "August 10, 2026",
+    readTime: "6 min read",
+    icon: FiFileText,
+    iconColor: "#f59e0b"
+  },
+  {
+    slug: "full-stack-ai-architecture",
+    title: "React + FastAPI + MongoDB: Full-Stack AI Architecture",
+    description: "Production guide for hosting React SPAs on Vercel Edge Network and FastAPI microservices on cloud infrastructure.",
+    category: "Full-Stack System",
+    targetKeyword: "full stack AI chatbot",
+    date: "August 02, 2026",
+    readTime: "9 min read",
     icon: FiLayers,
     iconColor: "#10b981"
   },
   {
-    slug: "jwt-ai-chatbot-security",
-    title: "Designing JWT Authentication for AI Chatbot Applications",
-    description: "Enforcing security compliance, bcrypt password hashing, token validation, and multi-tenant user data isolation in AI platforms.",
-    category: "Security",
+    slug: "jwt-ai-chatbot",
+    title: "How JWT Authentication Works in AI Chatbot Applications",
+    description: "Enforcing security compliance, bcrypt password hashing, token validation, and multi-tenant user data isolation.",
+    category: "Security & Auth",
+    targetKeyword: "JWT AI chatbot",
     date: "August 05, 2026",
     readTime: "6 min read",
     icon: FiShield,
-    iconColor: "#a855f7"
+    iconColor: "#6366f1"
   },
   {
-    slug: "full-stack-ai-architecture",
-    title: "Deploying Full-Stack AI Applications on Vercel + Render",
-    description: "Production guide for hosting React SPAs on Vercel Edge Network and FastAPI microservices on Render cloud with CORS and health checks.",
-    category: "DevOps & Cloud",
-    date: "August 02, 2026",
-    readTime: "9 min read",
-    icon: FiCode,
-    iconColor: "#f59e0b"
+    slug: "chat-history-memory",
+    title: "How to Build Conversational AI With Chat History and Memory",
+    description: "Designing a high-performance MongoDB Atlas database schema for multi-turn chat threads and session state.",
+    category: "State & Database",
+    targetKeyword: "AI chatbot with chat history",
+    date: "August 08, 2026",
+    readTime: "7 min read",
+    icon: FiLayers,
+    iconColor: "#14b8a6"
   }
 ];
 
 const BlogHub = () => {
   useSeo({
-    title: "SARVA AI Engineering Blog & Technical Articles",
-    description: "Technical articles and engineering guides on building full-stack AI chatbots with React 19, FastAPI, MongoDB Atlas, Groq LPUs, and cloud security.",
+    title: "SARVA AI Technical Blog & Engineering Articles",
+    description: "In-depth engineering articles on full-stack AI development with React 19, FastAPI, MongoDB Atlas, Groq LPUs, and cloud security.",
     canonicalPath: "/blog",
     jsonLd: {
       "@context": "https://schema.org",
@@ -100,7 +128,7 @@ const BlogHub = () => {
               <Link
                 key={article.slug}
                 to={`/blog/${article.slug}`}
-                className="seo-card"
+                className="seo-card hover-lift"
                 style={{ textDecoration: "none", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
               >
                 <div>

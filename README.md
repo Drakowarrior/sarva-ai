@@ -1,11 +1,11 @@
 <p align="center">
   <h1 align="center">🚀 SARVA AI</h1>
-  <p align="center"><strong>Enterprise AI Chat & Organization Workspace Platform</strong></p>
+  <p align="center"><strong>Full-stack conversational AI platform built with React, FastAPI, MongoDB Atlas and Groq.</strong></p>
   <p align="center">
-    <a href="https://sarva-ai-one.vercel.app/"><strong>🌐 Live Demo: https://sarva-ai-one.vercel.app/</strong></a>
+    <a href="https://sarva-ai-one.vercel.app/"><strong>🚀 Live Demo → https://sarva-ai-one.vercel.app/</strong></a>
   </p>
   <p align="center">
-    <em>Secure • Premium • Scalable • Production-Ready Conversational AI</em>
+    <em>Secure • Intelligent • High-Performance AI Assistant & File Analysis Platform</em>
   </p>
 </p>
 

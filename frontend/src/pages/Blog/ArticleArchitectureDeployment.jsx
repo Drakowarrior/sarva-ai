@@ -1,33 +1,24 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiCode, FiCloud } from "react-icons/fi";
+import { FiClock, FiCode, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import useSeo from "../../hooks/useSeo";
+import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleArchitectureDeployment = () => {
   useSeo({
-    title: "Deploying Full-Stack AI Applications on Vercel + Render | SARVA AI",
-    description: "Production deployment guide for hosting React SPAs on Vercel Edge Network and FastAPI microservices on Render cloud with CORS and health checks.",
+    title: "React + FastAPI + MongoDB: Full-Stack AI Architecture | SARVA AI",
+    description: "Production breakdown of hosting React SPAs on Vercel and FastAPI microservices with MongoDB Atlas state management.",
     canonicalPath: "/blog/full-stack-ai-architecture",
     jsonLd: {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
-            { "@type": "ListItem", "position": 3, "name": "Deploying AI Apps on Vercel + Render", "item": "https://sarva-ai-one.vercel.app/blog/full-stack-ai-architecture" }
-          ]
-        },
-        {
-          "@type": "TechArticle",
-          "headline": "Deploying Full-Stack AI Applications on Vercel + Render",
-          "description": "DevOps guide on hosting React SPAs and FastAPI backend microservices for AI applications.",
-          "author": { "@type": "Person", "name": "Karan Garg" },
-          "datePublished": "2026-08-02"
-        }
-      ]
+      "@type": "TechArticle",
+      "headline": "React + FastAPI + MongoDB: Full-Stack AI Architecture",
+      "description": "Comprehensive engineering breakdown of deploying full-stack AI applications.",
+      "author": { "@type": "Person", "name": "Karan Garg" },
+      "publisher": { "@type": "Organization", "name": "SARVA AI" },
+      "datePublished": "2026-08-02"
     }
   });
 
@@ -35,34 +26,84 @@ const ArticleArchitectureDeployment = () => {
     <div className="seo-page-container">
       <SeoHeader />
 
-      <main className="seo-page-content" style={{ maxWidth: "880px" }}>
-        <div className="seo-hero-badge">☁️ DevOps & Cloud Deployment</div>
-        <h1 className="seo-page-title" style={{ fontSize: "2.4rem" }}>
-          Deploying Full-Stack AI Applications on Vercel + Render
-        </h1>
-        
-        <div style={{ display: "flex", gap: "16px", color: "var(--text-secondary)", fontSize: "0.88rem", marginBottom: "30px" }}>
-          <span>By Karan Garg</span> • <span>August 02, 2026</span> • <span>9 min read</span>
+      <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
+          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
+          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
+          <span>Full-Stack AI Architecture</span>
         </div>
 
-        <section className="seo-card" style={{ marginBottom: "28px" }}>
-          <h2 className="seo-card-title">Production Hosting Topology</h2>
-          <p className="seo-card-text">
-            Deploying a full-stack AI application requires separating static client assets from heavy async API workloads. SARVA AI hosts its React 19 single-page application on the <strong>Vercel Edge Network</strong> (for zero-latency CDN distribution) while executing FastAPI microservices on <strong>Render Cloud</strong>.
-          </p>
-        </section>
+        <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
+          React + FastAPI + MongoDB: Full-Stack AI Architecture
+        </h1>
 
-        <section className="seo-card" style={{ textAlign: "center", marginTop: "36px" }}>
-          <h3 className="seo-card-title">Read the Complete Case Study</h3>
-          <p className="seo-card-text" style={{ marginBottom: "20px" }}>
-            Explore the 12-section technical case study detailing the complete engineering journey of SARVA AI.
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "16px 0 32px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
+          <span>By <strong>Karan Garg</strong></span>
+          <span>•</span>
+          <span>August 02, 2026</span>
+          <span>•</span>
+          <span><FiClock /> 9 min read</span>
+        </div>
+
+        <div className="article-body-content" style={{ fontSize: "1.05rem", lineHeight: "1.75", color: "var(--text-primary)" }}>
+          <p>
+            Deploying a production full-stack AI platform demands decoupled service separation: edge-rendered React frontend for low latency, an asynchronous FastAPI application server for business logic and document parsing, and MongoDB Atlas for document state isolation.
           </p>
-          <div style={{ display: "flex", gap: "14px", justifyContent: "center" }}>
-            <Link to="/case-study" className="seo-cta-btn" style={{ padding: "10px 22px" }}>
-              Read Technical Case Study <FiArrowRight />
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            1. Microservice Responsibilities
+          </h2>
+          <ul style={{ paddingLeft: "20px", margin: "16px 0" }}>
+            <li><strong>Frontend (React 19 + Vite)</strong>: Single-Page Application hosted on Vercel Global CDN with SPA route rewrites.</li>
+            <li><strong>Backend (FastAPI + Async Python)</strong>: Hosted on Render cloud with CORS headers, health checks, and rate limiting.</li>
+            <li><strong>Database (MongoDB Atlas)</strong>: Distributed NoSQL collection storing user profiles, chat threads, and message context.</li>
+            <li><strong>LLM Inference (Groq LPUs)</strong>: Streaming Llama 3.3 models via high-bandwidth API tokens.</li>
+          </ul>
+
+          {/* SARVA AI Funnel CTA Banner */}
+          <div style={{ 
+            background: "linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(56, 189, 248, 0.15))", 
+            border: "1px solid rgba(245, 158, 11, 0.4)", 
+            borderRadius: "16px", 
+            padding: "24px", 
+            margin: "40px 0",
+            textAlign: "center"
+          }}>
+            <h3 style={{ fontSize: "1.3rem", color: "var(--text-primary)", marginBottom: "8px" }}>
+              Try This Full-Stack Platform Now
+            </h3>
+            <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
+              Explore SARVA AI live in your browser to experience fast page loads, instant auth, and fluid AI responses.
+            </p>
+            <Link
+              to="/auth"
+              onClick={() => trackCtaClick("article_full_stack", "Try SARVA AI")}
+              className="seo-cta-btn"
+              style={{ padding: "10px 24px", fontSize: "0.95rem", display: "inline-flex" }}
+            >
+              Try SARVA AI Free →
             </Link>
           </div>
-        </section>
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            2. Cross-Origin Security (CORS) Configuration
+          </h2>
+          <p>
+            Ensuring secure cross-origin communication between Vercel deployment domains and Render REST APIs requires strict `CORSMiddleware` configuration.
+          </p>
+
+          <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
+            Internal Architecture Documentation
+          </h2>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
+            <Link to="/technology" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
+              ← Technology Stack Details
+            </Link>
+            <Link to="/case-study" style={{ color: "#38bdf8", textDecoration: "none", background: "var(--bg-card)", padding: "8px 14px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.88rem" }}>
+              Read Technical Case Study →
+            </Link>
+          </div>
+        </div>
       </main>
 
       <SeoFooter />

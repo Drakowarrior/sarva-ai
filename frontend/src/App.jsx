@@ -16,11 +16,13 @@ import Contact from "./pages/SeoPages/Contact";
 import CaseStudy from "./pages/SeoPages/CaseStudy";
 
 import BlogHub from "./pages/Blog/BlogHub";
+import ArticleReactFastApi from "./pages/Blog/ArticleReactFastApi";
 import ArticleFastApiGroq from "./pages/Blog/ArticleFastApiGroq";
+import ArticleChatWithPdf from "./pages/Blog/ArticleChatWithPdf";
 import ArticleDocumentAnalysis from "./pages/Blog/ArticleDocumentAnalysis";
-import ArticleMongodbMemory from "./pages/Blog/ArticleMongodbMemory";
-import ArticleJwtSecurity from "./pages/Blog/ArticleJwtSecurity";
 import ArticleArchitectureDeployment from "./pages/Blog/ArticleArchitectureDeployment";
+import ArticleJwtSecurity from "./pages/Blog/ArticleJwtSecurity";
+import ArticleMongodbMemory from "./pages/Blog/ArticleMongodbMemory";
 
 import { useAuth } from "./context/AuthContext";
 import Loader from "./components/Loader/Loader";
@@ -102,7 +104,6 @@ const RootLayout = () => {
   );
 };
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -153,25 +154,46 @@ const router = createBrowserRouter([
         path: "blog",
         element: <BlogHub />,
       },
+      // 7 Technical Articles
+      {
+        path: "blog/react-fastapi-ai-chatbot",
+        element: <ArticleReactFastApi />,
+      },
+      {
+        path: "blog/fastapi-groq-chatbot",
+        element: <ArticleFastApiGroq />,
+      },
       {
         path: "blog/fastapi-groq-ai-chatbot",
-        element: <ArticleFastApiGroq />,
+        element: <ArticleFastApiGroq />, // Legacy Alias
+      },
+      {
+        path: "blog/chat-with-pdf",
+        element: <ArticleChatWithPdf />,
       },
       {
         path: "blog/ai-document-analysis",
         element: <ArticleDocumentAnalysis />,
       },
       {
-        path: "blog/mongodb-chat-memory",
-        element: <ArticleMongodbMemory />,
+        path: "blog/full-stack-ai-architecture",
+        element: <ArticleArchitectureDeployment />,
       },
       {
-        path: "blog/jwt-ai-chatbot-security",
+        path: "blog/jwt-ai-chatbot",
         element: <ArticleJwtSecurity />,
       },
       {
-        path: "blog/full-stack-ai-architecture",
-        element: <ArticleArchitectureDeployment />,
+        path: "blog/jwt-ai-chatbot-security",
+        element: <ArticleJwtSecurity />, // Legacy Alias
+      },
+      {
+        path: "blog/chat-history-memory",
+        element: <ArticleMongodbMemory />,
+      },
+      {
+        path: "blog/mongodb-chat-memory",
+        element: <ArticleMongodbMemory />, // Legacy Alias
       },
       {
         path: "auth",
