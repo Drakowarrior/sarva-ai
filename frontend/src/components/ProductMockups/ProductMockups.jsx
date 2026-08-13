@@ -129,92 +129,34 @@ export const DocumentPreview = () => {
           </div>
           <span className="mockup-title">SARVA AI — Document Intelligence Engine</span>
         </div>
-        <span className="mockup-model-badge" style={{ color: "#ec4899", background: "rgba(236,72,153,0.12)", borderColor: "rgba(236,72,153,0.3)" }}>
+        <span className="mockup-model-badge doc-badge">
           <FiFileText /> PyPDF Engine Parsed
         </span>
       </div>
 
-      <div className="mockup-body" style={{ minHeight: "280px", padding: "20px", background: "rgba(15,23,42,0.4)" }}>
-        <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+      <div className="mockup-body mockup-doc-body">
+        <div className="mockup-doc-grid">
           {/* Document File View */}
-          <div style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "0.85rem", fontWeight: "700", color: "#38bdf8" }}>
-              <FiFileText style={{ fontSize: "1.2rem" }} /> Q3_Financial_Analysis_2026.pdf
+          <div className="mockup-doc-card">
+            <div className="mockup-doc-title">
+              <FiFileText className="doc-icon" /> Q3_Financial_Analysis_2026.pdf
             </div>
-            <div style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>24 Pages · Parsed in 120ms · 4,800 tokens extracted</div>
-            <div style={{ padding: "10px", background: "rgba(255,255,255,0.03)", borderRadius: "8px", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: "1.5" }}>
+            <div className="mockup-doc-sub">24 Pages · Parsed in 120ms · 4,800 tokens extracted</div>
+            <div className="mockup-doc-snippet">
               "...Total enterprise operational revenue increased by 34% YoY with gross margins reaching 82% following full integration of AI workflow automation..."
             </div>
           </div>
 
           {/* AI Extracted Key Takeaways */}
-          <div style={{ background: "rgba(0,0,0,0.3)", border: "1px solid var(--border)", borderRadius: "12px", padding: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#10b981", display: "flex", alignItems: "center", gap: "6px" }}>
+          <div className="mockup-summary-card">
+            <div className="mockup-summary-title">
               <FiCheckCircle /> AI Extracted Executive Summary
             </div>
-            <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "0.8rem", color: "var(--text-primary)", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <ul className="mockup-summary-list">
               <li><strong>Revenue Growth:</strong> 34% YoY enterprise operational surge.</li>
               <li><strong>Margin Optimization:</strong> 82% gross margins via automated pipelines.</li>
-              <li><strong>Action Item:</strong> Deploy organization workspace access across 4 departments.</li>
+              <li><strong>Action Item:</strong> Deploy organization workspace access across departments.</li>
             </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const WorkspacePreview = () => {
-  return (
-    <div className="mockup-window">
-      <div className="mockup-header">
-        <div className="mockup-header-left">
-          <div className="mockup-dots">
-            <span className="dot red"></span>
-            <span className="dot yellow"></span>
-            <span className="dot green"></span>
-          </div>
-          <span className="mockup-title">SARVA AI — Organization Control Center</span>
-        </div>
-        <span className="mockup-model-badge" style={{ color: "#10b981", background: "rgba(16,185,129,0.12)", borderColor: "rgba(16,185,129,0.3)" }}>
-          ● IGT Solutions Workspace
-        </span>
-      </div>
-
-      <div className="mockup-body" style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "14px", background: "rgba(15,23,42,0.4)" }}>
-        {/* Workspace Invite Box */}
-        <div style={{ padding: "14px 18px", borderRadius: "12px", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(56, 189, 248, 0.1))", border: "1px solid rgba(16,185,129,0.25)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "#10b981", textTransform: "uppercase" }}>WORKSPACE CODE</span>
-            <div style={{ fontSize: "1.1rem", fontWeight: "800", color: "var(--text-primary)", letterSpacing: "1px" }}>INV-IGT123</div>
-          </div>
-          <div style={{ padding: "6px 12px", borderRadius: "8px", background: "rgba(16,185,129,0.2)", color: "#10b981", fontSize: "0.75rem", fontWeight: "700" }}>
-            ✓ Copied
-          </div>
-        </div>
-
-        {/* Member Directory Row Preview */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: "rgba(0,0,0,0.2)", borderRadius: "10px", border: "1px solid var(--border)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#38bdf8", color: "#000", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", fontSize: "0.8rem" }}>KG</div>
-              <div>
-                <strong style={{ fontSize: "0.85rem", color: "var(--text-primary)", display: "block" }}>Karan Garg <span style={{ color: "#38bdf8", fontSize: "0.7rem" }}>(Head)</span></strong>
-                <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Artificial Intelligence · karan@igt.com</span>
-              </div>
-            </div>
-            <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(16,185,129,0.15)", color: "#10b981", fontWeight: "700" }}>● Active</span>
-          </div>
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: "rgba(0,0,0,0.2)", borderRadius: "10px", border: "1px solid var(--border)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "#8b5cf6", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", fontSize: "0.8rem" }}>VG</div>
-              <div>
-                <strong style={{ fontSize: "0.85rem", color: "var(--text-primary)", display: "block" }}>Vaani Garg</strong>
-                <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>Software Development · vaani@igt.com</span>
-              </div>
-            </div>
-            <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(139,92,246,0.15)", color: "#8b5cf6", fontWeight: "700" }}>Executive</span>
           </div>
         </div>
       </div>
@@ -239,9 +181,9 @@ export const TechnicalPreview = () => {
         </span>
       </div>
 
-      <div className="mockup-body" style={{ padding: "20px", background: "#090d16" }}>
-        <div style={{ width: "100%", fontFamily: "'Courier New', Courier, monospace", fontSize: "0.82rem", color: "#38bdf8", display: "flex", flexDirection: "column", gap: "6px" }}>
-          <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}><code>{TECHNICAL_LOG}</code></pre>
+      <div className="mockup-body mockup-tech-body">
+        <div className="mockup-tech-log">
+          <pre><code>{TECHNICAL_LOG}</code></pre>
         </div>
       </div>
     </div>
