@@ -121,6 +121,7 @@ function Settings({ isOpen, onClose }) {
   const [editingOrgIndustry, setEditingOrgIndustry] = useState("");
   const [editingOrgWebsite, setEditingOrgWebsite] = useState("");
   const [editingOrgLogo, setEditingOrgLogo] = useState("");
+  const [confirmingClearAll, setConfirmingClearAll] = useState(false);
 
   const fetchStats = async () => {
     try {
@@ -188,8 +189,6 @@ function Settings({ isOpen, onClose }) {
 
   const activeSessionObj = sessions.find((s) => s.session_id === currentSession);
   const activeTitle = activeSessionObj?.title || "Active Chat";
-
-  const [confirmingClearAll, setConfirmingClearAll] = useState(false);
 
   const handleClearAll = async () => {
     if (!confirmingClearAll) {
