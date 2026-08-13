@@ -101,6 +101,7 @@ function OrgDashboard() {
   const [showTransferModal, setShowTransferModal] = useState(false);
 
   // Redesign Menu & Drawer States
+  const [selectedMemberDetail, setSelectedMemberDetail] = useState(null);
   const [hoveredLink, setHoveredLink] = useState(null);
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -895,10 +896,87 @@ function OrgDashboard() {
                       border: "1px solid var(--border)",
                     }}>
                       <div className="status-badge active" style={{ fontSize: "0.8rem", fontWeight: "700", textTransform: "uppercase" }}>
-                        Active
+                        ● Active
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Executive Quick Action Bar */}
+                <div className="quick-action-pill-bar" style={{ display: "flex", gap: "12px", flexWrap: "wrap", margin: "-12px 0 4px 0" }}>
+                  <button 
+                    onClick={() => setActiveTab("invitations")}
+                    style={{
+                      background: "var(--accent)",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "8px 16px",
+                      fontSize: "0.82rem",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      boxShadow: "var(--shadow-sm)"
+                    }}
+                  >
+                    <FiMail /> + Invite Member
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab("departments")}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.04)",
+                      color: "var(--text-primary)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "10px",
+                      padding: "8px 16px",
+                      fontSize: "0.82rem",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
+                    }}
+                  >
+                    <FiFolder /> + Department
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab("chats")}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.04)",
+                      color: "var(--text-primary)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "10px",
+                      padding: "8px 16px",
+                      fontSize: "0.82rem",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
+                    }}
+                  >
+                    <FiShare2 /> View Shared Chats
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab("settings")}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.04)",
+                      color: "var(--text-primary)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "10px",
+                      padding: "8px 16px",
+                      fontSize: "0.82rem",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
+                    }}
+                  >
+                    <FiSliders /> Workspace Settings
+                  </button>
                 </div>
 
                 <div className="metrics-grid">
@@ -1094,6 +1172,87 @@ function OrgDashboard() {
                           </span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Departments Preview & Quick Member Roster Grid */}
+                <div className="details-row" style={{ marginTop: "24px" }}>
+                  {/* Department Overview Cards */}
+                  <div className="details-card glass flex-1">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                      <h3 style={{ margin: 0 }}>Active Departments</h3>
+                      <button 
+                        type="button" 
+                        onClick={() => setActiveTab("departments")}
+                        style={{ background: "transparent", border: "none", color: "var(--accent)", fontSize: "0.85rem", fontWeight: "600", cursor: "pointer" }}
+                      >
+                        View all →
+                      </button>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                      {(orgData?.departments || ["Artificial Intelligence", "Human Resources", "Software Development"]).slice(0, 3).map((dept, idx) => {
+                        const deptMembers = members.filter(m => m.department === dept);
+                        return (
+                          <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "rgba(0,0,0,0.12)", borderRadius: "10px", border: "1px solid var(--border)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                              <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: "rgba(56, 189, 248, 0.15)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700" }}>
+                                <FiFolder />
+                              </div>
+                              <div>
+                                <h4 style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-primary)" }}>{dept}</h4>
+                                <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{deptMembers.length || 2} Teammates</span>
+                              </div>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "-6px" }}>
+                              {deptMembers.slice(0, 3).map((m, i) => (
+                                <ImageWithFallback 
+                                  key={i}
+                                  src={m.avatar} 
+                                  alt={m.fullName || m.userName} 
+                                  fallbackText={m.fullName || m.userName} 
+                                  style={{ width: "24px", height: "24px", borderRadius: "50%", border: "2px solid var(--bg-card)", marginLeft: i > 0 ? "-8px" : 0 }} 
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Workspace Member Preview Roster */}
+                  <div className="details-card glass flex-1">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                      <h3 style={{ margin: 0 }}>Workspace Teammates</h3>
+                      <button 
+                        type="button" 
+                        onClick={() => setActiveTab("members")}
+                        style={{ background: "transparent", border: "none", color: "var(--accent)", fontSize: "0.85rem", fontWeight: "600", cursor: "pointer" }}
+                      >
+                        View all →
+                      </button>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                      {members.slice(0, 4).map((m) => (
+                        <div key={m.userId} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "rgba(0,0,0,0.12)", borderRadius: "10px", border: "1px solid var(--border)" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <ImageWithFallback 
+                              src={m.avatar} 
+                              alt={m.fullName || m.userName} 
+                              fallbackText={m.fullName || m.userName} 
+                              style={{ width: "28px", height: "28px", borderRadius: "50%" }} 
+                            />
+                            <div style={{ display: "flex", flexDirection: "column" }}>
+                              <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--text-primary)" }}>{m.fullName || m.userName}</span>
+                              <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>{m.department || "General"}</span>
+                            </div>
+                          </div>
+                          <span className={`role-badge ${ROLE_BADGE_COLORS[m.role] || "role-badge-exec"}`} style={{ fontSize: "0.7rem", padding: "2px 8px" }}>
+                            {m.role}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -2876,6 +3035,77 @@ function OrgDashboard() {
               </form>
             </motion.div>
           </div>
+        )}
+
+        {/* Right-Side Member Detail Drawer */}
+        {selectedMemberDetail && (
+          <>
+            <div 
+              className="notification-drawer-overlay" 
+              onClick={() => setSelectedMemberDetail(null)} 
+            />
+            <motion.aside 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="notification-drawer glass-morphic"
+              style={{ width: "360px", zIndex: 250 }}
+            >
+              <div className="drawer-header">
+                <h3>Member Profile</h3>
+                <button className="drawer-close-btn" onClick={() => setSelectedMemberDetail(null)}>
+                  <FiX />
+                </button>
+              </div>
+              <div className="drawer-body" style={{ display: "flex", flexDirection: "column", gap: "20px", padding: "20px" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", textAlign: "center", paddingBottom: "16px", borderBottom: "1px solid var(--border)" }}>
+                  <ImageWithFallback 
+                    src={selectedMemberDetail.avatar} 
+                    alt={selectedMemberDetail.fullName || selectedMemberDetail.userName} 
+                    fallbackText={selectedMemberDetail.fullName || selectedMemberDetail.userName} 
+                    style={{ width: "72px", height: "72px", borderRadius: "50%", border: "2px solid var(--accent)" }} 
+                  />
+                  <div>
+                    <h3 style={{ margin: 0, fontSize: "1.1rem" }}>{selectedMemberDetail.fullName || selectedMemberDetail.userName}</h3>
+                    <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>{selectedMemberDetail.email}</span>
+                  </div>
+                  <span className={`role-badge ${ROLE_BADGE_COLORS[selectedMemberDetail.role] || "role-badge-exec"}`}>
+                    {selectedMemberDetail.role}
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase", color: "var(--text-secondary)" }}>Workspace Details</span>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem" }}>
+                    <span style={{ color: "var(--text-secondary)" }}>Department:</span>
+                    <strong>{selectedMemberDetail.department || "General"}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem" }}>
+                    <span style={{ color: "var(--text-secondary)" }}>Status:</span>
+                    <strong style={{ color: "var(--success)", display: "flex", alignItems: "center", gap: "4px" }}>
+                      ● Active
+                    </strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem" }}>
+                    <span style={{ color: "var(--text-secondary)" }}>Joined Date:</span>
+                    <strong>{selectedMemberDetail.joinedAt ? new Date(selectedMemberDetail.joinedAt).toLocaleDateString() : "N/A"}</strong>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase", color: "var(--text-secondary)" }}>Role Permissions</span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {(ROLE_PERMISSIONS[selectedMemberDetail.role] || ROLE_PERMISSIONS["Executive"]).map((perm, idx) => (
+                      <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.8rem", color: "var(--text-primary)" }}>
+                        <FiCheckCircle style={{ color: "var(--success)", flexShrink: 0 }} /> {perm}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </div>
