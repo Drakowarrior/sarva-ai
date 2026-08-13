@@ -1,5 +1,10 @@
-import { useState, useEffect } from "react";
-import { FiX, FiMoon, FiSun, FiTrash2, FiDownload, FiGlobe, FiCpu, FiMessageSquare, FiBookmark, FiStar, FiFileText, FiLayers, FiBriefcase, FiFolder, FiUser, FiShield, FiPlus, FiCopy, FiCheckCircle, FiMail } from "react-icons/fi";
+import { useState, useEffect, useRef } from "react";
+import { 
+  FiX, FiMoon, FiSun, FiMonitor, FiTrash2, FiDownload, FiGlobe, 
+  FiCpu, FiMessageSquare, FiBookmark, FiStar, FiFileText, FiLayers, 
+  FiBriefcase, FiUser, FiShield, FiPlus, FiCopy, FiCheckCircle, 
+  FiMail, FiChevronDown, FiLock, FiSearch, FiCamera, FiCheck, FiAlertTriangle 
+} from "react-icons/fi";
 import { useTheme } from "../../context/ThemeContext";
 import { useChat } from "../../context/ChatContext";
 import { useSession } from "../../context/SessionContext";
@@ -8,14 +13,42 @@ import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
 import toast from "react-hot-toast";
 import ImageWithFallback from "../Common/ImageWithFallback";
+import "./Settings.css";
 
 const MODELS = [
-  { id: "meta-llama/llama-4-scout-17b-16e-instruct", name: "Llama 4 Scout (17B) — Latest", desc: "Meta's newest architecture for high quality responses" },
-  { id: "qwen/qwen3-32b", name: "Qwen 3 (32B) — High Capacity", desc: "Best for coding and reasoning tasks" },
-  { id: "llama-3.1-8b-instant", name: "Llama 3.1 (8B) — Fast", desc: "Ultra-fast response model" }
+  { id: "meta-llama/llama-4-scout-17b-16e-instruct", name: "Llama 4 Scout (17B)", version: "Latest", desc: "Meta's newest architecture for high quality responses", status: "Available" },
+  { id: "qwen/qwen3-32b", name: "Qwen 3 (32B)", version: "High Capacity", desc: "Best for complex coding, math, and reasoning tasks", status: "Available" },
+  { id: "llama-3.1-8b-instant", name: "Llama 3.1 (8B)", version: "Instant", desc: "Ultra-fast response model optimized for speed", status: "Available" }
 ];
 
-const LANGUAGES = ["English", "Spanish", "French", "German", "Hindi"];
+const LANGUAGES = [
+  { name: "English", code: "en", flag: "🌐" },
+  { name: "Spanish", code: "es", flag: "🇪🇸" },
+  { name: "French", code: "fr", flag: "🇫🇷" },
+  { name: "German", code: "de", flag: "🇩🇪" },
+  { name: "Hindi", code: "hi", flag: "🇮🇳" }
+];
+
+function getInitials(name) {
+  if (!name) return "S";
+  const parts = name.trim().split(" ");
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+function getRoleCategory(role) {
+  if (!role) return "entry";
+  const r = role.toLowerCase();
+  if (["head", "team lead", "hr", "director", "ceo", "cto", "cfo", "coo"].some(t => r.includes(t))) {
+    return "leadership";
+  }
+  if (["executive", "manager", "architect", "senior"].some(t => r.includes(t))) {
+    return "professional";
+  }
+  return "entry";
+}
 
 function Settings({ isOpen, onClose }) {
   const { theme, toggleTheme } = useTheme();
@@ -31,8 +64,12 @@ function Settings({ isOpen, onClose }) {
   const { sessions, currentSession, clearAllSessions } = useSession();
   const { user, checkAuthStatus } = useAuth();
 
-  // Tabs State
+  // Active Navigation Tab State
   const [activeTab, setActiveTab] = useState("profile"); // "profile" | "preferences" | "orgProfile" | "directory"
+
+  // Dropdown States
+  const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
 
   // Profile Edit States
   const [fullName, setFullName] = useState(user?.fullName || "");
@@ -41,64 +78,8 @@ function Settings({ isOpen, onClose }) {
   const [bio, setBio] = useState(user?.bio || "");
   const [locationState, setLocationState] = useState(user?.location || "");
   const [timezone, setTimezone] = useState(user?.timezone || "UTC");
-  const [avatar, setAvatar] = useState(user?.avatar || "/avatars/default.png");
+  const [avatar, setAvatar] = useState(user?.avatar || "");
   const [updatingProfile, setUpdatingProfile] = useState(false);
-
-  // Sync profile details when user loads
-  useEffect(() => {
-    if (user) {
-      setFullName(user.fullName || "");
-      setPhoneNumber(user.phoneNumber || "");
-      setDesignation(user.designation || "");
-      setBio(user.bio || "");
-      setLocationState(user.location || "");
-      setTimezone(user.timezone || "UTC");
-      setAvatar(user.avatar || "/avatars/default.png");
-    }
-  }, [user]);
-
-  const handleAvatarUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveAvatar = () => {
-    setAvatar("/avatars/default.png");
-  };
-
-  const handleSaveProfile = async (e) => {
-    e.preventDefault();
-    setUpdatingProfile(true);
-    try {
-      const res = await api.put("/user/profile", {
-        fullName,
-        phoneNumber,
-        designation,
-        bio,
-        location: locationState,
-        timezone,
-        avatar
-      });
-      if (res.data.success) {
-        toast.success("Profile updated successfully!");
-        if (checkAuthStatus) {
-          await checkAuthStatus();
-        }
-      } else {
-        toast.error(res.data.message || "Failed to update profile.");
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.detail || "Failed to update profile.");
-    } finally {
-      setUpdatingProfile(false);
-    }
-  };
 
   // Statistics State
   const [stats, setStats] = useState({
@@ -112,17 +93,36 @@ function Settings({ isOpen, onClose }) {
   const [orgData, setOrgData] = useState(null);
   const [membersList, setMembersList] = useState([]);
   const [searchMemberQuery, setSearchMemberQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("All");
+  const [deptFilter, setDeptFilter] = useState("All");
   const [inviteEmail, setInviteEmail] = useState("");
   const [invitationResult, setInvitationResult] = useState("");
   const [updatingOrg, setUpdatingOrg] = useState(false);
+  const [copiedInvite, setCopiedInvite] = useState(false);
 
-  // Editable settings local variables
+  // Editable Organization Local State
   const [editingOrgName, setEditingOrgName] = useState("");
   const [editingOrgDesc, setEditingOrgDesc] = useState("");
   const [editingOrgIndustry, setEditingOrgIndustry] = useState("");
   const [editingOrgWebsite, setEditingOrgWebsite] = useState("");
   const [editingOrgLogo, setEditingOrgLogo] = useState("");
   const [confirmingClearAll, setConfirmingClearAll] = useState(false);
+
+  // File Input Ref
+  const fileInputRef = useRef(null);
+
+  // Sync profile details when user updates
+  useEffect(() => {
+    if (user) {
+      setFullName(user.fullName || "");
+      setPhoneNumber(user.phoneNumber || "");
+      setDesignation(user.designation || "");
+      setBio(user.bio || "");
+      setLocationState(user.location || "");
+      setTimezone(user.timezone || "UTC");
+      setAvatar(user.avatar || "");
+    }
+  }, [user]);
 
   const fetchStats = async () => {
     try {
@@ -185,16 +185,60 @@ function Settings({ isOpen, onClose }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-
   if (!isOpen) return null;
 
   const activeSessionObj = sessions.find((s) => s.session_id === currentSession);
   const activeTitle = activeSessionObj?.title || "Active Chat";
 
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+        toast.success("Photo selected! Click 'Save Profile' to keep changes.");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatar("");
+    toast("Photo removed", { icon: "🗑️" });
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    setUpdatingProfile(true);
+    try {
+      const res = await api.put("/user/profile", {
+        fullName,
+        phoneNumber,
+        designation,
+        bio,
+        location: locationState,
+        timezone,
+        avatar
+      });
+      if (res.data.success) {
+        toast.success("Profile details saved!");
+        if (checkAuthStatus) {
+          await checkAuthStatus();
+        }
+      } else {
+        toast.error(res.data.message || "Failed to update profile.");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to update profile.");
+    } finally {
+      setUpdatingProfile(false);
+    }
+  };
+
   const handleClearAll = async () => {
     if (!confirmingClearAll) {
       setConfirmingClearAll(true);
-      toast("Click 'Confirm Delete All' within 4s to erase all chats.", { icon: "⚠️" });
+      toast("Click 'Confirm Delete All' within 4s to erase history.", { icon: "⚠️" });
       setTimeout(() => setConfirmingClearAll(false), 4000);
       return;
     }
@@ -281,7 +325,7 @@ function Settings({ isOpen, onClose }) {
     try {
       const res = await api.post("/organizations/invite", { email: inviteEmail.trim() });
       if (res.data.success) {
-        toast.success("Invitation generated successfully!");
+        toast.success("Invitation generated!");
         setInvitationResult(res.data.inviteCode);
         setInviteEmail("");
       }
@@ -312,865 +356,683 @@ function Settings({ isOpen, onClose }) {
     }
   };
 
+  // Filter Members
+  const filteredMembers = membersList.filter((m) => {
+    const matchesSearch = 
+      (m.name || "").toLowerCase().includes(searchMemberQuery.toLowerCase()) || 
+      (m.email || "").toLowerCase().includes(searchMemberQuery.toLowerCase());
+    const matchesRole = roleFilter === "All" || m.role === roleFilter;
+    const matchesDept = deptFilter === "All" || m.department === deptFilter;
+    return matchesSearch && matchesRole && matchesDept;
+  });
+
+  const availableDepts = Array.from(new Set(membersList.map(m => m.department).filter(Boolean)));
+  const currentModelObj = MODELS.find(m => m.id === selectedModel) || MODELS[0];
+
   return (
     <AnimatePresence>
-      <div className="modal-overlay" onClick={onClose}>
+      <div className="settings-center-backdrop" onClick={onClose}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          initial={{ opacity: 0, scale: 0.97, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          transition={{ duration: 0.25 }}
-          className="modal-content"
-          className="modal-content settings-command-center"
-          style={{ maxWidth: "860px", width: "92vw", padding: "0", overflow: "hidden", borderRadius: "20px" }}
+          exit={{ opacity: 0, scale: 0.97, y: 15 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="settings-center-shell"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Top Header */}
-          <div className="modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid var(--border)", background: "var(--bg-secondary)" }}>
-            <h3 className="modal-title" style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>Preferences & Settings</h3>
-            <button className="modal-close-btn" onClick={onClose} aria-label="Close Modal">
+          {/* Settings Shell Header */}
+          <div className="settings-center-header">
+            <div className="settings-header-left">
+              <div className="settings-brand-badge">✦</div>
+              <div className="settings-header-titles">
+                <h2>Settings Center</h2>
+                <p>Personalize your SARVA AI experience and manage your workspace.</p>
+              </div>
+            </div>
+            <button className="settings-close-btn" onClick={onClose} aria-label="Close Settings Center">
               <FiX />
             </button>
           </div>
-          
-          {/* Two Column Layout Container */}
-          <div className="settings-split-container" style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "480px", maxHeight: "75vh", overflow: "hidden" }}>
-            {/* Left Vertical Navigation */}
-            <div className="settings-nav-sidebar" style={{ background: "rgba(0, 0, 0, 0.1)", borderRight: "1px solid var(--border)", padding: "18px 14px", display: "flex", flexDirection: "column", gap: "16px", overflowY: "auto" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.8px", paddingLeft: "10px" }}>Personal</span>
+
+          {/* 2-Column Command Center Body */}
+          <div className="settings-center-body">
+            {/* Left Navigation Sidebar */}
+            <div className="settings-nav-sidebar">
+              <div className="settings-nav-group">
+                <span className="settings-nav-label">Personal</span>
+                
                 <button
                   type="button"
-                  onClick={() => { setActiveTab("profile"); setInvitationResult(""); }}
-                  className={`settings-nav-btn ${activeTab === "profile" ? "active" : ""}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "10px 12px",
-                    borderRadius: "10px",
-                    border: "none",
-                    background: activeTab === "profile" ? "var(--accent)" : "transparent",
-                    color: activeTab === "profile" ? "#ffffff" : "var(--text-primary)",
-                    fontWeight: activeTab === "profile" ? "700" : "500",
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "all 0.2s ease"
-                  }}
+                  onClick={() => setActiveTab("profile")}
+                  className={`settings-nav-item ${activeTab === "profile" ? "active" : ""}`}
                 >
-                  <FiUser /> My Profile
+                  <FiUser className="settings-nav-icon" />
+                  <span>Profile</span>
                 </button>
+
                 <button
                   type="button"
-                  onClick={() => { setActiveTab("preferences"); setInvitationResult(""); }}
-                  className={`settings-nav-btn ${activeTab === "preferences" ? "active" : ""}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "10px 12px",
-                    borderRadius: "10px",
-                    border: "none",
-                    background: activeTab === "preferences" ? "var(--accent)" : "transparent",
-                    color: activeTab === "preferences" ? "#ffffff" : "var(--text-primary)",
-                    fontWeight: activeTab === "preferences" ? "700" : "500",
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    transition: "all 0.2s ease"
-                  }}
+                  onClick={() => setActiveTab("preferences")}
+                  className={`settings-nav-item ${activeTab === "preferences" ? "active" : ""}`}
                 >
-                  <FiCpu /> Preferences
+                  <FiCpu className="settings-nav-icon" />
+                  <span>Preferences</span>
                 </button>
               </div>
 
               {user && user.accountType === "organization" && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <span style={{ fontSize: "0.7rem", fontWeight: "700", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.8px", paddingLeft: "10px" }}>Workspace</span>
+                <div className="settings-nav-group">
+                  <span className="settings-nav-label">Workspace</span>
+
                   <button
                     type="button"
-                    onClick={() => { setActiveTab("orgProfile"); setInvitationResult(""); }}
-                    className={`settings-nav-btn ${activeTab === "orgProfile" ? "active" : ""}`}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      padding: "10px 12px",
-                      borderRadius: "10px",
-                      border: "none",
-                      background: activeTab === "orgProfile" ? "var(--accent)" : "transparent",
-                      color: activeTab === "orgProfile" ? "#ffffff" : "var(--text-primary)",
-                      fontWeight: activeTab === "orgProfile" ? "700" : "500",
-                      fontSize: "0.85rem",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.2s ease"
-                    }}
+                    onClick={() => setActiveTab("orgProfile")}
+                    className={`settings-nav-item ${activeTab === "orgProfile" ? "active" : ""}`}
                   >
-                    <FiBriefcase /> Organization Profile
+                    <FiBriefcase className="settings-nav-icon" />
+                    <span>Organization</span>
                   </button>
+
                   <button
                     type="button"
-                    onClick={() => { setActiveTab("directory"); setInvitationResult(""); }}
-                    className={`settings-nav-btn ${activeTab === "directory" ? "active" : ""}`}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      padding: "10px 12px",
-                      borderRadius: "10px",
-                      border: "none",
-                      background: activeTab === "directory" ? "var(--accent)" : "transparent",
-                      color: activeTab === "directory" ? "#ffffff" : "var(--text-primary)",
-                      fontWeight: activeTab === "directory" ? "700" : "500",
-                      fontSize: "0.85rem",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      transition: "all 0.2s ease"
-                    }}
+                    onClick={() => setActiveTab("directory")}
+                    className={`settings-nav-item ${activeTab === "directory" ? "active" : ""}`}
                   >
-                    <FiLayers /> Member Directory
+                    <FiLayers className="settings-nav-icon" />
+                    <span>Members</span>
                   </button>
                 </div>
               )}
             </div>
 
             {/* Right Main Content Panel */}
-            <div className="modal-body" style={{ overflowY: "auto", overflowX: "hidden", padding: "24px", boxSizing: "border-box" }}>
-            {activeTab === "profile" && (
-              <form onSubmit={handleSaveProfile} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                {/* Profile Picture Upload Section */}
-                <div style={{ display: "flex", alignItems: "center", gap: "20px", background: "rgba(0,0,0,0.15)", padding: "16px", borderRadius: "12px", border: "1px solid var(--border)" }}>
-                  <div style={{ position: "relative" }}>
-                    <img 
-                      src={avatar} 
-                      alt="Avatar" 
-                      style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", border: "2px solid var(--accent)" }} 
-                    />
+            <div className="settings-content-panel">
+              {/* TAB 1: PROFILE PAGE */}
+              {activeTab === "profile" && (
+                <form onSubmit={handleSaveProfile} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  <div className="settings-section-header">
+                    <h3>Your Profile</h3>
+                    <p>Manage your identity and how teammates see you across SARVA AI.</p>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <span style={{ fontSize: "0.85rem", fontWeight: "600" }}>Profile Image</span>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <label style={{
-                        background: "var(--accent)",
-                        color: "white",
-                        padding: "6px 12px",
-                        borderRadius: "6px",
-                        fontSize: "0.75rem",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        display: "inline-block"
-                      }}>
-                        Upload Image
-                        <input type="file" accept="image/*" onChange={handleAvatarUpload} style={{ display: "none" }} />
-                      </label>
-                      {avatar !== "/avatars/default.png" && (
+
+                  {/* Profile Hero Card */}
+                  <div className="profile-hero-card">
+                    <div className="profile-avatar-container" onClick={() => fileInputRef.current?.click()}>
+                      <ImageWithFallback
+                        src={avatar}
+                        alt={fullName || user?.fullName}
+                        fallbackText={getInitials(fullName || user?.fullName)}
+                        className="profile-avatar-img"
+                      />
+                      <div className="profile-avatar-overlay">
+                        <FiCamera />
+                      </div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        style={{ display: "none" }}
+                      />
+                    </div>
+
+                    <div className="profile-hero-info">
+                      <h4 className="profile-hero-name">{fullName || user?.fullName || "SARVA Member"}</h4>
+                      <div className="profile-hero-role-badge">
+                        <span className={`role-pill ${getRoleCategory(user?.role)}`}>
+                          {user?.role || "Member"}
+                        </span>
+                        <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+                          {designation || "AI Collaborator"}
+                        </span>
+                      </div>
+                      <div className="profile-actions-row">
                         <button
                           type="button"
-                          onClick={handleRemoveAvatar}
-                          style={{
-                            background: "transparent",
-                            border: "1px solid var(--border)",
-                            color: "var(--danger)",
-                            padding: "6px 12px",
-                            borderRadius: "6px",
-                            fontSize: "0.75rem",
-                            fontWeight: "600",
-                            cursor: "pointer"
-                          }}
+                          className="btn-secondary-sm"
+                          onClick={() => fileInputRef.current?.click()}
                         >
-                          Remove
+                          Change photo
                         </button>
-                      )}
-                    </div>
-                    <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>Supports JPG, PNG, WEBP.</span>
-                  </div>
-                </div>
-
-                {/* Profile Fields */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Full Name</label>
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.85rem"
-                      }}
-                    />
-                  </div>
-
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Email Address</label>
-                    <input
-                      type="email"
-                      value={user?.email || ""}
-                      disabled
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.25)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-secondary)",
-                        outline: "none",
-                        fontSize: "0.85rem",
-                        cursor: "not-allowed"
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Phone Number</label>
-                    <input
-                      type="text"
-                      placeholder="+1 (555) 000-0000"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.85rem"
-                      }}
-                    />
-                  </div>
-
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Designation</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Intern, Manager"
-                      value={designation}
-                      onChange={(e) => setDesignation(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.85rem"
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="settings-group">
-                  <label className="settings-label" style={{ fontSize: "0.75rem" }}>Professional Bio</label>
-                  <textarea
-                    placeholder="Tell us about yourself..."
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    rows={3}
-                    style={{
-                      width: "100%",
-                      padding: "8px 10px",
-                      background: "rgba(0,0,0,0.15)",
-                      border: "1px solid var(--border)",
-                      borderRadius: "6px",
-                      color: "var(--text-primary)",
-                      outline: "none",
-                      fontSize: "0.85rem",
-                      resize: "none"
-                    }}
-                  />
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Location</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. San Francisco, CA"
-                      value={locationState}
-                      onChange={(e) => setLocationState(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.85rem"
-                      }}
-                    />
-                  </div>
-
-                  <div className="settings-group">
-                    <label className="settings-label" style={{ fontSize: "0.75rem" }}>Time Zone</label>
-                    <select
-                      value={timezone}
-                      onChange={(e) => setTimezone(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "8px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.85rem"
-                      }}
-                    >
-                      <option value="UTC">UTC (GMT+0)</option>
-                      <option value="EST">EST (GMT-5)</option>
-                      <option value="CST">CST (GMT-6)</option>
-                      <option value="PST">PST (GMT-8)</option>
-                      <option value="IST">IST (GMT+5:30)</option>
-                      <option value="BST">BST (GMT+1)</option>
-                      <option value="AEST">AEST (GMT+10)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-                  <div>
-                    <strong>Organization Role:</strong> {user?.role || "Personal Account"}
-                  </div>
-                  <div>
-                    <strong>Joined Workspace:</strong> {user?.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={updatingProfile}
-                  style={{
-                    background: "var(--accent)",
-                    color: "white",
-                    border: "none",
-                    padding: "10px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontWeight: "600",
-                    fontSize: "0.85rem",
-                    marginTop: "8px"
-                  }}
-                >
-                  {updatingProfile ? "Saving changes..." : "Save Profile Details"}
-                </button>
-              </form>
-            )}
-
-            {activeTab === "preferences" && (
-              <>
-                {/* User Statistics Grid */}
-                <div className="settings-group">
-                  <span className="settings-label">Session Statistics</span>
-                  <div className="stats-grid">
-                    <div className="stats-card">
-                      <div className="stats-icon-wrapper sessions">
-                        <FiMessageSquare />
-                      </div>
-                      <div className="stats-info">
-                        <div className="stats-value">{stats.total_sessions}</div>
-                        <div className="stats-label-text">Sessions</div>
-                      </div>
-                    </div>
-                    <div className="stats-card">
-                      <div className="stats-icon-wrapper messages">
-                        <FiFileText />
-                      </div>
-                      <div className="stats-info">
-                        <div className="stats-value">{stats.total_messages}</div>
-                        <div className="stats-label-text">Messages</div>
-                      </div>
-                    </div>
-                    <div className="stats-card">
-                      <div className="stats-icon-wrapper pinned">
-                        <FiBookmark />
-                      </div>
-                      <div className="stats-info">
-                        <div className="stats-value">{stats.pinned_sessions}</div>
-                        <div className="stats-label-text">Pinned</div>
-                      </div>
-                    </div>
-                    <div className="stats-card">
-                      <div className="stats-icon-wrapper favorites">
-                        <FiStar />
-                      </div>
-                      <div className="stats-info">
-                        <div className="stats-value">{stats.favorite_sessions}</div>
-                        <div className="stats-label-text">Favorites</div>
+                        {avatar && (
+                          <button
+                            type="button"
+                            className="btn-secondary-sm"
+                            style={{ color: "var(--danger)" }}
+                            onClick={handleRemoveAvatar}
+                          >
+                            Remove
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Theme Toggle */}
-                <div className="settings-group">
-                  <span className="settings-label">App Theme</span>
-                  <div className="settings-options-grid">
-                    <button
-                      className={`settings-option-card ${theme === "dark" ? "active" : ""}`}
-                      onClick={() => theme === "light" && toggleTheme()}
-                    >
-                      <FiMoon style={{ marginRight: "8px", verticalAlign: "middle" }} /> Dark Mode
-                    </button>
-                    <button
-                      className={`settings-option-card ${theme === "light" ? "active" : ""}`}
-                      onClick={() => theme === "dark" && toggleTheme()}
-                    >
-                      <FiSun style={{ marginRight: "8px", verticalAlign: "middle" }} /> Light Mode
-                    </button>
+                  {/* Profile Fields (2-Column Grid) */}
+                  <div className="settings-section-header">
+                    <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700" }}>PROFILE INFORMATION</h4>
                   </div>
-                </div>
 
-                {/* Model Selection */}
-                <div className="settings-group">
-                  <span className="settings-label">AI Completion Model</span>
-                  <select
-                    className="settings-select"
-                    value={selectedModel}
-                    onChange={(e) => setSelectedModel(e.target.value)}
-                  >
-                    {MODELS.map((model) => (
-                      <option key={model.id} value={model.id}>
-                        {model.name}
-                      </option>
-                    ))}
-                  </select>
-                  <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    {MODELS.find((m) => m.id === selectedModel)?.desc}
-                  </p>
-                </div>
-
-                {/* Language Selection */}
-                <div className="settings-group">
-                  <span className="settings-label">Target Chat Language</span>
-                  <select
-                    className="settings-select"
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
-                  >
-                    {LANGUAGES.map((lang) => (
-                      <option key={lang} value={lang}>
-                        {lang}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Operations */}
-                <div className="settings-group">
-                  <span className="settings-label">Transcript Exports</span>
-                  <div className="settings-options-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-                    <button className="settings-btn" onClick={exportMarkdown} disabled={!currentSession}>
-                      <FiDownload /> Markdown
-                    </button>
-                    <button className="settings-btn" onClick={() => exportChatAsTXT(activeTitle)} disabled={!currentSession}>
-                      <FiDownload /> Plain Text
-                    </button>
-                    <button className="settings-btn" onClick={exportChatAsPDF} disabled={!currentSession}>
-                      <FiDownload /> Print PDF
-                    </button>
-                  </div>
-                  <div className="settings-action-row" style={{ marginTop: "12px" }}>
-                    <button className="settings-btn" onClick={exportJSON} style={{ flex: 1 }}>
-                      <FiDownload /> Export All (JSON)
-                    </button>
-                    <button 
-                      className={`settings-btn danger ${confirmingClearAll ? "active" : ""}`} 
-                      onClick={handleClearAll} 
-                      style={{ flex: 1, background: confirmingClearAll ? "var(--danger)" : undefined, color: confirmingClearAll ? "#fff" : undefined }}
-                    >
-                      <FiTrash2 /> {confirmingClearAll ? "Confirm Delete All?" : "Delete All Chats"}
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {activeTab === "orgProfile" && orgData && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                {/* Org Stats Header */}
-                <div style={{
-                  background: "rgba(0, 0, 0, 0.15)",
-                  padding: "16px",
-                  borderRadius: "12px",
-                  border: "1px solid var(--border)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "14px"
-                }}>
-                  <div style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "8px",
-                    background: "var(--accent)",
-                    color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "bold",
-                    fontSize: "1.2rem"
-                  }}>
-                    {orgData.organizationName ? orgData.organizationName[0].toUpperCase() : "O"}
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <h4 style={{ margin: 0, fontSize: "1rem", color: "var(--text-primary)" }}>{orgData.organizationName}</h4>
-                    <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-                      Slug: {orgData.slug} | Total Members: {orgData.totalMembers}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Invite Code Clipboard Card */}
-                <div style={{
-                  background: "rgba(16, 185, 129, 0.08)",
-                  border: "1px solid rgba(16, 185, 129, 0.2)",
-                  borderRadius: "12px",
-                  padding: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between"
-                }}>
-                  <div>
-                    <div style={{ color: "var(--success)", fontWeight: "600", fontSize: "0.85rem" }}>
-                      Workspace Invite Code
-                    </div>
-                    <div style={{ fontSize: "1.2rem", fontWeight: "800", color: "var(--text-primary)", letterSpacing: "1px", marginTop: "4px" }}>
-                      {orgData.inviteCode}
-                    </div>
-                    <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>
-                      Share this code with teammates so they can register and join!
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(orgData.inviteCode);
-                      toast.success("Invite code copied to clipboard!");
-                    }}
-                    style={{
-                      background: "rgba(16, 185, 129, 0.15)",
-                      border: "none",
-                      color: "var(--success)",
-                      cursor: "pointer",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      fontSize: "0.8rem",
-                      fontWeight: "600",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px"
-                    }}
-                  >
-                    <FiCopy /> Copy
-                  </button>
-                </div>
-
-                {/* Edit Org Form (Head roles only) */}
-                {user && user.role === "Head" ? (
-                  <form onSubmit={handleSaveOrgSettings} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                    <h4 style={{ borderBottom: "1px solid var(--border)", paddingBottom: "6px", fontSize: "0.9rem", color: "var(--text-primary)" }}>
-                      Edit Workspace Settings
-                    </h4>
-                    
-                    <div className="settings-group">
-                      <label className="settings-label" style={{ fontSize: "0.75rem" }}>Organization Name</label>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div className="settings-field-group">
+                      <label className="settings-field-label">Full Name</label>
                       <input
                         type="text"
-                        value={editingOrgName}
-                        onChange={(e) => setEditingOrgName(e.target.value)}
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className="settings-field-input"
+                        placeholder="Enter full name..."
                         required
-                        style={{
-                          width: "100%",
-                          padding: "8px 10px",
-                          background: "rgba(0,0,0,0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "6px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.85rem"
-                        }}
                       />
                     </div>
 
-                    <div className="settings-group">
-                      <label className="settings-label" style={{ fontSize: "0.75rem" }}>Description</label>
-                      <input
-                        type="text"
-                        value={editingOrgDesc}
-                        onChange={(e) => setEditingOrgDesc(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "8px 10px",
-                          background: "rgba(0,0,0,0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "6px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.85rem"
-                        }}
-                      />
-                    </div>
-
-                    <div className="settings-group">
-                      <label className="settings-label" style={{ fontSize: "0.75rem" }}>Industry</label>
-                      <input
-                        type="text"
-                        value={editingOrgIndustry}
-                        onChange={(e) => setEditingOrgIndustry(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "8px 10px",
-                          background: "rgba(0,0,0,0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "6px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.85rem"
-                        }}
-                      />
-                    </div>
-
-                    <div className="settings-group">
-                      <label className="settings-label" style={{ fontSize: "0.75rem" }}>Website</label>
-                      <input
-                        type="text"
-                        value={editingOrgWebsite}
-                        onChange={(e) => setEditingOrgWebsite(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "8px 10px",
-                          background: "rgba(0,0,0,0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "6px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.85rem"
-                        }}
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={updatingOrg}
-                      style={{
-                        background: "var(--accent)",
-                        color: "white",
-                        border: "none",
-                        padding: "10px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                        fontSize: "0.85rem",
-                        marginTop: "4px"
-                      }}
-                    >
-                      {updatingOrg ? "Saving Changes..." : "Save Workspace Profile"}
-                    </button>
-                  </form>
-                ) : (
-                  // Read only metadata for other roles
-                  <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "0.8rem", color: "var(--text-secondary)" }}>
-                    <h4 style={{ color: "var(--text-primary)", borderBottom: "1px solid var(--border)", paddingBottom: "4px" }}>Organization Metadata</h4>
-                    <div><strong>Description:</strong> {orgData.description || "N/A"}</div>
-                    <div><strong>Industry:</strong> {orgData.industry || "N/A"}</div>
-                    <div><strong>Website:</strong> {orgData.website || "N/A"}</div>
-                    <div><strong>Created By:</strong> {orgData.createdBy}</div>
-                    <div><strong>Created Date:</strong> {new Date(orgData.createdDate).toLocaleDateString()}</div>
-                    <div><strong>Status:</strong> {orgData.status}</div>
-                    <div><strong>Departments:</strong> {orgData.departments?.join(", ") || "None"}</div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === "directory" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-                {/* Invite section for Head / HR roles */}
-                {user && (user.role === "Head" || user.role === "HR") && (
-                  <div style={{
-                    background: "rgba(255, 255, 255, 0.02)",
-                    border: "1px solid var(--border)",
-                    borderRadius: "12px",
-                    padding: "14px"
-                  }}>
-                    <h4 style={{ margin: "0 0 10px 0", fontSize: "0.85rem", color: "var(--text-primary)" }}>
-                      Invite New Collaborator
-                    </h4>
-                    <form onSubmit={handleInviteMember} style={{ display: "flex", gap: "10px" }}>
+                    <div className="settings-field-group">
+                      <label className="settings-field-label">
+                        <span>Email Address</span>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", fontWeight: "500" }}>🔒 Managed by account</span>
+                      </label>
                       <input
                         type="email"
-                        placeholder="collaborator@company.com"
+                        value={user?.email || ""}
+                        disabled
+                        className="settings-field-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div className="settings-field-group">
+                      <label className="settings-field-label">Phone Number</label>
+                      <input
+                        type="text"
+                        placeholder="+1 (555) 000-0000"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="settings-field-input"
+                      />
+                    </div>
+
+                    <div className="settings-field-group">
+                      <label className="settings-field-label">Designation</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. AI Researcher, Team Lead"
+                        value={designation}
+                        onChange={(e) => setDesignation(e.target.value)}
+                        className="settings-field-input"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Professional Bio */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">
+                      <span>Professional Bio</span>
+                      <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)" }}>{bio.length} / 500</span>
+                    </label>
+                    <textarea
+                      placeholder="Tell teammates a little about your background, role, or AI projects..."
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value.slice(0, 500))}
+                      rows={3}
+                      className="settings-field-input"
+                      style={{ resize: "none" }}
+                    />
+                  </div>
+
+                  {/* Workspace Membership Card */}
+                  <div style={{ padding: "16px 20px", borderRadius: "14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", fontSize: "0.8rem" }}>
+                    <div>
+                      <span style={{ color: "var(--text-tertiary)", display: "block", fontSize: "0.72rem" }}>ORGANIZATION</span>
+                      <strong style={{ color: "var(--text-primary)" }}>{user?.organizationName || "Personal Account"}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "var(--text-tertiary)", display: "block", fontSize: "0.72rem" }}>ROLE</span>
+                      <strong style={{ color: "var(--text-primary)" }}>{user?.role || "Member"}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "var(--text-tertiary)", display: "block", fontSize: "0.72rem" }}>JOINED</span>
+                      <strong style={{ color: "var(--text-primary)" }}>{user?.created_at ? new Date(user.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "Jul 2026"}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "var(--text-tertiary)", display: "block", fontSize: "0.72rem" }}>DEPARTMENT</span>
+                      <strong style={{ color: "var(--text-primary)" }}>{user?.department || "General"}</strong>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={updatingProfile}
+                    className="btn-secondary-sm"
+                    style={{ background: "var(--accent)", color: "#ffffff", border: "none", padding: "12px", borderRadius: "12px", fontWeight: "750", fontSize: "0.88rem", width: "fit-content" }}
+                  >
+                    {updatingProfile ? "Saving Profile..." : "Save Profile Details"}
+                  </button>
+                </form>
+              )}
+
+              {/* TAB 2: PREFERENCES PAGE */}
+              {activeTab === "preferences" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  <div className="settings-section-header">
+                    <h3>Preferences</h3>
+                    <p>Control how SARVA AI looks, responds, and performs for you.</p>
+                  </div>
+
+                  {/* Activity Overview (4 Compact Mini Cards) */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">ACTIVITY OVERVIEW</label>
+                    <div className="activity-stats-grid">
+                      <div className="stat-mini-card">
+                        <div className="stat-mini-icon cyan"><FiMessageSquare /></div>
+                        <div>
+                          <div className="stat-mini-num">{stats.total_sessions}</div>
+                          <div className="stat-mini-lbl">Sessions</div>
+                        </div>
+                      </div>
+                      <div className="stat-mini-card">
+                        <div className="stat-mini-icon purple"><FiFileText /></div>
+                        <div>
+                          <div className="stat-mini-num">{stats.total_messages}</div>
+                          <div className="stat-mini-lbl">Messages</div>
+                        </div>
+                      </div>
+                      <div className="stat-mini-card">
+                        <div className="stat-mini-icon amber"><FiBookmark /></div>
+                        <div>
+                          <div className="stat-mini-num">{stats.pinned_sessions}</div>
+                          <div className="stat-mini-lbl">Pinned</div>
+                        </div>
+                      </div>
+                      <div className="stat-mini-card">
+                        <div className="stat-mini-icon pink"><FiStar /></div>
+                        <div>
+                          <div className="stat-mini-num">{stats.favorite_sessions}</div>
+                          <div className="stat-mini-lbl">Favorites</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Appearance Control (Segmented Switcher) */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">APPEARANCE</label>
+                    <div className="theme-segmented-control">
+                      <button
+                        type="button"
+                        className={`theme-segment-btn ${theme === "light" ? "active" : ""}`}
+                        onClick={() => theme !== "light" && toggleTheme()}
+                      >
+                        <FiSun /> Light
+                      </button>
+                      <button
+                        type="button"
+                        className={`theme-segment-btn ${theme === "dark" ? "active" : ""}`}
+                        onClick={() => theme !== "dark" && toggleTheme()}
+                      >
+                        <FiMoon /> Dark
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* AI Model Selector */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">AI COMPLETION MODEL</label>
+                    <div className="custom-model-card">
+                      <div 
+                        className="custom-select-trigger"
+                        onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <span style={{ color: "var(--accent)" }}>✦</span>
+                          <span>{currentModelObj.name}</span>
+                          <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(56,189,248,0.15)", color: "var(--accent)", fontWeight: "700" }}>
+                            {currentModelObj.version}
+                          </span>
+                        </div>
+                        <FiChevronDown style={{ transform: modelDropdownOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
+                      </div>
+
+                      {modelDropdownOpen && (
+                        <div className="custom-select-options">
+                          {MODELS.map((m) => (
+                            <div
+                              key={m.id}
+                              className={`custom-option-item ${m.id === selectedModel ? "selected" : ""}`}
+                              onClick={() => {
+                                setSelectedModel(m.id);
+                                setModelDropdownOpen(false);
+                                toast.success(`Model switched to ${m.name}`);
+                              }}
+                            >
+                              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: "700", fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                                  {m.id === selectedModel && <FiCheck style={{ color: "var(--accent)" }} />}
+                                  {m.name}
+                                </div>
+                                <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{m.desc}</span>
+                              </div>
+                              <span style={{ fontSize: "0.68rem", color: "#10b981", fontWeight: "700", background: "rgba(16,185,129,0.12)", padding: "2px 8px", borderRadius: "6px" }}>
+                                ● {m.status}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Target Chat Language Selector */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">RESPONSE LANGUAGE</label>
+                    <div className="custom-select-trigger" onClick={() => setLanguageDropdownOpen(!languageDropdownOpen)}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <FiGlobe style={{ color: "var(--accent)" }} />
+                        <span>{selectedLanguage}</span>
+                      </div>
+                      <FiChevronDown style={{ transform: languageDropdownOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
+                    </div>
+
+                    {languageDropdownOpen && (
+                      <div className="custom-select-options">
+                        {LANGUAGES.map((l) => (
+                          <div
+                            key={l.code}
+                            className={`custom-option-item ${l.name === selectedLanguage ? "selected" : ""}`}
+                            onClick={() => {
+                              setSelectedLanguage(l.name);
+                              setLanguageDropdownOpen(false);
+                              toast.success(`Language set to ${l.name}`);
+                            }}
+                          >
+                            <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "0.85rem", fontWeight: "600", color: "var(--text-primary)" }}>
+                              <span>{l.flag}</span>
+                              <span>{l.name}</span>
+                            </div>
+                            {l.name === selectedLanguage && <FiCheck style={{ color: "var(--accent)" }} />}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Transcript Exports */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">EXPORT CONVERSATIONS</label>
+                    <div className="export-cards-grid">
+                      <button className="export-card-btn" onClick={exportMarkdown} disabled={!currentSession}>
+                        <FiDownload style={{ color: "var(--accent)" }} />
+                        <span>↓ Markdown</span>
+                      </button>
+                      <button className="export-card-btn" onClick={() => exportChatAsTXT(activeTitle)} disabled={!currentSession}>
+                        <FiDownload style={{ color: "var(--accent)" }} />
+                        <span>↓ Plain Text</span>
+                      </button>
+                      <button className="export-card-btn" onClick={exportChatAsPDF} disabled={!currentSession}>
+                        <FiDownload style={{ color: "var(--accent)" }} />
+                        <span>↓ Print PDF</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Danger Zone */}
+                  <div className="settings-field-group" style={{ marginTop: "10px" }}>
+                    <label className="settings-field-label" style={{ color: "var(--danger)" }}>DANGER ZONE</label>
+                    <div className="danger-zone-box">
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: "0.9rem", fontWeight: "750", color: "var(--danger)" }}>Delete Conversation History</h4>
+                        <span style={{ fontSize: "0.78rem", color: "var(--text-secondary)" }}>Permanently remove all saved conversations from backend storage.</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-danger"
+                        onClick={handleClearAll}
+                        style={{ background: confirmingClearAll ? "#dc2626" : undefined }}
+                      >
+                        {confirmingClearAll ? "Confirm Delete All?" : "Delete all chats"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: ORGANIZATION PROFILE */}
+              {activeTab === "orgProfile" && orgData && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  <div className="settings-section-header">
+                    <h3>Organization Workspace</h3>
+                    <p>Your workspace identity, invitation parameters, and business metadata.</p>
+                  </div>
+
+                  {/* Org Hero Card */}
+                  <div className="profile-hero-card">
+                    <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "linear-gradient(135deg, #38BDF8 0%, #8B5CF6 100%)", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "800", fontSize: "1.6rem", flexShrink: 0 }}>
+                      {orgData.organizationName ? orgData.organizationName[0].toUpperCase() : "O"}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
+                      <h4 style={{ margin: 0, fontSize: "1.2rem", fontWeight: "750", color: "var(--text-primary)" }}>{orgData.organizationName}</h4>
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>Enterprise AI Workspace · {orgData.industry || "Technology"}</span>
+                      <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
+                        <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(16,185,129,0.15)", color: "#10b981", fontWeight: "700" }}>
+                          ● Active
+                        </span>
+                        <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(56,189,248,0.15)", color: "#38bdf8", fontWeight: "700" }}>
+                          {orgData.totalMembers || membersList.length} members
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Invite Code Panel */}
+                  <div style={{ padding: "18px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%)", border: "1px solid rgba(16, 185, 129, 0.25)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <span style={{ fontSize: "0.72rem", fontWeight: "750", color: "var(--success)", textTransform: "uppercase", letterSpacing: "0.5px" }}>WORKSPACE INVITE CODE</span>
+                      <div style={{ fontSize: "1.3rem", fontWeight: "800", color: "var(--text-primary)", letterSpacing: "1.5px", marginTop: "2px" }}>
+                        {orgData.inviteCode}
+                      </div>
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>Anyone with this code can register & join according to workspace policies.</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn-secondary-sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(orgData.inviteCode);
+                        setCopiedInvite(true);
+                        toast.success("Invite code copied!");
+                        setTimeout(() => setCopiedInvite(false), 2500);
+                      }}
+                      style={{ background: "var(--success)", color: "#ffffff", border: "none" }}
+                    >
+                      {copiedInvite ? "✓ Copied" : "Copy Code"}
+                    </button>
+                  </div>
+
+                  {/* Edit Org Settings (Head role only) */}
+                  {user && user.role === "Head" ? (
+                    <form onSubmit={handleSaveOrgSettings} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                      <label className="settings-field-label">ORGANIZATION DETAILS</label>
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                        <div className="settings-field-group">
+                          <label className="settings-field-label">Organization Name</label>
+                          <input
+                            type="text"
+                            value={editingOrgName}
+                            onChange={(e) => setEditingOrgName(e.target.value)}
+                            className="settings-field-input"
+                            required
+                          />
+                        </div>
+
+                        <div className="settings-field-group">
+                          <label className="settings-field-label">Industry</label>
+                          <input
+                            type="text"
+                            value={editingOrgIndustry}
+                            onChange={(e) => setEditingOrgIndustry(e.target.value)}
+                            className="settings-field-input"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="settings-field-group">
+                        <label className="settings-field-label">Website URL</label>
+                        <input
+                          type="text"
+                          value={editingOrgWebsite}
+                          onChange={(e) => setEditingOrgWebsite(e.target.value)}
+                          className="settings-field-input"
+                        />
+                      </div>
+
+                      <div className="settings-field-group">
+                        <label className="settings-field-label">Description</label>
+                        <textarea
+                          value={editingOrgDesc}
+                          onChange={(e) => setEditingOrgDesc(e.target.value)}
+                          rows={3}
+                          className="settings-field-input"
+                          style={{ resize: "none" }}
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={updatingOrg}
+                        className="btn-secondary-sm"
+                        style={{ background: "var(--accent)", color: "#ffffff", border: "none", width: "fit-content", padding: "10px 18px", borderRadius: "10px" }}
+                      >
+                        {updatingOrg ? "Saving..." : "Save Workspace Details"}
+                      </button>
+                    </form>
+                  ) : (
+                    /* Read-Only Details Grid */
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                      <div style={{ padding: "14px", borderRadius: "12px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)" }}>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", display: "block" }}>DESCRIPTION</span>
+                        <span style={{ fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: "600" }}>{orgData.description || "Enterprise workspace"}</span>
+                      </div>
+                      <div style={{ padding: "14px", borderRadius: "12px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)" }}>
+                        <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", display: "block" }}>INDUSTRY</span>
+                        <span style={{ fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: "600" }}>{orgData.industry || "Artificial Intelligence"}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Departments Pills */}
+                  <div className="settings-field-group">
+                    <label className="settings-field-label">DEPARTMENTS</label>
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      {(orgData.departments || ["Artificial Intelligence", "Software Development", "Human Resources", "Research"]).map((dept, idx) => (
+                        <span key={idx} style={{ padding: "6px 14px", borderRadius: "10px", background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", fontSize: "0.8rem", fontWeight: "600", color: "var(--text-primary)" }}>
+                          {dept}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: MEMBER DIRECTORY PAGE */}
+              {activeTab === "directory" && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                  <div className="settings-section-header">
+                    <h3>Member Directory</h3>
+                    <p>{membersList.length} collaborators in your organization workspace.</p>
+                  </div>
+
+                  {/* Invite New Member Form (Head / HR roles) */}
+                  {user && (user.role === "Head" || user.role === "HR") && (
+                    <form onSubmit={handleInviteMember} style={{ display: "flex", gap: "10px", padding: "16px", borderRadius: "14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)" }}>
+                      <input
+                        type="email"
+                        placeholder="Enter collaborator email..."
                         value={inviteEmail}
                         onChange={(e) => setInviteEmail(e.target.value)}
+                        className="settings-field-input"
+                        style={{ flex: 1 }}
                         required
-                        style={{
-                          flex: 1,
-                          padding: "8px 10px",
-                          background: "rgba(0,0,0,0.15)",
-                          border: "1px solid var(--border)",
-                          borderRadius: "6px",
-                          color: "var(--text-primary)",
-                          outline: "none",
-                          fontSize: "0.85rem"
-                        }}
                       />
                       <button
                         type="submit"
-                        style={{
-                          background: "var(--success)",
-                          color: "white",
-                          border: "none",
-                          padding: "0 14px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                          fontWeight: "600",
-                          fontSize: "0.85rem",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px"
-                        }}
+                        className="btn-secondary-sm"
+                        style={{ background: "var(--accent)", color: "#ffffff", border: "none", padding: "0 18px", borderRadius: "10px", display: "flex", alignItems: "center", gap: "6px", fontWeight: "700" }}
                       >
                         <FiPlus /> Invite
                       </button>
                     </form>
-                    
-                    {invitationResult && (
-                      <div style={{
-                        background: "rgba(16, 185, 129, 0.12)",
-                        border: "1px solid rgba(16, 185, 129, 0.2)",
-                        borderRadius: "8px",
-                        padding: "10px",
-                        marginTop: "10px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between"
-                      }}>
-                        <div style={{ fontSize: "0.75rem", color: "var(--text-primary)" }}>
-                          Invite code generated: <strong style={{ color: "var(--success)", letterSpacing: "1px" }}>{invitationResult}</strong>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard.writeText(invitationResult);
-                            toast.success("Code copied!");
-                          }}
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "var(--success)",
-                            cursor: "pointer",
-                            fontSize: "0.75rem",
-                            fontWeight: "600"
-                          }}
-                        >
-                          Copy Code
-                        </button>
+                  )}
+
+                  {/* Search & Filter Toolbar */}
+                  <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                    <div style={{ position: "relative", flex: 1 }}>
+                      <FiSearch style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--text-tertiary)" }} />
+                      <input
+                        type="text"
+                        placeholder="Search members by name or email..."
+                        value={searchMemberQuery}
+                        onChange={(e) => setSearchMemberQuery(e.target.value)}
+                        className="settings-field-input"
+                        style={{ paddingLeft: "38px" }}
+                      />
+                    </div>
+
+                    <select
+                      value={roleFilter}
+                      onChange={(e) => setRoleFilter(e.target.value)}
+                      className="settings-field-input"
+                      style={{ width: "130px" }}
+                    >
+                      <option value="All">All Roles</option>
+                      <option value="Head">Head</option>
+                      <option value="Team Lead">Team Lead</option>
+                      <option value="HR">HR</option>
+                      <option value="Executive">Executive</option>
+                      <option value="Intern">Intern</option>
+                      <option value="Student">Student</option>
+                    </select>
+                  </div>
+
+                  {/* Member Directory Cards Grid */}
+                  <div className="member-cards-grid">
+                    {filteredMembers.length === 0 ? (
+                      <div style={{ textAlign: "center", padding: "40px 20px", color: "var(--text-secondary)", borderRadius: "16px", border: "1px dashed var(--border)", background: "rgba(0,0,0,0.1)" }}>
+                        <FiUser style={{ fontSize: "2rem", color: "var(--text-tertiary)", marginBottom: "8px" }} />
+                        <h4 style={{ margin: 0, fontSize: "0.95rem", color: "var(--text-primary)" }}>No members found</h4>
+                        <p style={{ margin: "4px 0 0 0", fontSize: "0.8rem" }}>Try adjusting your search query or filter options.</p>
                       </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Directory List */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
-                    <h4 style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-primary)" }}>Organization Members</h4>
-                    <input
-                      type="text"
-                      placeholder="Search member..."
-                      value={searchMemberQuery}
-                      onChange={(e) => setSearchMemberQuery(e.target.value)}
-                      style={{
-                        padding: "6px 10px",
-                        background: "rgba(0,0,0,0.15)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "6px",
-                        color: "var(--text-primary)",
-                        outline: "none",
-                        fontSize: "0.8rem",
-                        maxWidth: "200px"
-                      }}
-                    />
-                  </div>
-
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px",
-                    marginTop: "4px"
-                  }}>
-                    {membersList
-                      .filter(m => (m.name || "").toLowerCase().includes(searchMemberQuery.toLowerCase()) || (m.email || "").toLowerCase().includes(searchMemberQuery.toLowerCase()))
-                      .map((m) => {
+                    ) : (
+                      filteredMembers.map((m) => {
                         const isSelf = m.userId === user?.user_id;
                         return (
-                          <div
-                            key={m.userId}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              padding: "10px 12px",
-                              background: "rgba(255, 255, 255, 0.02)",
-                              border: "1px solid var(--border)",
-                              borderRadius: "8px",
-                              gap: "10px"
-                            }}
-                          >
-                            <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden", flex: 1 }}>
-                              <div style={{
-                                width: "32px",
-                                height: "32px",
-                                borderRadius: "50%",
-                                background: m.role === "Head" ? "var(--success)" : "var(--accent)",
-                                color: "white",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: "bold",
-                                fontSize: "0.8rem",
-                                flexShrink: 0
-                              }}>
-                                {m.name ? m.name[0].toUpperCase() : "U"}
-                              </div>
-                              <div style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
-                                <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                  {m.name} {isSelf && <span style={{ color: "var(--accent)", fontSize: "0.75rem" }}>(You)</span>}
-                                </span>
-                                <span style={{ fontSize: "0.7rem", color: "var(--text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                  📂 {m.department} | {m.email}
+                          <div key={m.userId} className="member-directory-card">
+                            <div style={{ display: "flex", alignItems: "center", gap: "14px", flex: 1, minWidth: 0 }}>
+                              <ImageWithFallback
+                                src={m.avatar}
+                                alt={m.name}
+                                fallbackText={getInitials(m.name)}
+                                style={{ width: "42px", height: "42px", borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                              />
+
+                              <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                  <span style={{ fontSize: "0.9rem", fontWeight: "750", color: "var(--text-primary)" }}>{m.name}</span>
+                                  {isSelf && <span style={{ fontSize: "0.72rem", color: "var(--accent)", fontWeight: "700" }}>(You)</span>}
+                                </div>
+                                <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+                                  {m.department || "General"} · {m.email}
                                 </span>
                               </div>
                             </div>
 
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              {/* Role selection for owner/Head */}
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
+                              {/* Role Selector or Badge */}
                               {user && user.role === "Head" && !isSelf ? (
                                 <select
                                   value={m.role}
                                   onChange={(e) => handleUpdateRole(m.userId, e.target.value)}
-                                  style={{
-                                    padding: "4px 8px",
-                                    background: "rgba(0,0,0,0.35)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "4px",
-                                    color: "var(--text-primary)",
-                                    fontSize: "0.75rem",
-                                    outline: "none"
-                                  }}
+                                  className="settings-field-input"
+                                  style={{ padding: "4px 8px", fontSize: "0.75rem", width: "110px" }}
                                 >
                                   <option value="Head">Head</option>
                                   <option value="Team Lead">Team Lead</option>
@@ -1178,66 +1040,33 @@ function Settings({ isOpen, onClose }) {
                                   <option value="Executive">Executive</option>
                                   <option value="Intern">Intern</option>
                                   <option value="Student">Student</option>
-                                  <option value="Manager">Manager</option>
-                                  <option value="Director">Director</option>
-                          <option value="CEO">CEO</option>
-                          <option value="CTO">CTO</option>
-                          <option value="CFO">CFO</option>
-                          <option value="COO">COO</option>
-                          <option value="CIO">CIO</option>
-                          <option value="CMO">CMO</option>
-                          <option value="CSO">CSO</option>
-                          <option value="CPO">CPO</option>
-                          <option value="CLO">CLO</option>
-                          <option value="CRO">CRO</option>
-                          <option value="CDO">CDO</option>
-                          <option value="CAO">CAO</option>
-                          <option value="CCO">CCO</option>
                                 </select>
                               ) : (
-                                <span style={{
-                                  background: m.role === "Head" ? "rgba(16, 185, 129, 0.15)" : "rgba(255, 255, 255, 0.05)",
-                                  color: m.role === "Head" ? "var(--success)" : "var(--text-primary)",
-                                  padding: "2px 6px",
-                                  borderRadius: "4px",
-                                  fontSize: "0.7rem",
-                                  fontWeight: "600"
-                                }}>
+                                <span className={`role-pill ${getRoleCategory(m.role)}`}>
                                   {m.role}
                                 </span>
                               )}
 
-                              {/* Remove member for owner/Head */}
                               {user && user.role === "Head" && !isSelf && (
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveMember(m.userId)}
-                                  style={{
-                                    background: "transparent",
-                                    border: "none",
-                                    color: "var(--text-secondary)",
-                                    cursor: "pointer",
-                                    padding: "4px",
-                                    display: "flex",
-                                    alignItems: "center"
-                                  }}
+                                  style={{ background: "transparent", border: "none", color: "var(--text-tertiary)", cursor: "pointer", padding: "6px" }}
                                   title="Remove Member"
-                                  onMouseEnter={(e) => e.currentTarget.style.color = "var(--danger)"}
-                                  onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
                                 >
-                                  <FiTrash2 style={{ fontSize: "0.9rem" }} />
+                                  <FiTrash2 style={{ fontSize: "0.95rem" }} />
                                 </button>
                               )}
                             </div>
                           </div>
                         );
-                      })}
+                      })
+                    )}
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
         </motion.div>
       </div>
     </AnimatePresence>
