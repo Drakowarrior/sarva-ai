@@ -1,709 +1,783 @@
 /* ============================================================
-   SARVA AI — SETTINGS CENTER 3.0 PRODUCTION DESIGN SYSTEM
+   SARVA AI — SETTINGS CENTER FINAL PRODUCTION STYLES
    ============================================================ */
 
-/* Backdrop overlay - clear recognition of inactive chat surface */
-.settings-center-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(15, 23, 42, 0.48);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify: center;
-  padding: 24px;
-  box-sizing: border-box;
+/* Top-level Viewport Backdrop Overlay */
+.sarva-settings-center.settings-center-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  z-index: 9990 !important;
+  background: rgba(15, 23, 42, 0.48) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
 }
 
-/* Modal Shell Container - Fixed sizing regardless of active tab */
-.settings-center-shell {
-  width: min(1240px, calc(100vw - 48px));
-  height: min(900px, calc(100vh - 48px));
-  max-width: 1240px;
+/* Mathematically Centered Modal Shell */
+.sarva-settings-center .settings-center-shell {
+  position: relative !important;
+  width: min(1240px, calc(100vw - 48px)) !important;
+  height: min(900px, calc(100dvh - 48px)) !important;
+  max-width: 1240px !important;
+  max-height: calc(100dvh - 48px) !important;
+  margin: 0 auto !important;
   background: var(--bg-primary);
   border: 1px solid var(--border);
-  border-radius: 24px;
-  box-shadow: 0 32px 100px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
+  border-radius: 24px !important;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.20) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  z-index: 10000 !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
 }
 
-/* Header Refinement (Height 80px) */
-.settings-center-header {
-  height: 80px;
-  padding: 0 28px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Header Area (Fixed 88px height at top) */
+.sarva-settings-center .settings-center-header {
+  height: 88px !important;
+  min-height: 88px !important;
+  padding: 0 28px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 10005 !important;
+  box-sizing: border-box !important;
 }
 
-.settings-header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.sarva-settings-center .settings-header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
 }
 
-.settings-brand-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2));
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  display: flex;
-  align-items: center;
-  justify: center;
-  color: var(--accent);
-  font-size: 1.25rem;
+/* Decorative Sparkle Badge — Completely Static, No Hover */
+.sarva-settings-center .settings-brand-badge {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(139, 92, 246, 0.18)) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--accent) !important;
+  font-size: 1.25rem !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  cursor: default !important;
+  transform: none !important;
 }
 
-.settings-header-titles h2 {
-  margin: 0;
-  font-size: 1.35rem;
-  font-weight: 750;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
+.sarva-settings-center .settings-header-titles h2 {
+  margin: 0 !important;
+  font-size: 1.35rem !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text-primary) !important;
 }
 
-.settings-header-titles p {
-  margin: 2px 0 0 0;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.sarva-settings-center .settings-header-titles p {
+  margin: 2px 0 0 0 !important;
+  font-size: 0.85rem !important;
+  color: var(--text-secondary) !important;
 }
 
-.settings-close-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid transparent;
+/* Dedicated Close Button — Strictly Contained, No Icon Transforms */
+.sarva-settings-center .settings-close-btn {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: var(--text-secondary) !important;
+  font-size: 1.15rem !important;
+  cursor: pointer !important;
+  z-index: 10010 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transition: background-color 150ms ease, color 150ms ease !important;
+  overflow: hidden !important;
+  transform: none !important;
+}
+
+.sarva-settings-center .settings-close-btn:hover {
+  background: rgba(15, 23, 42, 0.08) !important;
+  color: var(--text-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.sarva-settings-center .settings-close-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18) !important;
+}
+
+.sarva-settings-center .settings-close-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  transform: none !important;
+  transition: color 150ms ease !important;
+  pointer-events: none !important;
+}
+
+/* 2-Column Body Layout */
+.sarva-settings-center .settings-center-body {
+  display: grid !important;
+  grid-template-columns: 232px minmax(0, 1fr) !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Left Sidebar Navigation */
+.sarva-settings-center .settings-nav-sidebar {
+  background: var(--bg-secondary) !important;
+  border-right: 1px solid var(--border) !important;
+  padding: 20px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  overflow-y: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.sarva-settings-center .settings-nav-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.sarva-settings-center .settings-nav-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--text-tertiary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  padding: 0 12px 6px 12px !important;
+}
+
+.sarva-settings-center .settings-nav-item {
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
   background: transparent;
   color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify: center;
-  font-size: 1.15rem;
-  cursor: pointer;
-  transition: all 0.18ms ease;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  position: relative !important;
+  overflow: hidden !important; /* Contains active indicator and hover backgrounds */
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease !important;
+  transform: none !important;
+  box-sizing: border-box !important;
 }
 
-.settings-close-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  border-color: var(--border);
-  transform: rotate(90deg) scale(1.05);
+.sarva-settings-center .settings-nav-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+  transform: none !important;
 }
 
-.settings-close-btn:active {
-  transform: scale(0.96);
+.sarva-settings-center .settings-nav-item.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(139, 92, 246, 0.10)) !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
 }
 
-/* 2-Column Body Structure */
-.settings-center-body {
-  display: grid;
-  grid-template-columns: 232px minmax(0, 1fr);
-  flex: 1;
-  overflow: hidden;
+.sarva-settings-center .settings-nav-item.active::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 8px !important;
+  bottom: 8px !important;
+  width: 3px !important;
+  border-radius: 0 4px 4px 0 !important;
+  background: linear-gradient(180deg, #38BDF8, #8B5CF6) !important;
 }
 
-/* Left Navigation Sidebar — Clean Integrated Surface */
-.settings-nav-sidebar {
-  background: var(--bg-secondary);
-  border-right: 1px solid var(--border);
-  padding: 20px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-  flex-shrink: 0;
+.sarva-settings-center .settings-nav-icon {
+  font-size: 18px !important;
+  color: var(--text-tertiary) !important;
+  transition: color 150ms ease !important;
+  transform: none !important;
+  flex-shrink: 0 !important;
 }
 
-.settings-nav-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.sarva-settings-center .settings-nav-item.active .settings-nav-icon {
+  color: var(--accent) !important;
 }
 
-.settings-nav-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0 12px 6px 12px;
+/* Right Content Panel & Centered Inner Wrapper */
+.sarva-settings-center .settings-content-panel {
+  padding: 0 !important;
+  min-width: 0 !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(100, 116, 139, 0.22) transparent !important;
 }
 
-.settings-nav-item {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: left;
-  position: relative;
-  transition: all 0.18s ease;
+.sarva-settings-center .settings-content-panel::-webkit-scrollbar {
+  width: 8px !important;
 }
 
-.settings-nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
+.sarva-settings-center .settings-content-panel::-webkit-scrollbar-track {
+  background: transparent !important;
 }
 
-.settings-nav-item.active {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(139, 92, 246, 0.10));
-  border-color: rgba(56, 189, 248, 0.25);
-  color: var(--text-primary);
-  font-weight: 700;
+.sarva-settings-center .settings-content-panel::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.22) !important;
+  border-radius: 999px !important;
 }
 
-.settings-nav-item.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: linear-gradient(180deg, #38BDF8, #8B5CF6);
-}
-
-.settings-nav-icon {
-  font-size: 18px;
-  color: var(--text-tertiary);
-  transition: color 0.18s ease;
-}
-
-.settings-nav-item.active .settings-nav-icon {
-  color: var(--accent);
-}
-
-/* Right Content Panel */
-.settings-content-panel {
-  padding: 32px;
-  max-width: 880px;
-  width: 100%;
-  min-width: 0;
-  overflow-y: auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
-
-.settings-content-panel::-webkit-scrollbar {
-  width: 6px;
-}
-
-.settings-content-panel::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
+.sarva-settings-center .settings-content-inner {
+  width: 100% !important;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  padding: 32px 36px 40px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 28px !important;
 }
 
 /* Section Header Typography */
-.settings-section-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.sarva-settings-center .settings-section-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
 }
 
-.settings-section-header h3 {
-  margin: 0;
-  font-size: 26px;
-  font-weight: 750;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
+.sarva-settings-center .settings-section-header h3 {
+  margin: 0 !important;
+  font-size: 26px !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text-primary) !important;
 }
 
-.settings-section-header p {
-  margin: 0;
-  font-size: 14.5px;
-  color: var(--text-secondary);
-  line-height: 1.5;
+.sarva-settings-center .settings-section-header p {
+  margin: 0 !important;
+  font-size: 14.5px !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.5 !important;
 }
 
 /* Profile Identity Hero Card */
-.profile-hero-card {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 24px;
-  border-radius: 18px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+.sarva-settings-center .profile-hero-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 24px !important;
+  border-radius: 18px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  box-sizing: border-box !important;
 }
 
-.profile-avatar-container {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  cursor: pointer;
+.sarva-settings-center .profile-avatar-container {
+  position: relative !important;
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
 }
 
-.profile-avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--accent);
-  transition: transform 0.2s ease;
+.sarva-settings-center .profile-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 2px solid var(--accent) !important;
+  transition: transform 0.18s ease !important;
 }
 
-.profile-avatar-container:hover .profile-avatar-img {
-  transform: scale(1.03);
+.sarva-settings-center .profile-avatar-container:hover .profile-avatar-img {
+  transform: scale(1.03) !important;
 }
 
-.profile-avatar-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  align-items: center;
-  justify: center;
-  color: #ffffff;
-  font-size: 1.3rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+.sarva-settings-center .profile-avatar-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #ffffff !important;
+  font-size: 1.3rem !important;
+  opacity: 0 !important;
+  transition: opacity 0.18s ease !important;
 }
 
-.profile-avatar-container:hover .profile-avatar-overlay {
-  opacity: 1;
+.sarva-settings-center .profile-avatar-container:hover .profile-avatar-overlay {
+  opacity: 1 !important;
 }
 
-.profile-hero-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
+.sarva-settings-center .profile-hero-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  flex: 1 !important;
 }
 
-.profile-hero-name {
-  font-size: 20px;
-  font-weight: 750;
-  color: var(--text-primary);
-  margin: 0;
+.sarva-settings-center .profile-hero-name {
+  font-size: 20px !important;
+  font-weight: 750 !important;
+  color: var(--text-primary) !important;
+  margin: 0 !important;
 }
 
-.profile-hero-role-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.sarva-settings-center .profile-hero-role-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
-.role-pill {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.sarva-settings-center .role-pill {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 10px !important;
+  border-radius: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 
-.role-pill.leadership {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+.sarva-settings-center .role-pill.leadership {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
 }
 
-.role-pill.professional {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+.sarva-settings-center .role-pill.professional {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
 }
 
-.role-pill.entry {
-  background: rgba(139, 92, 246, 0.10);
-  color: #7C3AED;
-  border: 1px solid rgba(139, 92, 246, 0.25);
+.sarva-settings-center .role-pill.entry {
+  background: rgba(139, 92, 246, 0.10) !important;
+  color: #7C3AED !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
 }
 
-.profile-actions-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
+.sarva-settings-center .profile-actions-row {
+  display: flex !important;
+  gap: 10px !important;
+  margin-top: 4px !important;
 }
 
-.btn-secondary-sm {
-  height: 38px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 0 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 650;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify: center;
-  transition: all 0.18s ease;
+.sarva-settings-center .btn-secondary-sm {
+  height: 38px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: 0 14px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.18s ease, border-color 0.18s ease !important;
+  transform: none !important;
 }
 
-.btn-secondary-sm:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent);
+.sarva-settings-center .btn-secondary-sm:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--accent) !important;
+  transform: none !important;
 }
 
-/* Fields & Inputs Grid */
-.settings-field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+/* Form Fields & Input Styling */
+.sarva-settings-center .settings-field-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
 }
 
-.settings-field-label {
-  font-size: 13px;
-  font-weight: 650;
-  color: var(--text-primary);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.sarva-settings-center .settings-field-label {
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  color: var(--text-primary) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 
-.settings-field-input {
-  width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  background: rgba(0, 0, 0, 0.12);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.18s ease;
-  box-sizing: border-box;
+.sarva-settings-center .settings-field-input {
+  width: 100% !important;
+  height: 44px !important;
+  padding: 0 14px !important;
+  background: rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  outline: none !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease !important;
+  box-sizing: border-box !important;
 }
 
-.settings-field-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+.sarva-settings-center .settings-field-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12) !important;
 }
 
-.settings-field-input:disabled {
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--text-secondary);
-  cursor: not-allowed;
-  border-color: rgba(255, 255, 255, 0.05);
+.sarva-settings-center .settings-field-input:disabled {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: var(--text-secondary) !important;
+  cursor: not-allowed !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Segmented Theme Selector */
-.theme-segmented-control {
-  display: flex;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 4px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  gap: 4px;
+/* Theme Segmented Switcher */
+.sarva-settings-center .theme-segmented-control {
+  display: flex !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  padding: 4px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--border) !important;
+  gap: 4px !important;
 }
 
-.theme-segment-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s ease;
+.sarva-settings-center .theme-segment-btn {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 16px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
 }
 
-.theme-segment-btn:hover {
-  color: var(--text-primary);
+.sarva-settings-center .theme-segment-btn:hover {
+  color: var(--text-primary) !important;
 }
 
-.theme-segment-btn.active {
-  background: var(--accent);
-  color: #ffffff;
-  font-weight: 750;
-  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+.sarva-settings-center .theme-segment-btn.active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  font-weight: 750 !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25) !important;
 }
 
-/* Mini Activity Statistics Cards */
-.activity-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+/* Mini Activity Overview Cards */
+.sarva-settings-center .activity-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px !important;
 }
 
-.stat-mini-card {
-  height: 100px;
-  padding: 16px;
-  border-radius: 16px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: all 0.18s ease;
-  box-sizing: border-box;
+.sarva-settings-center .stat-mini-card {
+  height: 100px !important;
+  padding: 16px !important;
+  border-radius: 16px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease !important;
+  box-sizing: border-box !important;
+  transform: none !important;
 }
 
-.stat-mini-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.sarva-settings-center .stat-mini-card:hover {
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  transform: none !important;
 }
 
-.stat-mini-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify: center;
-  font-size: 1.15rem;
-  flex-shrink: 0;
+.sarva-settings-center .stat-mini-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.15rem !important;
+  flex-shrink: 0 !important;
 }
 
-.stat-mini-icon.cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-.stat-mini-icon.purple { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
-.stat-mini-icon.amber { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.stat-mini-icon.pink { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.sarva-settings-center .stat-mini-icon.cyan { background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; }
+.sarva-settings-center .stat-mini-icon.purple { background: rgba(139, 92, 246, 0.15) !important; color: #8b5cf6 !important; }
+.sarva-settings-center .stat-mini-icon.amber { background: rgba(245, 158, 11, 0.15) !important; color: #f59e0b !important; }
+.sarva-settings-center .stat-mini-icon.pink { background: rgba(236, 72, 153, 0.15) !important; color: #ec4899 !important; }
 
-.stat-mini-num {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1;
+.sarva-settings-center .stat-mini-num {
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: var(--text-primary) !important;
+  line-height: 1 !important;
 }
 
-.stat-mini-lbl {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 4px;
+.sarva-settings-center .stat-mini-lbl {
+  font-size: 11px !important;
+  color: var(--text-secondary) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 4px !important;
 }
 
-/* Custom Select Dropdown Cards */
-.custom-model-card {
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Custom Select Dropdowns */
+.sarva-settings-center .custom-model-card {
+  padding: 16px !important;
+  border-radius: 14px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
 }
 
-.custom-select-trigger {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s ease;
+.sarva-settings-center .custom-select-trigger {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: border-color 0.18s ease !important;
 }
 
-.custom-select-trigger:hover {
-  border-color: var(--accent);
+.sarva-settings-center .custom-select-trigger:hover {
+  border-color: var(--accent) !important;
 }
 
-.custom-select-options {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 6px;
+.sarva-settings-center .custom-select-options {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin-top: 6px !important;
 }
 
-.custom-option-item {
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid transparent;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.18s ease;
+.sarva-settings-center .custom-option-item {
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid transparent !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: background-color 0.18s ease, border-color 0.18s ease !important;
 }
 
-.custom-option-item:hover {
-  background: rgba(56, 189, 248, 0.08);
-  border-color: rgba(56, 189, 248, 0.2);
+.sarva-settings-center .custom-option-item:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
 }
 
-.custom-option-item.selected {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: var(--accent);
+.sarva-settings-center .custom-option-item.selected {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-color: var(--accent) !important;
 }
 
 /* Export Cards Grid */
-.export-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+.sarva-settings-center .export-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
 }
 
-.export-card-btn {
-  height: 44px;
-  padding: 0 14px;
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s ease;
+.sarva-settings-center .export-card-btn {
+  height: 44px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  color: var(--text-primary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background-color 0.18s ease, border-color 0.18s ease !important;
+  transform: none !important;
 }
 
-.export-card-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: var(--accent);
-  background: rgba(56, 189, 248, 0.1);
+.sarva-settings-center .export-card-btn:hover:not(:disabled) {
+  border-color: var(--accent) !important;
+  background: rgba(56, 189, 248, 0.1) !important;
+  transform: none !important;
 }
 
-.export-card-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.sarva-settings-center .export-card-btn:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
 }
 
-/* Danger Zone Box */
-.danger-zone-box {
-  padding: 20px;
-  border-radius: 16px;
-  background: rgba(239, 68, 68, 0.03);
-  border: 1px solid rgba(239, 68, 68, 0.20);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Danger Zone Container */
+.sarva-settings-center .danger-zone-box {
+  padding: 20px !important;
+  border-radius: 16px !important;
+  background: rgba(239, 68, 68, 0.03) !important;
+  border: 1px solid rgba(239, 68, 68, 0.20) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
 }
 
-.btn-danger {
-  height: 40px;
-  background: #ef4444;
-  color: #ffffff;
-  border: none;
-  padding: 0 18px;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.18s ease;
+.sarva-settings-center .btn-danger {
+  height: 40px !important;
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 0 18px !important;
+  border-radius: 10px !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease !important;
 }
 
-.btn-danger:hover {
-  background: #dc2626;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+.sarva-settings-center .btn-danger:hover {
+  background: #dc2626 !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3) !important;
 }
 
-/* Member Directory Grid / Cards */
-.member-cards-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Member Directory Cards Grid */
+.sarva-settings-center .member-cards-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
 }
 
-.member-directory-card {
-  height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
-  border-radius: 14px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  transition: all 0.18s ease;
-  box-sizing: border-box;
+.sarva-settings-center .member-directory-card {
+  height: 76px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 18px !important;
+  border-radius: 14px !important;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  transition: border-color 0.18s ease, background-color 0.18s ease !important;
+  box-sizing: border-box !important;
+  transform: none !important;
 }
 
-.member-directory-card:hover {
-  border-color: rgba(56, 189, 248, 0.25);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+.sarva-settings-center .member-directory-card:hover {
+  border-color: rgba(56, 189, 248, 0.25) !important;
+  transform: none !important;
 }
 
-/* Mobile Responsive Adjustments (< 768px) */
+/* Responsive Viewport Rules */
 @media (max-width: 768px) {
-  .settings-center-backdrop {
-    padding: 0;
+  .sarva-settings-center.settings-center-backdrop {
+    padding: 0 !important;
   }
 
-  .settings-center-shell {
-    width: 100vw;
-    height: 100dvh;
-    max-width: 100vw;
-    max-height: 100dvh;
-    border-radius: 0;
-    border: none;
+  .sarva-settings-center .settings-center-shell {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: 100vw !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
   }
 
-  .settings-center-body {
-    grid-template-columns: 1fr;
-    display: flex;
-    flex-direction: column;
+  .sarva-settings-center .settings-center-body {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
-  .settings-nav-sidebar {
-    flex-direction: row;
-    overflow-x: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 10px;
-    gap: 8px;
+  .sarva-settings-center .settings-nav-sidebar {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 10px !important;
+    gap: 8px !important;
   }
 
-  .settings-nav-group {
-    flex-direction: row;
-    gap: 6px;
+  .sarva-settings-center .settings-nav-group {
+    flex-direction: row !important;
+    gap: 6px !important;
   }
 
-  .settings-nav-label {
-    display: none;
+  .sarva-settings-center .settings-nav-label {
+    display: none !important;
   }
 
-  .settings-nav-item {
-    white-space: nowrap;
-    height: 38px;
-    padding: 6px 12px;
-    font-size: 13px;
+  .sarva-settings-center .settings-nav-item {
+    white-space: nowrap !important;
+    height: 38px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
   }
 
-  .activity-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .sarva-settings-center .activity-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  .export-cards-grid {
-    grid-template-columns: 1fr;
+  .sarva-settings-center .export-cards-grid {
+    grid-template-columns: 1fr !important;
   }
 
-  .profile-hero-card {
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
+  .sarva-settings-center .profile-hero-card {
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .sarva-settings-center .settings-content-inner {
+    padding: 20px 16px 24px !important;
   }
 }
