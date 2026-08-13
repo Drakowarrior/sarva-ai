@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { 
   FiArrowRight, FiCpu, FiDatabase, FiFileText, FiLayers, FiShield, 
-  FiCode, FiMessageSquare, FiZap, FiGithub, FiCheckCircle, FiTerminal 
+  FiCode, FiMessageSquare, FiZap, FiGithub, FiCheckCircle, FiTerminal, 
+  FiUsers, FiLock, FiCheck, FiCommand, FiActivity 
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import PublicDemo from "../../components/PublicDemo/PublicDemo";
-import { ChatInterfaceMockup, ArchitectureDiagramMockup } from "../../components/ProductMockups/ProductMockups";
+import { 
+  ChatPreview, 
+  DocumentPreview, 
+  WorkspacePreview, 
+  TechnicalPreview, 
+  ArchitectureDiagramMockup 
+} from "../../components/ProductMockups/ProductMockups";
 import useSeo from "../../hooks/useSeo";
 import { 
   trackCtaClick, 
@@ -18,47 +25,44 @@ import {
   trackCaseStudyView, 
   trackUseCasesView 
 } from "../../utils/analytics";
+import "./Home.css";
 
-const USE_CASES = [
+const CAPABILITIES = [
   {
-    id: "coding",
-    category: "💻 Coding",
-    title: "Software Engineering & Debugging",
-    description: "Debug FastAPI route errors, inspect React state hooks, review Python algorithms, and generate structured implementation code.",
-    exampleTask: "Debug FastAPI 422 validation errors or craft async MongoDB Atlas queries.",
-    promptExample: "Help me debug this FastAPI API endpoint and structure async Pydantic schemas."
+    num: "01",
+    icon: <FiMessageSquare />,
+    title: "AI Conversations",
+    description: "Context-aware multi-turn conversations powered by Groq LPUs for instant 300+ token/sec responses."
   },
   {
-    id: "documents",
-    category: "📄 Documents",
-    title: "AI Document Analysis & PDF Context",
-    description: "Upload financial reports, research papers, resumes, and text archives. Extract structured insights directly from file contents.",
-    exampleTask: "Extract resume key qualifications or summarize 50-page PDF research reports.",
-    promptExample: "Analyze my uploaded PDF report and summarize 5 key takeaways."
+    num: "02",
+    icon: <FiFileText />,
+    title: "Document Intelligence",
+    description: "Upload financial reports, research PDFs, and specs to extract grounded answers and key takeaways."
   },
   {
-    id: "learning",
-    category: "📚 Learning",
-    title: "Computer Science & Education",
-    description: "Master complex concepts, understand machine learning architectures, study Data Structures & Algorithms, and format study outlines.",
-    exampleTask: "Break down transformer attention mechanisms or binary search tree algorithms.",
-    promptExample: "Explain the difference between RAG and model fine-tuning with code examples."
+    num: "03",
+    icon: <FiCode />,
+    title: "Technical Analysis",
+    description: "Debug code, review Python/React architecture, format API specs, and analyze system performance."
   },
   {
-    id: "analysis",
-    category: "📊 Analysis",
-    title: "Technical Data & Insight Extraction",
-    description: "Synthesize multi-source technical data, extract action items, compare cloud architecture models, and optimize system design.",
-    exampleTask: "Compare Groq LPU throughput vs standard cloud GPU latency metrics.",
-    promptExample: "Analyze token streaming latency differences between Llama 3.3 70B and Llama 3.1 8B."
+    num: "04",
+    icon: <FiCpu />,
+    title: "Knowledge & Research",
+    description: "Synthesize data across multi-source threads and maintain persistent context stored in MongoDB Atlas."
   },
   {
-    id: "writing",
-    category: "✍️ Writing",
-    title: "Technical Writing & Documentation",
-    description: "Draft architectural specifications, API reference manuals, project READMEs, and technical blog summaries effortlessly.",
-    exampleTask: "Generate clean API documentation or refine technical documentation summaries.",
-    promptExample: "Draft a comprehensive README for a full-stack React and FastAPI AI platform."
+    num: "05",
+    icon: <FiUsers />,
+    title: "Team Collaboration",
+    description: "Share conversations with workspace members, assign RBAC permissions, and streamline team workflows."
+  },
+  {
+    num: "06",
+    icon: <FiShield />,
+    title: "Enterprise Workspace",
+    description: "Stateless JWT authentication, department isolation, and organization administrative workspace controls."
   }
 ];
 
@@ -67,8 +71,8 @@ function Home() {
   const [selectedPromptForDemo, setSelectedPromptForDemo] = useState("");
 
   useSeo({
-    title: "SARVA AI – Intelligent Conversational AI Platform",
-    description: "SARVA AI is an intelligent conversational AI platform for natural conversations, AI assistance, file analysis, and productive workflows.",
+    title: "SARVA AI – Intelligent Enterprise AI Workspace OS",
+    description: "SARVA AI is an intelligent conversational AI platform for natural conversations, document analysis, team collaboration, and enterprise productivity.",
     canonicalPath: "/",
     jsonLd: {
       "@context": "https://schema.org",
@@ -78,7 +82,7 @@ function Home() {
           "@id": "https://sarva-ai-one.vercel.app/#website",
           "url": "https://sarva-ai-one.vercel.app/",
           "name": "SARVA AI",
-          "description": "Intelligent Conversational AI Platform",
+          "description": "Intelligent Enterprise AI Workspace OS",
           "author": {
             "@type": "Person",
             "name": "Karan Garg"
@@ -101,310 +105,330 @@ function Home() {
   });
 
   return (
-    <div className="seo-page-container">
-      {/* 1. NAVBAR */}
+    <div className="sarva-home-root">
+      {/* 1. FLOATING NAVIGATION BAR */}
       <SeoHeader />
 
-      {/* 2. HERO */}
-      <section className="landing-hero" style={{ padding: "50px 24px 20px", textAlign: "center", maxWidth: "920px", margin: "0 auto" }}>
+      {/* 2. HERO SECTION */}
+      <section className="sarva-hero-section">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="seo-hero-badge"
+          transition={{ duration: 0.5 }}
+          className="sarva-hero-eyebrow"
         >
-          ✨ Full-Stack Conversational AI Platform
+          ✦ ENTERPRISE AI WORKSPACE OS
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="seo-page-title"
-          style={{ fontSize: "2.8rem", lineHeight: "1.2" }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="sarva-hero-title"
         >
-          Your Intelligent AI Assistant
+          Your Intelligence. Connected. <br />
+          <span className="sarva-hero-title-accent">Your Work. Accelerated.</span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="seo-page-subtitle"
-          style={{ fontSize: "1.15rem", maxWidth: "760px", margin: "16px auto 28px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="sarva-hero-subtitle"
         >
-          Chat, analyze files, manage conversations, and get AI-powered assistance from one platform. Powered by React, FastAPI, MongoDB, and Groq LPUs.
+          Chat, analyze documents, collaborate across your organization, and turn complex technical information into useful answers — all from one intelligent workspace.
         </motion.p>
 
-        {/* 3. PRIMARY & SECONDARY CTA */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-          style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap", marginBottom: "32px" }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="sarva-hero-cta-group"
         >
           <Link 
             to={isAuthenticated ? "/chat" : "/auth"} 
             onClick={() => {
-              trackCtaClick("home_hero", "Try SARVA AI Free");
+              trackCtaClick("home_hero", "Launch SARVA AI");
               trackTrySarvaClick("home_hero");
             }}
-            className="seo-cta-btn" 
-            style={{ padding: "14px 32px", fontSize: "1.05rem" }}
+            className="sarva-btn-primary"
           >
-            {isAuthenticated ? "Launch Dashboard" : "Try SARVA AI Free"} <FiArrowRight />
+            {isAuthenticated ? "Launch Dashboard" : "Launch SARVA AI"} <FiArrowRight />
           </Link>
-          <a 
-            href="#features" 
-            className="seo-social-link" 
-            style={{ padding: "14px 28px", fontSize: "1rem" }}
-          >
-            Explore Features <FiZap />
+
+          <a href="#capabilities" className="sarva-btn-secondary">
+            Explore Platform <FiZap />
           </a>
+        </motion.div>
+        <span className="sarva-hero-subtext">No credit card required · Free plan available</span>
+
+        {/* Hero Product Centerpiece Mockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="sarva-hero-mockup-wrapper"
+        >
+          <ChatPreview />
         </motion.div>
       </section>
 
-      {/* 4. INTERACTIVE PUBLIC DEMO & 5. EXAMPLE PROMPTS */}
-      <section style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: "16px" }}>
-          <h2 style={{ fontSize: "1.8rem", color: "var(--text-primary)" }}>
-            Try SARVA AI Live in Your Browser
-          </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
-            Experience real-time AI assistance before creating your free account.
+      {/* 3. TRUST & CREDIBILITY STRIP */}
+      <section className="sarva-trust-strip">
+        <div className="sarva-trust-label">BUILT FOR MODERN TECHNICAL TEAMS</div>
+        <div className="sarva-trust-badges">
+          <span className="sarva-trust-badge-item">💻 AI Engineering</span>
+          <span className="sarva-trust-badge-item">🔬 Academic Research</span>
+          <span className="sarva-trust-badge-item">⚡ Software Development</span>
+          <span className="sarva-trust-badge-item">👥 Human Resources</span>
+          <span className="sarva-trust-badge-item">📊 Technical Operations</span>
+        </div>
+      </section>
+
+      {/* 4. CORE PLATFORM CAPABILITIES (6-CARD GRID) */}
+      <section id="capabilities" className="sarva-section">
+        <div className="sarva-section-header">
+          <span className="sarva-section-tag">PLATFORM CAPABILITIES</span>
+          <h2 className="sarva-section-title">Everything your team needs to work with AI.</h2>
+          <p className="sarva-section-subtitle">
+            One workspace for conversations, document analysis, knowledge retrieval, and organization collaboration.
           </p>
         </div>
 
-        <PublicDemo initialPrompt={selectedPromptForDemo} />
+        <div className="sarva-capabilities-grid">
+          {CAPABILITIES.map((cap, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              className="sarva-capability-card"
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="sarva-cap-icon-box">{cap.icon}</div>
+                  <span className="sarva-cap-num">{cap.num}</span>
+                </div>
+                <h3 className="sarva-cap-title">{cap.title}</h3>
+                <p className="sarva-cap-desc">{cap.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
-      <main className="seo-page-content" style={{ maxWidth: "1100px", margin: "40px auto 0" }}>
-        {/* 6. USE CASES SECTION */}
-        <section style={{ marginBottom: "50px" }}>
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <h2 className="seo-section-heading" style={{ fontSize: "1.9rem" }}>
-              SARVA AI Support Use Cases
-            </h2>
-            <p className="seo-page-subtitle" style={{ margin: "8px auto 0" }}>
-              Engineered to supercharge technical productivity across core engineering workflows.
+      {/* 5. ALTERNATING FEATURE SHOWCASE SECTIONS */}
+      <section className="sarva-showcase-container">
+        {/* SHOWCASE A: AI CONVERSATIONS */}
+        <div className="sarva-showcase-row">
+          <div className="sarva-showcase-text">
+            <span className="sarva-showcase-tag">01 · CONVERSATIONAL ENGINE</span>
+            <h2 className="sarva-showcase-title">High-throughput token generation at 300+ tok/sec.</h2>
+            <p className="sarva-showcase-desc">
+              Experience instant answers powered by Groq LPU hardware acceleration. Switch between Llama 4 Scout (17B), Qwen 3 (32B), and instant fast models seamlessly.
             </p>
+            <div className="sarva-showcase-bullets">
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Multi-turn persistent thread memory</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Dynamic model selection on the fly</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Markdown, code blocks, & LaTeX math rendering</div>
+            </div>
           </div>
-
-          <div className="seo-grid-2">
-            {USE_CASES.map((uc) => (
-              <div 
-                key={uc.id} 
-                className="seo-card hover-lift"
-                style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}
-              >
-                <div>
-                  <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#38bdf8", marginBottom: "8px" }}>
-                    {uc.category}
-                  </div>
-                  <h3 className="seo-card-title" style={{ fontSize: "1.25rem", marginBottom: "8px" }}>
-                    {uc.title}
-                  </h3>
-                  <p className="seo-card-text" style={{ fontSize: "0.92rem", marginBottom: "16px" }}>
-                    {uc.description}
-                  </p>
-                  <div style={{ 
-                    background: "rgba(15, 23, 42, 0.6)", 
-                    padding: "10px 14px", 
-                    borderRadius: "8px", 
-                    fontSize: "0.85rem", 
-                    color: "var(--text-secondary)",
-                    border: "1px solid var(--border)",
-                    marginBottom: "16px"
-                  }}>
-                    <strong>Example Task:</strong> {uc.exampleTask}
-                  </div>
-                </div>
-
-                <Link
-                  to={isAuthenticated ? "/chat" : "/auth"}
-                  onClick={() => {
-                    trackUseCasesView(uc.id);
-                    trackCtaClick("use_case_card", `Try ${uc.id}`);
-                  }}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    color: "#38bdf8",
-                    fontWeight: "600",
-                    fontSize: "0.9rem",
-                    textDecoration: "none",
-                    marginTop: "8px"
-                  }}
-                >
-                  Try it →
-                </Link>
-              </div>
-            ))}
+          <div>
+            <ChatPreview />
           </div>
-        </section>
+        </div>
 
-        {/* 7. PRODUCT SCREENSHOTS / REAL MOCKUP */}
-        <section style={{ marginBottom: "50px" }}>
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
-            <h2 className="seo-section-heading" style={{ fontSize: "1.9rem" }}>
-              Actual SARVA AI Workspace Interface
-            </h2>
-            <p className="seo-page-subtitle">
-              Clean markdown rendering, model selection, document attachment context, and session history.
+        {/* SHOWCASE B: DOCUMENT INTELLIGENCE */}
+        <div className="sarva-showcase-row reverse">
+          <div>
+            <DocumentPreview />
+          </div>
+          <div className="sarva-showcase-text">
+            <span className="sarva-showcase-tag">02 · DOCUMENT INTELLIGENCE</span>
+            <h2 className="sarva-showcase-title">Upload documents and extract grounded answers.</h2>
+            <p className="sarva-showcase-desc">
+              Parse PDF financial reports, technical documentation, resumes, and text files. Extract structured insights directly from file contents without manual searching.
             </p>
-          </div>
-
-          <ChatInterfaceMockup />
-        </section>
-
-        {/* 8. KEY FEATURES */}
-        <section id="features" style={{ marginBottom: "50px" }}>
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <h2 className="seo-section-heading" style={{ fontSize: "1.9rem" }}>
-              Core Platform Capabilities
-            </h2>
-          </div>
-
-          <div className="seo-grid-2">
-            <div className="seo-card">
-              <div className="seo-card-icon"><FiMessageSquare /></div>
-              <h3 className="seo-card-title">Intelligent AI Conversations</h3>
-              <p className="seo-card-text">
-                Multi-turn conversation history stored seamlessly in MongoDB Atlas for persistent thread context.
-              </p>
-            </div>
-
-            <div className="seo-card">
-              <div className="seo-card-icon"><FiCpu /></div>
-              <h3 className="seo-card-title">Groq LPU Acceleration</h3>
-              <p className="seo-card-text">
-                High-throughput token generation streaming at 300+ tokens/sec using Llama 3.3 70B and Llama 3.1 8B.
-              </p>
-            </div>
-
-            <div className="seo-card">
-              <div className="seo-card-icon"><FiFileText /></div>
-              <h3 className="seo-card-title">PDF & Document Analysis</h3>
-              <p className="seo-card-text">
-                Extract context from PDF reports, resumes, and text documents to receive grounded AI answers.
-              </p>
-            </div>
-
-            <div className="seo-card">
-              <div className="seo-card-icon"><FiShield /></div>
-              <h3 className="seo-card-title">JWT Authentication & Privacy</h3>
-              <p className="seo-card-text">
-                Stateless JWT tokens, bcrypt password encryption, and multi-tenant database session isolation.
-              </p>
+            <div className="sarva-showcase-bullets">
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> PyPDF asynchronous extraction pipeline</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Grounded contextual Q&A from uploaded PDFs</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Support for multi-page PDF files & code archives</div>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* 9. HOW IT WORKS & 10. ARCHITECTURE */}
-        <section style={{ marginBottom: "50px" }}>
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
-            <h2 className="seo-section-heading" style={{ fontSize: "1.9rem" }}>
-              How SARVA AI Works
-            </h2>
-            <p className="seo-page-subtitle">
-              React 19 Frontend ➔ FastAPI Python Backend ➔ MongoDB Session Store ➔ Groq LPU Models
+        {/* SHOWCASE C: TEAM KNOWLEDGE & WORKSPACE */}
+        <div className="sarva-showcase-row">
+          <div className="sarva-showcase-text">
+            <span className="sarva-showcase-tag">03 · ORGANIZATION WORKSPACE</span>
+            <h2 className="sarva-showcase-title">Move from individual chats to team intelligence.</h2>
+            <p className="sarva-showcase-desc">
+              Connect your teammates in an Executive Organization Workspace. Manage member permissions, invite collaborators via secure codes, and share conversation threads.
             </p>
+            <div className="sarva-showcase-bullets">
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Role-Based Access Control (Head, Team Lead, HR, Member)</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Workspace invite codes & member management</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Department organization & shared workspace chats</div>
+            </div>
+          </div>
+          <div>
+            <WorkspacePreview />
+          </div>
+        </div>
+
+        {/* SHOWCASE D: TECHNICAL WORKFLOWS */}
+        <div className="sarva-showcase-row reverse">
+          <div>
+            <TechnicalPreview />
+          </div>
+          <div className="sarva-showcase-text">
+            <span className="sarva-showcase-tag">04 · TECHNICAL WORKFLOWS</span>
+            <h2 className="sarva-showcase-title">Engineered for software & AI developers.</h2>
+            <p className="sarva-showcase-desc">
+              Debug complex code, inspect stack trace errors, format API endpoints, and export conversation transcripts directly to Markdown, Plain Text, or PDF.
+            </p>
+            <div className="sarva-showcase-bullets">
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Syntax-highlighted code blocks with 1-click copy</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Transcript exports (Markdown, TXT, PDF, JSON)</div>
+              <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> FastAPI & MongoDB Atlas execution pipeline</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. "HOW SARVA AI WORKS" ARCHITECTURE TIMELINE */}
+      <section className="sarva-section">
+        <div className="sarva-section-header">
+          <span className="sarva-section-tag">ARCHITECTURE PIPELINE</span>
+          <h2 className="sarva-section-title">How SARVA AI Operates</h2>
+          <p className="sarva-section-subtitle">
+            From user prompt to high-speed LPU generation, stateful storage, and grounded context delivery.
+          </p>
+        </div>
+
+        <div className="sarva-timeline-grid">
+          <div className="sarva-timeline-card">
+            <span className="sarva-step-badge">STEP 01</span>
+            <h3 className="sarva-step-title">1. Prompt & File Context</h3>
+            <p className="sarva-step-desc">Enter natural prompts or attach PDF documents. Text is parsed and contextually attached.</p>
           </div>
 
+          <div className="sarva-timeline-card">
+            <span className="sarva-step-badge">STEP 02</span>
+            <h3 className="sarva-step-title">2. JWT Security & Auth</h3>
+            <p className="sarva-step-desc">Requests are authenticated via OAuth2 Bearer tokens and checked against RBAC policy.</p>
+          </div>
+
+          <div className="sarva-timeline-card">
+            <span className="sarva-step-badge">STEP 03</span>
+            <h3 className="sarva-step-title">3. Groq LPU Inference</h3>
+            <p className="sarva-step-desc">Llama 4 Scout stream generates high-speed responses at over 300 tokens per second.</p>
+          </div>
+
+          <div className="sarva-timeline-card">
+            <span className="sarva-step-badge">STEP 04</span>
+            <h3 className="sarva-step-title">4. MongoDB Atlas Memory</h3>
+            <p className="sarva-step-desc">Conversations and thread states are saved to cloud clusters for multi-turn thread history.</p>
+          </div>
+        </div>
+
+        <div style={{ marginTop: "40px" }}>
           <ArchitectureDiagramMockup />
-        </section>
+        </div>
+      </section>
 
-        {/* 11. SECURITY & PRIVACY */}
-        <section className="seo-card" style={{ marginBottom: "50px", padding: "32px" }}>
-          <h2 className="seo-card-title" style={{ fontSize: "1.6rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <FiShield style={{ color: "#10b981", margin: 0 }} /> Enterprise-Grade Security Standards
-          </h2>
-          <p className="seo-card-text" style={{ fontSize: "0.98rem", marginTop: "12px" }}>
-            SARVA AI implements stateless JWT bearer tokens, CORS origins protection, client IP rate limiting, input validation, and password salt hashing via Bcrypt. Your data is isolated per authenticated account.
-          </p>
-          <div style={{ marginTop: "16px" }}>
-            <Link to="/security" className="seo-social-link" style={{ fontSize: "0.9rem" }}>
-              Learn about SARVA AI Security Architecture <FiArrowRight />
-            </Link>
+      {/* 7. ENTERPRISE SECURITY PANEL */}
+      <section className="sarva-section">
+        <div className="sarva-security-panel">
+          <div className="sarva-section-header" style={{ textAlign: "left", margin: 0 }}>
+            <span className="sarva-section-tag" style={{ color: "#10b981" }}>ENTERPRISE PRIVACY & SECURITY</span>
+            <h2 className="sarva-section-title" style={{ fontSize: "2rem" }}>Built for Enterprise Confidence.</h2>
+            <p className="sarva-section-subtitle">
+              Strict authentication, multi-tenant isolation, and encrypted session security standards.
+            </p>
           </div>
-        </section>
 
-        {/* 12. CASE STUDY */}
-        <section className="seo-card" style={{ marginBottom: "50px", background: "linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.8))" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
-            <div>
-              <h2 className="seo-card-title" style={{ fontSize: "1.5rem" }}>
-                Full-Stack Technical Case Study
-              </h2>
-              <p className="seo-card-text" style={{ marginTop: "6px" }}>
-                Read the engineering report on building 300+ token/sec AI streaming with FastAPI & React.
-              </p>
+          <div className="sarva-security-grid">
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiLock style={{ color: "#10b981" }} /> JWT Bearer Tokens</div>
+              <p className="sarva-sec-desc">Stateless token authentication signed with HS256 algorithm and expiration validation.</p>
             </div>
-            <Link 
-              to="/case-study" 
-              onClick={() => trackCaseStudyView("home_banner")}
-              className="seo-cta-btn" 
-              style={{ padding: "10px 22px", fontSize: "0.9rem" }}
-            >
-              Read Case Study <FiCode />
-            </Link>
-          </div>
-        </section>
 
-        {/* 13. GITHUB TRAFFIC SOURCE BANNER */}
-        <section className="seo-card" style={{ marginBottom: "50px", border: "1px solid rgba(56, 189, 248, 0.3)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "20px" }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#38bdf8", fontWeight: "700", fontSize: "0.85rem" }}>
-                <FiGithub /> OPEN SOURCE & DEVELOPER RESOURCES
-              </div>
-              <h3 style={{ fontSize: "1.4rem", margin: "6px 0", color: "var(--text-primary)" }}>
-                Explore SARVA AI on GitHub
-              </h3>
-              <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem" }}>
-                Full-stack conversational AI platform built with React, FastAPI, MongoDB Atlas and Groq.
-              </p>
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiShield style={{ color: "#38bdf8" }} /> RBAC Permissions</div>
+              <div className="sarva-sec-desc">Hierarchical permissions for Head, Team Lead, HR, Executive, and Intern roles.</div>
             </div>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackGithubClick("home_banner")}
-              className="seo-social-link"
-              style={{ padding: "12px 24px", display: "flex", alignItems: "center", gap: "8px" }}
-            >
-              <FiGithub /> View on GitHub <FiArrowRight />
-            </a>
-          </div>
-        </section>
 
-        {/* 14. FINAL CTA */}
-        <section style={{ textAlignment: "center", padding: "40px 24px", background: "var(--bg-card)", borderRadius: "24px", border: "1px solid var(--border)", textAlign: "center", marginBottom: "40px" }}>
-          <h2 style={{ fontSize: "2rem", marginBottom: "12px", color: "var(--text-primary)" }}>
-            Ready to Experience Intelligent AI Assistance?
-          </h2>
-          <p style={{ color: "var(--text-secondary)", maxWidth: "600px", margin: "0 auto 24px", fontSize: "1.05rem" }}>
-            Get started in seconds with your free account. No credit card required.
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiDatabase style={{ color: "#a855f7" }} /> Multi-Tenant Isolation</div>
+              <p className="sarva-sec-desc">Database collection isolation ensures users and organizations only access authorized data.</p>
+            </div>
+
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiKey style={{ color: "#ec4899" }} /> Bcrypt Salt Hashing</div>
+              <p className="sarva-sec-desc">Passwords are hashed using Bcrypt algorithm with salt rounds before backend storage.</p>
+            </div>
+
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiGlobe style={{ color: "#f59e0b" }} /> CORS Origin Protection</div>
+              <p className="sarva-sec-desc">Restricted API domain whitelist prevents unauthorized cross-origin requests.</p>
+            </div>
+
+            <div className="sarva-security-item">
+              <div className="sarva-sec-title"><FiActivity style={{ color: "#10b981" }} /> Protected API Architecture</div>
+              <p className="sarva-sec-desc">FastAPI input schemas validate payloads and sanitize requests automatically.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. LIVE PRODUCT DEMO */}
+      <section className="sarva-section" style={{ padding: "40px 24px" }}>
+        <div className="sarva-section-header">
+          <span className="sarva-section-tag">LIVE INTERACTIVE DEMO</span>
+          <h2 className="sarva-section-title">Experience SARVA AI Live</h2>
+          <p className="sarva-section-subtitle">
+            Try asking questions, inspecting responses, or testing prompts right now in your browser.
           </p>
+        </div>
+
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <PublicDemo initialPrompt={selectedPromptForDemo} />
+        </div>
+      </section>
+
+      {/* 9. FINAL CONVERSION CTA */}
+      <section style={{ padding: "0 24px" }}>
+        <div className="sarva-cta-banner">
+          <h2>Ready to Experience Intelligent AI Assistance?</h2>
+          <p>Start working with SARVA AI in seconds. No credit card required.</p>
           <Link
-            to="/auth"
+            to={isAuthenticated ? "/chat" : "/auth"}
             onClick={() => {
               trackCtaClick("home_bottom", "Try SARVA AI Free");
               trackTrySarvaClick("home_bottom");
             }}
-            className="seo-cta-btn"
-            style={{ padding: "14px 36px", fontSize: "1.1rem", display: "inline-flex" }}
+            className="sarva-btn-primary"
+            style={{ padding: "16px 36px", fontSize: "1.1rem" }}
           >
-            Try SARVA AI Free <FiArrowRight />
+            {isAuthenticated ? "Launch Dashboard" : "Try SARVA AI Free"} <FiArrowRight />
           </Link>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      {/* 15. FOOTER */}
+      {/* 10. ENTERPRISE FOOTER */}
       <SeoFooter />
     </div>
   );
+}
+
+// Helper icons for security items
+function FiKey(props) {
+  return <FiLock {...props} />;
+}
+function FiGlobe(props) {
+  return <FiZap {...props} />;
 }
 
 export default Home;
