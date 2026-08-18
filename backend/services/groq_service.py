@@ -45,11 +45,13 @@ async def generate_ai_response(
 ) -> str:
     # Model mapping dictionary to resolve mock model IDs to active Groq endpoints
     model_mapping = {
-        "meta-llama/llama-4-scout-17b-16e-instruct": "llama-3.3-70b-versatile",
-        "qwen/qwen3-32b": "llama-3.3-70b-versatile",
+        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen-3.6-27b",
+        "qwen/qwen3-32b": "qwen-3.6-27b",
+        "gpt-oss-120b": "gpt-oss-120b",
+        "qwen-3.6-27b": "qwen-3.6-27b",
         "llama-3.1-8b-instant": "llama-3.1-8b-instant"
     }
-    resolved_model = model_mapping.get(model, "llama-3.3-70b-versatile")
+    resolved_model = model_mapping.get(model, "qwen-3.6-27b")
 
     try:
         # Check if we have any image file attachments in the messages

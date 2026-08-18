@@ -88,7 +88,7 @@ router = APIRouter(prefix="/api/chat")
 class ChatRequest(BaseModel):
     session_id: str
     message: str
-    model: str = "llama-3.3-70b-versatile"
+    model: str = "qwen-3.6-27b"
 
 @router.post("")
 async def handle_chat_message(payload: ChatRequest):

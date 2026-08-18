@@ -65,7 +65,7 @@ client = AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
 
 async def generate_response(prompt_history: list):
     completion = await client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="qwen-3.6-27b",
         messages=prompt_history,
         temperature=0.7,
         max_tokens=2048
@@ -106,7 +106,7 @@ async def generate_response(prompt_history: list):
           </p>
           <ul style={{ paddingLeft: "20px", margin: "12px 0" }}>
             <li><strong>Llama 3.1 8B Instant</strong>: Optimized for quick conversational replies.</li>
-            <li><strong>Llama 3.3 70B Versatile</strong>: Tuning for deep code reasoning and document analysis.</li>
+            <li><strong>Qwen 3.6 27B / GPT OSS 120B</strong>: Tuning for deep code reasoning and document analysis.</li>
           </ul>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>

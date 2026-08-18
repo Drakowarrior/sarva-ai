@@ -119,7 +119,7 @@ const Technology = () => {
               </tr>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 <td style={{ padding: "12px", fontWeight: "700", color: "var(--text-primary)" }}>Inference API</td>
-                <td style={{ padding: "12px" }}>Groq Cloud LPU API (Llama-3.3-70b-versatile, Llama-3.2-11b-vision-preview)</td>
+                <td style={{ padding: "12px" }}>Groq Cloud LPU API (Qwen-3.6-27b / GPT-OSS-120b, Llama-3.2-11b-vision-preview)</td>
               </tr>
               <tr>
                 <td style={{ padding: "12px", fontWeight: "700", color: "var(--text-primary)" }}>Hosting</td>
