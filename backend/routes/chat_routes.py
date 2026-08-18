@@ -58,7 +58,7 @@ async def generate_and_save_session_title(user_id: str, session_id: str, first_m
         )
         
         completion = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",  # Quick lightweight model
+            model="groq/compound-mini",  # Quick lightweight model
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates clean conversation titles."},
                 {"role": "user", "content": title_prompt}

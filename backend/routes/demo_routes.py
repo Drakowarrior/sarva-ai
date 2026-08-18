@@ -79,7 +79,7 @@ async def demo_chat(req: DemoChatRequest, request: Request):
         # Timeout after 8 seconds
         completion = await asyncio.wait_for(
             async_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="groq/compound-mini",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": sanitized_prompt}

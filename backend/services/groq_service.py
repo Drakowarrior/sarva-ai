@@ -45,13 +45,16 @@ async def generate_ai_response(
 ) -> str:
     # Model mapping dictionary to resolve mock model IDs to active Groq endpoints
     model_mapping = {
-        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen-3.6-27b",
-        "qwen/qwen3-32b": "qwen-3.6-27b",
-        "gpt-oss-120b": "gpt-oss-120b",
-        "qwen-3.6-27b": "qwen-3.6-27b",
-        "llama-3.1-8b-instant": "llama-3.1-8b-instant"
+        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
+        "qwen/qwen3-32b": "qwen/qwen3.6-27b",
+        "qwen-3.6-27b": "qwen/qwen3.6-27b",
+        "qwen/qwen3.6-27b": "qwen/qwen3.6-27b",
+        "gpt-oss-120b": "openai/gpt-oss-120b",
+        "openai/gpt-oss-120b": "openai/gpt-oss-120b",
+        "llama-3.1-8b-instant": "groq/compound-mini",
+        "groq/compound-mini": "groq/compound-mini"
     }
-    resolved_model = model_mapping.get(model, "qwen-3.6-27b")
+    resolved_model = model_mapping.get(model, "qwen/qwen3.6-27b")
 
     try:
         # Check if we have any image file attachments in the messages
@@ -145,9 +148,9 @@ async def generate_ai_response(
                     "content": text_context + content
                 })
 
-        # Switch to vision model if images are present and selected model is not a vision model
-        if has_images and "vision" not in resolved_model.lower():
-            resolved_model = "llama-3.2-11b-vision-preview"
+        # Switch to vision model if images are present
+        if has_images:
+            resolved_model = "qwen/qwen3.6-27b"
 
         # Call Groq API (async)
         completion = await async_client.chat.completions.create(
