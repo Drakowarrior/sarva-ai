@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { 
   FiArrowRight, FiCpu, FiDatabase, FiFileText, FiLayers, FiShield, 
   FiCode, FiMessageSquare, FiZap, FiGithub, FiCheckCircle, FiTerminal, 
-  FiUsers, FiLock, FiCheck, FiCommand, FiActivity 
+  FiUsers, FiLock, FiCheck, FiCommand, FiActivity, FiKey, FiGlobe 
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
@@ -400,14 +400,6 @@ function Home() {
       <SeoFooter />
     </div>
   );
-}
-
-// Helper icons for security items
-function FiKey(props) {
-  return <FiLock {...props} />;
-}
-function FiGlobe(props) {
-  return <FiZap {...props} />;
 }
 
 export default Home;

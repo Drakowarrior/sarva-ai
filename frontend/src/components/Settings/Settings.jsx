@@ -3,7 +3,7 @@ import {
   FiX, FiMoon, FiSun, FiMonitor, FiTrash2, FiDownload, FiGlobe, 
   FiCpu, FiMessageSquare, FiBookmark, FiStar, FiFileText, FiLayers, 
   FiBriefcase, FiUser, FiShield, FiPlus, FiCopy, FiCheckCircle, 
-  FiMail, FiChevronDown, FiLock, FiSearch, FiCamera, FiCheck, FiAlertTriangle 
+  FiMail, FiChevronDown, FiLock, FiSearch, FiCamera, FiCheck, FiAlertTriangle, FiSettings 
 } from "react-icons/fi";
 import { useTheme } from "../../context/ThemeContext";
 import { useChat } from "../../context/ChatContext";
