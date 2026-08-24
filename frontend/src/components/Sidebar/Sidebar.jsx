@@ -28,6 +28,11 @@ const formatRelativeTime = (isoString) => {
   return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 };
 
+const cleanText = (str, fallback = "") => {
+  if (!str) return fallback;
+  return str.replace(/<think>[\s\S]*?(?:<\/think>|$)/gi, "").trim() || fallback;
+};
+
 function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -302,7 +307,9 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                       />
                     ) : (
                       <div style={{ display: "flex", flexDirection: "column", gap: "1px", overflow: "hidden" }}>
-                        <span className="session-title" style={{ fontWeight: isActive ? "600" : "400" }}>{session.title}</span>
+                        <span className="session-title" style={{ fontWeight: isActive ? "600" : "400" }}>
+                          {cleanText(session.title, "New Chat")}
+                        </span>
                         {session.isShared && (
                           <span style={{
                             fontSize: "0.62rem",
@@ -317,7 +324,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                             alignItems: "center",
                             gap: "3px"
                           }}>
-                            🟣 Shared{session.sharedBy ? ` by ${session.sharedBy}` : ""}
+                            Shared{session.sharedBy ? ` by ${session.sharedBy}` : ""}
                           </span>
                         )}
                       </div>
@@ -346,7 +353,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap"
                   }}>
-                    {session.last_message || "No messages yet"}
+                    {cleanText(session.last_message, "No messages yet")}
                   </div>
                 )}
 

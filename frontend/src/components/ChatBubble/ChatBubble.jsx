@@ -3,11 +3,30 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { FiCopy, FiCheck, FiRotateCw, FiFileText, FiImage, FiCpu, FiUser, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
+import { FiCopy, FiCheck, FiRotateCw, FiFileText, FiImage, FiCpu, FiUser, FiThumbsUp, FiThumbsDown, FiChevronDown } from "react-icons/fi";
 import { useSession } from "../../context/SessionContext";
 import DislikeFeedbackModal from "../DislikeFeedbackModal/DislikeFeedbackModal";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+
+function parseThoughtProcess(rawText) {
+  if (!rawText) return { thought: null, content: "" };
+
+  const closedThinkMatch = rawText.match(/^<think>([\s\S]*?)<\/think>/i);
+  if (closedThinkMatch) {
+    const thought = closedThinkMatch[1].trim();
+    const content = rawText.replace(/^<think>[\s\S]*?<\/think>/i, "").trim();
+    return { thought, content };
+  }
+
+  const unclosedThinkMatch = rawText.match(/^<think>([\s\S]*)$/i);
+  if (unclosedThinkMatch) {
+    const thought = unclosedThinkMatch[1].trim();
+    return { thought, content: "" };
+  }
+
+  return { thought: null, content: rawText };
+}
 
 function CodeBlock({ children, language, ...props }) {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -266,6 +285,8 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
     }
   };
 
+  const { thought, content: formattedContent } = parseThoughtProcess(text);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -274,17 +295,7 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
       className={`message-wrapper ${role}`}
     >
       <div className={`avatar ${role}`}>
-        {isUser ? (
-          <FiUser />
-        ) : (
-          <svg
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            style={{ width: "1.2rem", height: "1.2rem", color: "var(--accent)" }}
-          >
-            <path d="M12 2c-.5 0-.9.3-1.1.7L9.2 7.2 4.7 8.9c-.4.2-.7.6-.7 1.1s.3.9.7 1.1l4.5 1.7 1.7 4.5c.2.4.6.7 1.1.7s.9-.3 1.1-.7l1.7-4.5 4.5-1.7c.4-.2.7-.6.7-1.1s-.3-.9-.7-1.1l-4.5-1.7-1.7-4.5C12.9 2.3 12.5 2 12 2zm6 11c-.3 0-.5.1-.6.4l-.8 2.1-2.1.8c-.3.1-.4.3-.4.6s.1.5.4.6l2.1.8.8 2.1c.1.3.3.4.6.4s.5-.1.6-.4l.8-2.1 2.1-.8c.3-.1.4-.3.4-.6s-.1-.5-.4-.6l-2.1-.8-.8-2.1c-.1-.3-.3-.4-.6-.4z" />
-          </svg>
-        )}
+        {isUser ? <FiUser /> : "S"}
       </div>
 
       <div className="message-bubble">
@@ -329,25 +340,42 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
             <p style={{ whiteSpace: "pre-wrap" }}>{text}</p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <ReactMarkdown
-                components={{
-                  code({ node, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    const isInline = !match;
-                    return !isInline ? (
-                      <CodeBlock language={match[1]} {...props}>
-                        {children}
-                      </CodeBlock>
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  }
-                }}
-              >
-                {text}
-              </ReactMarkdown>
+              {thought && (
+                <details className="sarva-thought-container" open={message.isStreaming && !formattedContent}>
+                  <summary className="sarva-thought-summary">
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <FiCpu style={{ color: "var(--accent)" }} />
+                      <span>Thought Process</span>
+                    </div>
+                    <FiChevronDown className="thought-chevron" />
+                  </summary>
+                  <div className="sarva-thought-content">
+                    <ReactMarkdown>{thought}</ReactMarkdown>
+                  </div>
+                </details>
+              )}
+
+              {formattedContent ? (
+                <ReactMarkdown
+                  components={{
+                    code({ node, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      const isInline = !match;
+                      return !isInline ? (
+                        <CodeBlock language={match[1]} {...props}>
+                          {children}
+                        </CodeBlock>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {formattedContent}
+                </ReactMarkdown>
+              ) : null}
               {message.isStreaming && <span className="streaming-cursor" />}
             </div>
           )}

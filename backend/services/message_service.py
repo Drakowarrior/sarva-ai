@@ -3,6 +3,8 @@ from database.mongodb import db
 from datetime import datetime
 
 def clean_markdown_for_preview(text: str) -> str:
+    # Remove <think> reasoning blocks
+    text = re.sub(r"<think>[\s\S]*?(?:</think>|$)", "", text, flags=re.IGNORECASE)
     # Remove markdown headers (e.g. ### Hello -> Hello)
     text = re.sub(r"^#+\s+", "", text, flags=re.MULTILINE)
     # Remove bold, italic, strikethrough, backticks (e.g. **bold** -> bold)

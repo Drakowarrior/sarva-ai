@@ -787,6 +787,65 @@ body.modal-open {
 }
 
 /* ─── Markdown / Code Blocks ─── */
+/* ─── Reasoning Accordion (<think> blocks) ─── */
+.sarva-thought-container {
+  margin-bottom: var(--space-3);
+  border-radius: var(--sarva-radius-md, 8px);
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.sarva-thought-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .sarva-thought-summary {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sarva-thought-summary:hover {
+  color: var(--text-primary);
+}
+
+.thought-chevron {
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.sarva-thought-container[open] .thought-chevron {
+  transform: rotate(180deg);
+}
+
+.sarva-thought-content {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.sarva-thought-content p {
+  margin-bottom: 8px;
+}
+
+.sarva-thought-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Markdown / Code Blocks ─── */
 .message-content pre {
   margin: var(--space-3) 0;
   border-radius: var(--sarva-radius-md);
@@ -794,8 +853,28 @@ body.modal-open {
   box-shadow: var(--shadow-sm);
 }
 
-.message-content p { margin-bottom: var(--space-2); }
+.message-content p {
+  margin-bottom: 12px;
+  line-height: 1.68;
+}
 .message-content p:last-child { margin-bottom: 0; }
+
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.message-content h1 { font-size: 1.35rem; }
+.message-content h2 { font-size: 1.2rem; }
+.message-content h3 { font-size: 1.05rem; }
+.message-content h4 { font-size: 0.95rem; }
 
 .message-content code {
   font-family: 'Fira Code', 'Courier New', Courier, monospace;
@@ -809,9 +888,23 @@ body.modal-open {
   background: rgba(0, 0, 0, 0.06);
 }
 
-.message-content ul, .message-content ol {
-  margin-left: 20px;
-  margin-bottom: var(--space-2);
+.message-content ul,
+.message-content ol {
+  margin-left: 22px;
+  margin-bottom: 14px;
+}
+
+.message-content li {
+  margin-bottom: 6px;
+  line-height: 1.62;
+}
+
+.message-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+  margin: 14px 0;
+  color: var(--text-secondary);
+  font-style: italic;
 }
 
 /* Code block header with gradient accent bar */
