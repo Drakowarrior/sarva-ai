@@ -165,7 +165,7 @@ const router = createBrowserRouter([
       },
       {
         path: "blog/fastapi-groq-ai-chatbot",
-        element: <ArticleFastApiGroq />, // Legacy Alias
+        element: <Navigate to="/blog/fastapi-groq-chatbot" replace />,
       },
       {
         path: "blog/chat-with-pdf",
@@ -185,7 +185,7 @@ const router = createBrowserRouter([
       },
       {
         path: "blog/jwt-ai-chatbot-security",
-        element: <ArticleJwtSecurity />, // Legacy Alias
+        element: <Navigate to="/blog/jwt-ai-chatbot" replace />,
       },
       {
         path: "blog/chat-history-memory",
@@ -193,7 +193,7 @@ const router = createBrowserRouter([
       },
       {
         path: "blog/mongodb-chat-memory",
-        element: <ArticleMongodbMemory />, // Legacy Alias
+        element: <Navigate to="/blog/chat-history-memory" replace />,
       },
       {
         path: "auth",

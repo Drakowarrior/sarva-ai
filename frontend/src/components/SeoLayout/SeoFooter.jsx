@@ -53,7 +53,22 @@ const SeoFooter = () => {
           </ul>
         </div>
 
-        {/* Column 4: Quick Overview */}
+        {/* Column 4: Engineering Articles */}
+        <div className="seo-footer-col">
+          <h4 className="seo-footer-title">Engineering Articles</h4>
+          <ul className="seo-footer-links">
+            <li><Link to="/blog">Blog Hub Overview</Link></li>
+            <li><Link to="/blog/react-fastapi-ai-chatbot">React + FastAPI Chatbot</Link></li>
+            <li><Link to="/blog/fastapi-groq-chatbot">Groq LPU LLaMA 3.3</Link></li>
+            <li><Link to="/blog/chat-with-pdf">Chat With PDF Documents</Link></li>
+            <li><Link to="/blog/ai-document-analysis">AI Document Analysis</Link></li>
+            <li><Link to="/blog/full-stack-ai-architecture">Full-Stack AI Architecture</Link></li>
+            <li><Link to="/blog/jwt-ai-chatbot">JWT Security & Auth</Link></li>
+            <li><Link to="/blog/chat-history-memory">MongoDB Thread Memory</Link></li>
+          </ul>
+        </div>
+
+        {/* Column 5: Quick Overview */}
         <div className="seo-footer-col">
           <h4 className="seo-footer-title">Key Capabilities</h4>
           <ul className="seo-footer-badges">

@@ -209,6 +209,7 @@ const SeoHeader = () => {
           <Link to="/features" className="seo-mobile-link"><FiZap /> All Features</Link>
           
           <div className="seo-mobile-header">Resources & Tech</div>
+          <Link to="/blog" className="seo-mobile-link"><FiBookOpen /> Engineering Blog</Link>
           <Link to="/technology" className="seo-mobile-link"><FiLayers /> Tech Stack</Link>
           <Link to="/case-study" className="seo-mobile-link"><FiCode /> Case Study</Link>
           <Link to="/security" className="seo-mobile-link"><FiShield /> Security</Link>
