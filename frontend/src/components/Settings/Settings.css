@@ -12,8 +12,8 @@
   bottom: 0 !important;
   width: 100vw !important;
   height: 100dvh !important;
-  z-index: 9990 !important;
-  background: rgba(15, 23, 42, 0.48) !important;
+  z-index: var(--z-modal-backdrop) !important;
+  background: rgba(15, 23, 42, 0.55) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
   display: flex !important;
@@ -39,7 +39,7 @@
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
-  z-index: 10000 !important;
+  z-index: var(--z-modal) !important;
   transform: none !important;
   top: auto !important;
   left: auto !important;

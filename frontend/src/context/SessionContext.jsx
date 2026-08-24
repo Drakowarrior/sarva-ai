@@ -112,9 +112,8 @@ export const SessionProvider = ({ children }) => {
         data.forEach((session) => {
           if (session.isShared && !notifiedIds.includes(session.session_id)) {
             const senderName = session.sharedBy || "Someone";
-            toast.success(`${senderName} shared a chat with you! 🟣`, {
-              duration: 6000,
-              icon: "📣"
+            toast.success(`${senderName} shared a chat with you!`, {
+              duration: 6000
             });
             notifiedIds.push(session.session_id);
             newlyNotified = true;

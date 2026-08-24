@@ -5,7 +5,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { 
   FiMail, FiLock, FiUser, FiArrowLeft, FiLoader, FiKey, 
   FiCheck, FiCheckCircle, FiLayers, FiBriefcase, FiShield, 
-  FiEye, FiEyeOff, FiMoon, FiSun, FiZap, FiArrowRight 
+  FiEye, FiEyeOff, FiMoon, FiSun, FiZap, FiArrowRight, FiAlertCircle 
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
@@ -302,10 +302,10 @@ function Auth() {
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
               className="auth-speech-bubble"
             >
-              {authMode === "login" && "Let's get you back in 👋"}
-              {authMode === "register" && "Let me help you setup your space! 🚀"}
-              {authMode === "forgot" && "No worries! Let's verify your identity 🔑"}
-              {authMode === "reset" && "Almost done! Create your new password 🔒"}
+              {authMode === "login" && "Welcome back to SARVA Workspace"}
+              {authMode === "register" && "Setup your SARVA organization workspace"}
+              {authMode === "forgot" && "Verify your account identity"}
+              {authMode === "reset" && "Create your new password"}
               <div className="auth-speech-tail" />
             </motion.div>
           </AnimatePresence>
@@ -513,7 +513,7 @@ function Auth() {
                     textAlign: "left"
                   }}
                 >
-                  ⚠️ {error}
+                  <FiAlertCircle style={{ flexShrink: 0 }} /> {error}
                 </motion.div>
               )}
             </AnimatePresence>

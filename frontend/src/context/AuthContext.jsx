@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userProfile);
         setIsAuthenticated(true);
         trackLogin("email");
-        toast.success(`Welcome back, ${userProfile.username}! 👋`);
+        toast.success(`Welcome back, ${userProfile.username}!`);
         return { success: true };
       }
 } catch (err) {
@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
         trackSignUp("email");
         
         const welcomeName = userProfile.fullName || userProfile.username;
-        toast.success(`Account created! Welcome, ${welcomeName}! 🚀`);
+        toast.success(`Account created! Welcome to SARVA, ${welcomeName}!`);
         return { success: true };
       }
     } catch (err) {

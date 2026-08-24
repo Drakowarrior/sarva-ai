@@ -234,7 +234,7 @@ function ShareModal({ isOpen, onClose, sessionId }) {
                       <div className="share-user-info" style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%", overflow: "hidden" }}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px" }}>
                           <span className="share-user-name" style={{ fontWeight: "600", fontSize: "0.9rem", color: "var(--text-primary)" }}>
-                            👤 {u.name}
+                            {u.name}
                           </span>
                           
                           {/* Priority / Connection Badges */}
@@ -276,13 +276,13 @@ function ShareModal({ isOpen, onClose, sessionId }) {
                         {u.accountType === "organization" && u.organizationName ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "2px", fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: "2px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                              <FiLayers style={{ flexShrink: 0 }} /> <span>🏢 {u.organizationName}</span>
+                              <FiLayers style={{ flexShrink: 0 }} /> <span>{u.organizationName}</span>
                             </div>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                              <FiBriefcase style={{ flexShrink: 0 }} /> <span>💼 {u.role}</span>
+                              <FiBriefcase style={{ flexShrink: 0 }} /> <span>{u.role}</span>
                             </div>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                              <FiFolder style={{ flexShrink: 0 }} /> <span>📂 {u.department}</span>
+                              <FiFolder style={{ flexShrink: 0 }} /> <span>{u.department}</span>
                             </div>
                           </div>
                         ) : (

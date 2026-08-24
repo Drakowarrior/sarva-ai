@@ -70,8 +70,8 @@ function Home() {
   const [selectedPromptForDemo, setSelectedPromptForDemo] = useState("");
 
   useSeo({
-    title: "SARVA AI – Intelligent Enterprise AI Workspace OS",
-    description: "SARVA AI is an intelligent conversational AI platform for natural conversations, document analysis, team collaboration, and enterprise productivity.",
+    title: "SARVA — Intelligence Infrastructure",
+    description: "SARVA connects conversations, documents, knowledge, workflows and AI into one unified workspace.",
     canonicalPath: "/",
     jsonLd: {
       "@context": "https://schema.org",
@@ -81,7 +81,7 @@ function Home() {
           "@id": "https://sarva-ai-one.vercel.app/#website",
           "url": "https://sarva-ai-one.vercel.app/",
           "name": "SARVA AI",
-          "description": "Intelligent Enterprise AI Workspace OS",
+          "description": "SARVA — Intelligence Infrastructure",
           "author": {
             "@type": "Person",
             "name": "Karan Garg"
@@ -90,7 +90,7 @@ function Home() {
         {
           "@type": "SoftwareApplication",
           "@id": "https://sarva-ai-one.vercel.app/#software",
-          "name": "SARVA AI Platform",
+          "name": "SARVA Intelligence Platform",
           "operatingSystem": "Web",
           "applicationCategory": "BusinessApplication",
           "offers": {
@@ -104,93 +104,92 @@ function Home() {
   });
 
   return (
-    <div className="sarva-home-root">
-      {/* 1. FLOATING NAVIGATION BAR */}
+    <div className="sarva-home-root sarva-grid-bg">
+      {/* 1. NAVIGATION BAR */}
       <SeoHeader />
 
-      {/* 2. HERO SECTION */}
+      {/* 2. PRODUCT-FIRST HERO SECTION */}
       <section className="sarva-hero-section">
         <motion.div
-          initial={{ opacity: 0, y: -15 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
           className="sarva-hero-eyebrow"
         >
-          ✦ ENTERPRISE AI WORKSPACE OS
+          SARVA / INTELLIGENCE INFRASTRUCTURE
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="sarva-hero-title"
         >
-          Your Intelligence. Connected. <br />
-          <span className="sarva-hero-title-accent">Your Work. Accelerated.</span>
+          Your intelligence, connected to your work.
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
           className="sarva-hero-subtitle"
         >
-          Chat, analyze documents, collaborate across your organization, and turn complex technical information into useful answers — all from one intelligent workspace.
+          SARVA connects conversations, documents, knowledge, workflows and AI into one unified workspace. Built for software engineers, researchers, and enterprise teams.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
           className="sarva-hero-cta-group"
         >
           <Link 
             to={isAuthenticated ? "/chat" : "/auth"} 
             onClick={() => {
-              trackCtaClick("home_hero", "Launch SARVA AI");
+              trackCtaClick("home_hero", "Open Workspace");
               trackTrySarvaClick("home_hero");
             }}
             className="sarva-btn-primary"
           >
-            {isAuthenticated ? "Launch Dashboard" : "Launch SARVA AI"} <FiArrowRight />
+            {isAuthenticated ? "Open Workspace" : "Open Workspace"} <FiArrowRight />
           </Link>
 
           <a href="#capabilities" className="sarva-btn-secondary">
-            Explore Platform <FiZap />
+            Explore Platform
           </a>
         </motion.div>
-        <span className="sarva-hero-subtext">No credit card required · Free plan available</span>
+        <span className="sarva-hero-subtext">Free trial available · No credit card required</span>
 
-        {/* Hero Product Centerpiece Mockup */}
+        {/* Immediate Above-The-Fold Product Preview */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="sarva-hero-mockup-wrapper"
         >
           <ChatPreview />
         </motion.div>
       </section>
 
-      {/* 3. TRUST & CREDIBILITY STRIP */}
+      {/* 3. TECHNICAL AUDIENCE & DOMAIN SYSTEM */}
       <section className="sarva-trust-strip">
-        <div className="sarva-trust-label">BUILT FOR MODERN TECHNICAL TEAMS</div>
+        <div className="sarva-trust-label">BUILT FOR TECHNICAL ORGANIZATIONS & RESEARCH TEAMS</div>
         <div className="sarva-trust-badges">
-          <span className="sarva-trust-badge-item">💻 AI Engineering</span>
-          <span className="sarva-trust-badge-item">🔬 Academic Research</span>
-          <span className="sarva-trust-badge-item">⚡ Software Development</span>
-          <span className="sarva-trust-badge-item">👥 Human Resources</span>
-          <span className="sarva-trust-badge-item">📊 Technical Operations</span>
+          <span className="sarva-trust-badge-item">Software Engineering</span>
+          <span className="sarva-trust-badge-item">AI Research</span>
+          <span className="sarva-trust-badge-item">Technical Operations</span>
+          <span className="sarva-trust-badge-item">Organization Administration</span>
+          <span className="sarva-trust-badge-item">Document Intelligence</span>
         </div>
       </section>
 
-      {/* 4. CORE PLATFORM CAPABILITIES (6-CARD GRID) */}
+      {/* 4. PLATFORM ARCHITECTURE CAPABILITIES */}
       <section id="capabilities" className="sarva-section">
         <div className="sarva-section-header">
-          <span className="sarva-section-tag">PLATFORM CAPABILITIES</span>
-          <h2 className="sarva-section-title">Everything your team needs to work with AI.</h2>
+          <span className="sarva-section-tag">SYSTEM CAPABILITIES</span>
+          <h2 className="sarva-section-title">One intelligence layer for your organization.</h2>
           <p className="sarva-section-subtitle">
-            One workspace for conversations, document analysis, knowledge retrieval, and organization collaboration.
+            Structure your knowledge, execute multi-model analysis, and collaborate seamlessly.
           </p>
         </div>
 

@@ -125,8 +125,8 @@ export const ChatProvider = ({ children }) => {
         ...prev,
         {
           role: "assistant",
-          message: `⚠️ Error: ${error?.response?.data?.detail || error.message || "Failed to get AI response."}`,
-          content: `⚠️ Error: ${error?.response?.data?.detail || error.message || "Failed to get AI response."}`,
+          message: `Error: ${error?.response?.data?.detail || error.message || "Failed to get AI response."}`,
+          content: `Error: ${error?.response?.data?.detail || error.message || "Failed to get AI response."}`,
           timestamp: new Date().toISOString()
         },
       ]);

@@ -171,7 +171,7 @@ function ChatWindow() {
           color: "var(--text-secondary)",
           fontSize: "0.95rem"
         }}>
-          🔍 No messages match "{messageSearchQuery}"
+          No messages match "{messageSearchQuery}"
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "24px", width: "100%" }}>

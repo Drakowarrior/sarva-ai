@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { FiRefreshCw, FiLogOut, FiClock, FiAlertTriangle, FiAlertOctagon, FiMessageSquare } from "react-icons/fi";
+import { FiRefreshCw, FiLogOut, FiClock, FiAlertTriangle, FiAlertOctagon, FiMessageSquare, FiFolder } from "react-icons/fi";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 
@@ -248,7 +248,7 @@ function PendingApproval() {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem" }}>
             <span style={{ color: "var(--text-secondary)", fontWeight: "550" }}>Department:</span>
-            <span style={{ fontWeight: "600" }}>📂 {user?.department}</span>
+            <span style={{ fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}><FiFolder /> {user?.department}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem" }}>
             <span style={{ color: "var(--text-secondary)", fontWeight: "550" }}>Registration Date:</span>

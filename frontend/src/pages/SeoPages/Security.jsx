@@ -24,7 +24,7 @@ const Security = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">🔒 Enterprise Security Standards</div>
+        <div className="seo-hero-badge">Enterprise Security Standards</div>
         <h1 className="seo-page-title">Security & Privacy Architecture</h1>
         <p className="seo-page-subtitle">
           SARVA AI is engineered from the ground up to protect user data, guard against unauthorized access, and enforce strict session isolation across all conversational workflows.

@@ -12,8 +12,8 @@ async def init_db_indexes():
         logger.info("Initializing database indexes...")
         
         # 1. Users Indexes
-        await db.users.create_index("email", unique=True)
-        await db.users.create_index("username", unique=True)
+        await db.users.create_index("email", unique=True, sparse=True)
+        await db.users.create_index("username", unique=True, sparse=True)
         logger.info("User indexes created/verified successfully.")
         
         # 2. Organizations Indexes

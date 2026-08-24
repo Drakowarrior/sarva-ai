@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { 
   FiMessageSquare, FiCpu, FiFileText, FiDatabase, FiLock, 
   FiCheckCircle, FiCopy, FiCheck, FiDownload, FiTerminal, 
-  FiLayers, FiCode, FiUser, FiShare2, FiZap, FiSearch, FiPlus, FiBriefcase 
+  FiLayers, FiCode, FiUser, FiShare2, FiZap, FiSearch, FiPlus, FiBriefcase, FiChevronRight 
 } from "react-icons/fi";
 import "./ProductMockups.css";
 
@@ -25,7 +25,7 @@ const TECHNICAL_LOG = `# Initializing async Groq LPU stream pipeline...
 [INFO] Model: meta-llama/llama-4-scout-17b-16e-instruct
 [INFO] Session ID: sess_94a8c1f92e
 [SUCCESS] JWT Authentication verified for user_id: 66ab91c8e
-➔ Stream initialized: 314.5 tokens/sec`;
+-> Stream initialized: 314.5 tokens/sec`;
 
 export const ChatPreview = () => {
   const [copied, setCopied] = useState(false);
@@ -90,7 +90,7 @@ export const ChatPreview = () => {
 
           {/* AI Response */}
           <div className="mockup-msg ai">
-            <div className="mockup-avatar ai">✦</div>
+            <div className="mockup-avatar ai">S</div>
             <div className="mockup-bubble ai">
               <p>Here is the recommended production architecture for <strong>FastAPI + Groq LPU + MongoDB Atlas</strong>:</p>
 
@@ -208,7 +208,7 @@ export const ArchitectureDiagramMockup = () => {
           <p>Context State, SSE Stream, CSS</p>
         </div>
 
-        <div className="arch-arrow">➔</div>
+        <div className="arch-arrow"><FiChevronRight /></div>
 
         <div className="arch-node security">
           <div className="arch-icon"><FiLock /></div>
@@ -217,7 +217,7 @@ export const ArchitectureDiagramMockup = () => {
           <p>Role Security & Session Tokens</p>
         </div>
 
-        <div className="arch-arrow">➔</div>
+        <div className="arch-arrow"><FiChevronRight /></div>
 
         <div className="arch-node backend">
           <div className="arch-icon"><FiTerminal /></div>
@@ -226,7 +226,7 @@ export const ArchitectureDiagramMockup = () => {
           <p>PyPDF Parser, Chunking</p>
         </div>
 
-        <div className="arch-arrow">➔</div>
+        <div className="arch-arrow"><FiChevronRight /></div>
 
         <div className="arch-node llm">
           <div className="arch-icon"><FiCpu /></div>
@@ -235,7 +235,7 @@ export const ArchitectureDiagramMockup = () => {
           <p>300+ tok/sec Low Latency</p>
         </div>
 
-        <div className="arch-arrow">➔</div>
+        <div className="arch-arrow"><FiChevronRight /></div>
 
         <div className="arch-node db">
           <div className="arch-icon"><FiDatabase /></div>

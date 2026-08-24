@@ -46,6 +46,7 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
         <button
           className="menu-toggle-btn"
           onClick={onToggleSidebar}
+          aria-label="Toggle navigation menu"
           title="Toggle Sidebar"
         >
           <FiMenu />
@@ -159,10 +160,10 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
                   flexDirection: "column"
                 }}>
                   {[
-                    { label: "📄 Export as PDF", handler: () => exportChatAsPDF() },
-                    { label: "Ⓜ️ Export Markdown", handler: () => exportChatAsMarkdown(activeTitle) },
-                    { label: "{ } Export JSON", handler: () => exportChatAsJSON(activeTitle) },
-                    { label: "📝 Export Plain Text", handler: () => exportChatAsTXT(activeTitle) }
+                    { label: "Export as PDF", handler: () => exportChatAsPDF() },
+                    { label: "Export Markdown", handler: () => exportChatAsMarkdown(activeTitle) },
+                    { label: "Export JSON", handler: () => exportChatAsJSON(activeTitle) },
+                    { label: "Export Plain Text", handler: () => exportChatAsTXT(activeTitle) }
                   ].map(({ label, handler }) => (
                     <button
                       key={label}

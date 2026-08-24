@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FiPlus, FiSearch, FiMessageSquare, FiEdit3, FiTrash, 
-  FiCheck, FiX, FiSettings, FiBookmark, FiStar, FiChevronRight, FiShare2, FiCopy
+  FiCheck, FiX, FiSettings, FiBookmark, FiStar, FiChevronRight, FiShare2, FiCopy, FiBriefcase
 } from "react-icons/fi";
 import { useSession } from "../../context/SessionContext";
 import { useAuth } from "../../context/AuthContext";
@@ -63,6 +63,25 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
+
+  // Keyboard Escape listener & Body scroll lock when mobile drawer is open
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    if (isOpen && window.innerWidth < 768) {
+      document.body.classList.add("drawer-open");
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.classList.remove("drawer-open");
+    }
+    return () => {
+      document.body.classList.remove("drawer-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   const handleCreateChat = async () => {
     try {
@@ -535,7 +554,7 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
               boxShadow: "none"
             }}
           >
-            🏢 Org Dashboard
+            <FiBriefcase style={{ flexShrink: 0 }} /> Organization Dashboard
           </button>
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>

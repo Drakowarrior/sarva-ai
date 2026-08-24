@@ -262,6 +262,25 @@ function OrgDashboard() {
     }
   }, [user, activeTab]);
 
+  // Mobile drawer keyboard & scroll lock listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    if (mobileMenuOpen) {
+      document.body.classList.add("drawer-open");
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.classList.remove("drawer-open");
+    }
+    return () => {
+      document.body.classList.remove("drawer-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
   // Helper actions
   const handleSaveSettings = async (e) => {
     if (e) e.preventDefault();
@@ -887,7 +906,7 @@ function OrgDashboard() {
                   <div className="hero-left">
                     <span className="hero-subtitle">Welcome Back</span>
                     <h1 className="hero-title">
-                      Good morning, <span className="hero-workspace">{user?.fullName || "Karan"} 👋</span>
+                      Good morning, <span className="hero-workspace">{user?.fullName || "Karan"}</span>
                     </h1>
                     <p className="hero-summary-text">
                       Welcome to the <strong>{orgData?.organizationName || "IGT Solutions"}</strong> workspace dashboard. Here is today's overview.
@@ -1189,7 +1208,7 @@ function OrgDashboard() {
                       </div>
                       <div className="branding-text-details">
                         <span className="brand-name-bold">{orgData?.organizationName}</span>
-                        <span className="brand-industry-badge">💼 {orgData?.industry || "Enterprise Workspace"}</span>
+                        <span className="brand-industry-badge"><FiBriefcase style={{ marginRight: "4px" }} /> {orgData?.industry || "Enterprise Workspace"}</span>
                       </div>
                       
                       <div className="branding-stats-grid">
@@ -1590,7 +1609,7 @@ function OrgDashboard() {
                                   </td>
                                   <td>
                                     <span className="member-dept-badge">
-                                      📂 {m.department}
+                                      <FiFolder style={{ marginRight: "4px" }} /> {m.department}
                                     </span>
                                   </td>
                                   <td>
@@ -1660,7 +1679,7 @@ function OrgDashboard() {
                                 </div>
                                 <div className="detail-item">
                                   <span className="label">Dept:</span>
-                                  <span className="member-dept-badge">📂 {m.department}</span>
+                                  <span className="member-dept-badge"><FiFolder style={{ marginRight: "4px" }} /> {m.department}</span>
                                 </div>
                                 <div className="detail-item">
                                   <span className="label">Status:</span>
@@ -2568,8 +2587,8 @@ function OrgDashboard() {
                       {/* Shared Cards Container */}
                       {filtered.length === 0 ? (
                         <div className="glass" style={{ padding: "60px 24px", textAlign: "center", borderRadius: "20px", border: "1px solid var(--border)", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-                          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(56, 189, 248, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontSize: "1.8rem" }}>
-                            ✦
+                          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--accent-soft)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontSize: "1.8rem" }}>
+                            <FiMessageSquare />
                           </div>
                           <div>
                             <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: "700" }}>No shared chats found</h3>
@@ -2616,8 +2635,8 @@ function OrgDashboard() {
                               <div>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "10px" }}>
                                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                    <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(56, 189, 248, 0.12)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
-                                      💬
+                                    <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "var(--accent-soft)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
+                                      <FiMessageSquare />
                                     </div>
                                     <h4 style={{ margin: 0, fontSize: "1.05rem", fontWeight: "700", color: "var(--text-primary)", lineHeight: 1.3 }}>
                                       {chat.title}
@@ -2732,8 +2751,8 @@ function OrgDashboard() {
                               }}
                             >
                               <div style={{ display: "flex", alignItems: "center", gap: "14px", flex: 1, minWidth: 0 }}>
-                                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(56, 189, 248, 0.12)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
-                                  💬
+                                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--accent-soft)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", flexShrink: 0 }}>
+                                  <FiMessageSquare />
                                 </div>
                                 <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
                                   <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700", color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -3386,8 +3405,8 @@ function OrgDashboard() {
                                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                   <h4 style={{ margin: 0, fontSize: "0.92rem", fontWeight: "700" }}>Allow External Chat Sharing</h4>
                                   {allowExtSharing && (
-                                    <span style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(245, 158, 11, 0.15)", color: "#f59e0b", fontWeight: "700" }}>
-                                      ⚠️ External Enabled
+                                    <span style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(245, 158, 11, 0.15)", color: "#f59e0b", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                                      <FiAlertTriangle /> External Enabled
                                     </span>
                                   )}
                                 </div>
@@ -3658,8 +3677,8 @@ function OrgDashboard() {
                   </select>
                 </div>
 
-                <div style={{ fontSize: "0.8rem", color: "var(--danger)", background: "rgba(239, 68, 68, 0.08)", padding: "10px", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.2)", marginBottom: "16px" }}>
-                  ⚠️ Warning: Transferring ownership will demote your account role to Team Lead and revoke your administrative control. This action cannot be undone.
+                <div style={{ fontSize: "0.8rem", color: "var(--danger)", background: "rgba(239, 68, 68, 0.08)", padding: "10px", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.2)", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <FiAlertTriangle style={{ flexShrink: 0 }} /> Warning: Transferring ownership will demote your account role to Team Lead and revoke your administrative control. This action cannot be undone.
                 </div>
 
                 <div className="modal-actions">

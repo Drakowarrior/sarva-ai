@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FiSend, FiZap, FiLock, FiArrowRight, FiRotateCcw, FiCheckCircle, FiShield, FiFileText, FiCpu, FiCode } from "react-icons/fi";
+import { FiSend, FiZap, FiLock, FiArrowRight, FiRotateCcw, FiCheckCircle, FiShield, FiFileText, FiCpu, FiCode, FiGlobe, FiBookOpen, FiLayers } from "react-icons/fi";
 import ReactMarkdown from "react-markdown";
 import { 
   trackDemoStarted, 
@@ -17,42 +17,42 @@ export const DEMO_PROMPTS = [
   {
     id: "python-code",
     category: "Coding",
-    icon: "🐍",
+    icon: <FiCode />,
     title: "Explain this Python code",
     prompt: "Explain how async/await concurrency works in Python with a quick 4-line code example."
   },
   {
     id: "pdf-analysis",
     category: "Documents",
-    icon: "📄",
+    icon: <FiFileText />,
     title: "Analyze my PDF document",
     prompt: "How does SARVA AI parse PDF documents and feed structured context into LLM context windows?"
   },
   {
     id: "fastapi-debug",
     category: "Coding",
-    icon: "⚡",
+    icon: <FiZap />,
     title: "Help me debug FastAPI API",
     prompt: "Why am I getting a 422 Unprocessable Entity error in my FastAPI POST endpoint?"
   },
   {
     id: "summarize-doc",
     category: "Writing",
-    icon: "📝",
+    icon: <FiBookOpen />,
     title: "Summarize this document",
     prompt: "Summarize the key architectural benefits of using Groq LPUs over standard cloud GPUs."
   },
   {
     id: "study-plan",
     category: "Learning",
-    icon: "🎓",
+    icon: <FiLayers />,
     title: "Create a study plan",
     prompt: "Create a 3-step study plan to master full-stack AI engineering with React and FastAPI."
   },
   {
     id: "ml-concept",
     category: "Analysis",
-    icon: "🤖",
+    icon: <FiCpu />,
     title: "Explain ML concept",
     prompt: "Explain the difference between RAG (Retrieval-Augmented Generation) and fine-tuning in simple terms."
   }
@@ -71,7 +71,7 @@ const PublicDemo = ({ initialPrompt = "" }) => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "👋 **Welcome to the SARVA AI Public Demo!**\n\nSelect a sample prompt below or type a query to test our conversational AI engine in real time. *(3 free demo turns per session)*"
+      content: "**Welcome to the SARVA AI Interactive Demo!**\n\nSelect a sample prompt below or type a query to test our conversational AI engine in real time. *(3 free demo turns per session)*"
     }
   ]);
   const [input, setInput] = useState(initialPrompt);
@@ -158,7 +158,7 @@ const PublicDemo = ({ initialPrompt = "" }) => {
     setMessages([
       {
         role: "assistant",
-        content: "👋 Demo reset! Choose a prompt or enter a question below."
+        content: "Demo reset! Choose a prompt or enter a question below."
       }
     ]);
     setDemoTurnsUsed(0);
@@ -188,7 +188,7 @@ const PublicDemo = ({ initialPrompt = "" }) => {
         {messages.map((msg, index) => (
           <div key={index} className={`demo-msg-bubble ${msg.role}`}>
             <div className="demo-avatar">
-              {msg.role === "assistant" ? "🤖" : "👤"}
+              {msg.role === "assistant" ? "S" : "U"}
             </div>
             <div className="demo-msg-content">
               <div className="demo-sender-name">
@@ -203,7 +203,7 @@ const PublicDemo = ({ initialPrompt = "" }) => {
 
         {isLoading && (
           <div className="demo-msg-bubble assistant">
-            <div className="demo-avatar">🤖</div>
+            <div className="demo-avatar">S</div>
             <div className="demo-msg-content">
               <div className="demo-typing">
                 <span></span><span></span><span></span> Thinking...

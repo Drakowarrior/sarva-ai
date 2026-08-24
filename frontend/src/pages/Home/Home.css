@@ -30,40 +30,38 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(139, 92, 246, 0.12));
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  color: var(--accent, #38bdf8);
-  font-size: 13px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
+  padding: 5px 14px;
+  border-radius: var(--sarva-radius-sm, 6px);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-accent);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .sarva-hero-title {
-  font-size: clamp(2.8rem, 5.5vw, 4.8rem);
-  font-weight: 850;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-  margin: 0 0 20px 0;
-  max-width: 980px;
-  color: var(--text-primary, #ffffff);
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 16px 0;
+  max-width: 900px;
+  color: var(--text-primary);
 }
 
 .sarva-hero-title-accent {
-  background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
+  color: var(--accent);
+  display: inline;
 }
 
 .sarva-hero-subtitle {
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-  color: var(--text-secondary, #94a3b8);
-  max-width: 760px;
-  margin: 0 auto 36px;
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  color: var(--text-secondary);
+  max-width: 720px;
+  margin: 0 auto 32px;
   line-height: 1.6;
 }
 
@@ -71,59 +69,60 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .sarva-btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%);
+  gap: 8px;
+  padding: 12px 26px;
+  border-radius: var(--sarva-radius-md, 8px);
+  background: var(--accent);
   color: #ffffff;
-  font-size: 1rem;
-  font-weight: 750;
+  font-size: 0.95rem;
+  font-weight: 700;
   text-decoration: none;
   border: none;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.18s ease;
 }
 
 .sarva-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(56, 189, 248, 0.35);
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
   color: #ffffff;
 }
 
 .sarva-btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary, #ffffff);
-  font-size: 1rem;
-  font-weight: 650;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--sarva-radius-md, 8px);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
   text-decoration: none;
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
 }
 
 .sarva-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent, #38bdf8);
-  color: var(--text-primary, #ffffff);
+  background: var(--sarva-surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .sarva-hero-subtext {
-  font-size: 0.8rem;
-  color: var(--text-tertiary, #64748b);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
   margin-top: 4px;
 }
 
@@ -131,7 +130,7 @@
 .sarva-hero-mockup-wrapper {
   width: 100%;
   max-width: 1140px;
-  margin: 48px auto 0;
+  margin: 40px auto 0;
   position: relative;
 }
 
@@ -139,39 +138,39 @@
    2. TRUST & CREDIBILITY STRIP
    ─────────────────────────────────────────────────────────── */
 .sarva-trust-strip {
-  padding: 40px 24px;
+  padding: 36px 24px;
   max-width: 1240px;
-  margin: 0 auto 60px;
-  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  margin: 0 auto 50px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   text-align: center;
 }
 
 .sarva-trust-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  color: var(--text-tertiary, #64748b);
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .sarva-trust-badges {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .sarva-trust-badge-item {
-  padding: 8px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-secondary, #94a3b8);
+  padding: 6px 14px;
+  border-radius: var(--sarva-radius-sm, 6px);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 /* ───────────────────────────────────────────────────────────
@@ -495,6 +494,18 @@
     padding: 40px 16px 40px;
   }
 
+  .sarva-hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sarva-btn-primary,
+  .sarva-btn-secondary {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
   .sarva-capabilities-grid {
     grid-template-columns: 1fr;
   }
@@ -509,5 +520,25 @@
 
   .sarva-cta-banner {
     padding: 40px 20px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sarva-hero-title {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .sarva-trust-strip {
+    padding: 24px 12px;
+  }
+
+  .sarva-trust-badge-item {
+    font-size: 0.78rem;
+    padding: 6px 12px;
+  }
+
+  .sarva-security-panel {
+    padding: 24px 16px;
   }
 }

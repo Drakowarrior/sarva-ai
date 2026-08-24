@@ -34,7 +34,7 @@ const Technology = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">⚡ Modern Full-Stack Architecture</div>
+        <div className="seo-hero-badge">Modern Full-Stack Architecture</div>
         <h1 className="seo-page-title">SARVA AI Technology Stack</h1>
         <p className="seo-page-subtitle">
           SARVA AI is built on a modern, decoupled full-stack architecture optimized for ultra-low latency inference, high concurrent throughput, and rich interactive frontend experiences.

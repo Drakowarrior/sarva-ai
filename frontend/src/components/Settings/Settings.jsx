@@ -22,11 +22,11 @@ const MODELS = [
 ];
 
 const LANGUAGES = [
-  { name: "English", code: "en", flag: "🌐" },
-  { name: "Spanish", code: "es", flag: "🇪🇸" },
-  { name: "French", code: "fr", flag: "🇫🇷" },
-  { name: "German", code: "de", flag: "🇩🇪" },
-  { name: "Hindi", code: "hi", flag: "🇮🇳" }
+  { name: "English", code: "en", flag: "" },
+  { name: "Spanish", code: "es", flag: "" },
+  { name: "French", code: "fr", flag: "" },
+  { name: "German", code: "de", flag: "" },
+  { name: "Hindi", code: "hi", flag: "" }
 ];
 
 function getInitials(name) {
@@ -180,9 +180,15 @@ function Settings({ isOpen, onClose }) {
       }
     };
     if (isOpen) {
+      document.body.classList.add("modal-open");
       window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.classList.remove("modal-open");
     }
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.classList.remove("modal-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -204,7 +210,7 @@ function Settings({ isOpen, onClose }) {
 
   const handleRemoveAvatar = () => {
     setAvatar("");
-    toast("Photo removed", { icon: "🗑️" });
+    toast("Photo removed");
   };
 
   const handleSaveProfile = async (e) => {
@@ -238,7 +244,7 @@ function Settings({ isOpen, onClose }) {
   const handleClearAll = async () => {
     if (!confirmingClearAll) {
       setConfirmingClearAll(true);
-      toast("Click 'Confirm Delete All' within 4s to erase history.", { icon: "⚠️" });
+      toast("Click 'Confirm Delete All' within 4s to erase history.");
       setTimeout(() => setConfirmingClearAll(false), 4000);
       return;
     }
@@ -383,7 +389,7 @@ function Settings({ isOpen, onClose }) {
           {/* Settings Shell Header */}
           <div className="settings-center-header">
             <div className="settings-header-left">
-              <div className="settings-brand-badge">✦</div>
+              <div className="settings-brand-badge"><FiSettings /></div>
               <div className="settings-header-titles">
                 <h2>Settings Center</h2>
                 <p>Personalize your SARVA AI experience and manage your workspace.</p>
@@ -530,7 +536,7 @@ function Settings({ isOpen, onClose }) {
                       <div className="settings-field-group">
                         <label className="settings-field-label">
                           <span>Email Address</span>
-                          <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", fontWeight: "500" }}>🔒 Managed by account</span>
+                          <span style={{ fontSize: "0.72rem", color: "var(--text-tertiary)", fontWeight: "500" }}>Managed by account</span>
                         </label>
                         <input
                           type="email"
@@ -685,7 +691,7 @@ function Settings({ isOpen, onClose }) {
                           onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            <span style={{ color: "var(--accent)" }}>✦</span>
+                            <span style={{ color: "var(--accent)", display: "flex", alignItems: "center" }}><FiCpu /></span>
                             <span>{currentModelObj.name}</span>
                             <span style={{ fontSize: "0.7rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(56,189,248,0.15)", color: "var(--accent)", fontWeight: "700" }}>
                               {currentModelObj.version}

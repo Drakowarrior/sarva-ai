@@ -24,7 +24,7 @@ const About = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">🚀 Platform Vision & Team</div>
+        <div className="seo-hero-badge">Platform Vision & Team</div>
         <h1 className="seo-page-title">About SARVA AI</h1>
         <p className="seo-page-subtitle">
           SARVA AI is an advanced enterprise conversational AI platform built to deliver intuitive reasoning, document intelligence, multi-model flexibility, and developer-centric workflows.

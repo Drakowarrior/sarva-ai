@@ -24,7 +24,7 @@ const EnterpriseAi = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">🏢 Enterprise Grade AI Architecture</div>
+        <div className="seo-hero-badge">Enterprise Grade AI Architecture</div>
         <h1 className="seo-page-title">Enterprise AI Assistant & Conversational Platform</h1>
         <p className="seo-page-subtitle">
           Engineered for scale, reliability, and corporate data governance. SARVA AI empowers organizations with private AI assistant workflows, role-based controls, and seamless cloud integrations.

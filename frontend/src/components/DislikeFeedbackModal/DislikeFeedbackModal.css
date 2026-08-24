@@ -10,12 +10,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: var(--z-modal-backdrop);
   padding: 20px;
 }
 
 .dislike-modal-card {
-  width: 100%;
+  width: min(460px, calc(100vw - 32px));
   max-width: 460px;
   background: var(--bg-card);
   backdrop-filter: blur(24px);

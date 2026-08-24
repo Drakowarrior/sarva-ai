@@ -24,7 +24,7 @@ const FileAnalysis = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">📄 Intelligent Document Comprehension</div>
+        <div className="seo-hero-badge">Intelligent Document Comprehension</div>
         <h1 className="seo-page-title">File Analysis & AI Assistance</h1>
         <p className="seo-page-subtitle">
           Transform unstructured documents into actionable insights. Upload PDF files, resumes, research papers, and technical specifications for instant parsing and context-grounded AI responses.

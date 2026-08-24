@@ -24,7 +24,7 @@ const AiChatbot = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">💬 Conversational AI Engine</div>
+        <div className="seo-hero-badge">Conversational AI Engine</div>
         <h1 className="seo-page-title">AI Chatbot – Intelligent Conversations</h1>
         <p className="seo-page-subtitle">
           SARVA AI chatbot combines fast inference, deep contextual understanding, multi-turn memory, and document attachment capabilities to deliver human-like conversational experiences.

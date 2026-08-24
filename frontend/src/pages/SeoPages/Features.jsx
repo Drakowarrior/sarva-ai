@@ -24,7 +24,7 @@ const Features = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">✨ Core Platform Features</div>
+        <div className="seo-hero-badge">Core Platform Capabilities</div>
         <h1 className="seo-page-title">SARVA AI Platform Features</h1>
         <p className="seo-page-subtitle">
           An all-in-one conversational suite designed to boost productivity, accelerate code comprehension, and automate complex document analysis workflows.

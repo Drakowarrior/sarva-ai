@@ -48,7 +48,7 @@ const Contact = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
-        <div className="seo-hero-badge">📬 Developer Contact & Support</div>
+        <div className="seo-hero-badge">Developer Contact & Support</div>
         <h1 className="seo-page-title">Get in Touch with SARVA AI</h1>
         <p className="seo-page-subtitle">
           Have questions about our architecture, deployment options, or custom LLM integrations? Send us a message or connect via GitHub.

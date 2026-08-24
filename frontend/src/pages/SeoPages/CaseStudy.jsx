@@ -34,7 +34,7 @@ const CaseStudy = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "1050px" }}>
-        <div className="seo-hero-badge">📚 Engineering Case Study</div>
+        <div className="seo-hero-badge">Engineering Case Study</div>
         <h1 className="seo-page-title">SARVA AI Case Study – Building a Full-Stack Conversational AI Platform</h1>
         <p className="seo-page-subtitle">
           An exhaustive breakdown of how SARVA AI was conceptualized, architected, built, and deployed as a high-performance enterprise conversational AI platform.
