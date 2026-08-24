@@ -907,6 +907,66 @@ body.modal-open {
   font-style: italic;
 }
 
+/* ─── Markdown Tables (GFM) ─── */
+.message-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 16px 0;
+  border-radius: var(--sarva-radius-md, 8px);
+  overflow-x: auto;
+  display: block;
+  border: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.message-content th {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-primary);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+[data-theme="dark"] .message-content th {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.message-content th:last-child {
+  border-right: none;
+}
+
+.message-content td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  color: var(--text-primary);
+  line-height: 1.5;
+  vertical-align: top;
+}
+
+.message-content td:last-child {
+  border-right: none;
+}
+
+.message-content tr:last-child td {
+  border-bottom: none;
+}
+
+.message-content tr:nth-child(even) td {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+[data-theme="dark"] .message-content tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.message-content tr:hover td {
+  background: var(--accent-soft);
+}
+
 /* Code block header with gradient accent bar */
 .code-block-wrapper {
   border-radius: var(--sarva-radius-md);

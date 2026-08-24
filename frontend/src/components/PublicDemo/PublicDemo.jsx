@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiSend, FiZap, FiLock, FiArrowRight, FiRotateCcw, FiCheckCircle, FiShield, FiFileText, FiCpu, FiCode, FiGlobe, FiBookOpen, FiLayers } from "react-icons/fi";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { 
   trackDemoStarted, 
   trackDemoPromptClicked, 
@@ -195,7 +196,7 @@ const PublicDemo = ({ initialPrompt = "" }) => {
                 {msg.role === "assistant" ? "SARVA AI (Demo Engine)" : "You"}
               </div>
               <div className="demo-text">
-                <ReactMarkdown>{msg.content}</ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
               </div>
             </div>
           </div>

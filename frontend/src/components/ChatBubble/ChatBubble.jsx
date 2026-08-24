@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiCopy, FiCheck, FiRotateCw, FiFileText, FiImage, FiCpu, FiUser, FiThumbsUp, FiThumbsDown, FiChevronDown } from "react-icons/fi";
@@ -8,6 +9,13 @@ import { useSession } from "../../context/SessionContext";
 import DislikeFeedbackModal from "../DislikeFeedbackModal/DislikeFeedbackModal";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+
+function formatMarkdownTables(text) {
+  if (!text) return "";
+  let formatted = text.replace(/\|\s*\|/g, "|\n|");
+  formatted = formatted.replace(/(\|[^\n]+\|)\s*(\|[^\n]+\|)/g, "$1\n$2");
+  return formatted;
+}
 
 function parseThoughtProcess(rawText) {
   if (!rawText) return { thought: null, content: "" };
@@ -350,13 +358,16 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
                     <FiChevronDown className="thought-chevron" />
                   </summary>
                   <div className="sarva-thought-content">
-                    <ReactMarkdown>{thought}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {formatMarkdownTables(thought)}
+                    </ReactMarkdown>
                   </div>
                 </details>
               )}
 
               {formattedContent ? (
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
                   components={{
                     code({ node, className, children, ...props }) {
                       const match = /language-(\w+)/.exec(className || "");
@@ -373,7 +384,7 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
                     }
                   }}
                 >
-                  {formattedContent}
+                  {formatMarkdownTables(formattedContent)}
                 </ReactMarkdown>
               ) : null}
               {message.isStreaming && <span className="streaming-cursor" />}
