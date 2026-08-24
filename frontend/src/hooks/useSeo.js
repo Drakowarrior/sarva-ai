@@ -9,7 +9,8 @@ export const useSeo = ({
   description, 
   canonicalPath = "", 
   jsonLd = null,
-  type = "website"
+  type = "website",
+  noindex = false
 }) => {
   useEffect(() => {
     const baseUrl = "https://sarva-ai-one.vercel.app";
@@ -31,6 +32,13 @@ export const useSeo = ({
       }
       element.setAttribute("content", contentValue);
     };
+
+    // Robots meta tag
+    if (noindex) {
+      setMetaTag('meta[name="robots"]', 'name', 'robots', 'noindex, nofollow');
+    } else {
+      setMetaTag('meta[name="robots"]', 'name', 'robots', 'index, follow');
+    }
 
     // 2. Meta Description
     if (description) {
@@ -83,7 +91,7 @@ export const useSeo = ({
         scriptToRemove.remove();
       }
     };
-  }, [title, description, canonicalPath, jsonLd, type]);
+  }, [title, description, canonicalPath, jsonLd, type, noindex]);
 };
 
 export default useSeo;

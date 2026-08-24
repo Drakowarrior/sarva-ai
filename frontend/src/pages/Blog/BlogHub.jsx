@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FiCode, FiLayers, FiShield, FiFileText, FiCpu, FiArrowRight, FiClock, FiBookOpen } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 export const articlesData = [
@@ -87,7 +88,7 @@ export const articlesData = [
 
 const BlogHub = () => {
   useSeo({
-    title: "SARVA AI Technical Blog & Engineering Articles",
+    title: "SARVA Technical Blog — Engineering Articles & Guides",
     description: "In-depth engineering articles on full-stack AI development with React 19, FastAPI, MongoDB Atlas, Groq LPUs, and cloud security.",
     canonicalPath: "/blog",
     jsonLd: {
@@ -115,6 +116,7 @@ const BlogHub = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "1100px" }}>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }]} />
         <div className="seo-hero-badge"><FiBookOpen /> Technical Engineering Hub</div>
         <h1 className="seo-page-title">SARVA AI Engineering Blog</h1>
         <p className="seo-page-subtitle">

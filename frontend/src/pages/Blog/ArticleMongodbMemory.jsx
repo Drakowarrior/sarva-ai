@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { FiClock, FiLayers, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleMongodbMemory = () => {
   useSeo({
-    title: "How to Build Conversational AI With Chat History and Memory | SARVA AI",
-    description: "Designing a high-performance MongoDB Atlas database schema for multi-turn chat threads, user profiles, and session trajectories.",
+    title: "How to Build Conversational AI With Chat History & Memory | SARVA AI",
+    description: "Designing a high-performance MongoDB Atlas database schema for multi-turn session state.",
     canonicalPath: "/blog/chat-history-memory",
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "How to Build Conversational AI With Chat History and Memory",
-      "description": "Technical guide detailing MongoDB Atlas schema design for AI session context.",
-      "author": { "@type": "Person", "name": "Karan Garg" },
-      "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-08"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+            { "@type": "ListItem", "position": 3, "name": "Chat History & Memory", "item": "https://sarva-ai-one.vercel.app/blog/chat-history-memory" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "How to Build Conversational AI With Chat History and Memory",
+          "description": "Technical guide detailing MongoDB Atlas schema design for AI session context.",
+          "author": { "@type": "Person", "name": "Karan Garg" },
+          "publisher": { "@type": "Organization", "name": "SARVA AI" },
+          "datePublished": "2026-08-08"
+        }
+      ]
     }
   });
 
@@ -27,11 +40,7 @@ const ArticleMongodbMemory = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
-          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
-          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>Chat History & Memory</span>
-        </div>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: "Chat History & Memory", path: "/blog/chat-history-memory" }]} />
 
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
           How to Build Conversational AI With Chat History and Memory

@@ -70,8 +70,8 @@ function Home() {
   const [selectedPromptForDemo, setSelectedPromptForDemo] = useState("");
 
   useSeo({
-    title: "SARVA — Intelligence Infrastructure",
-    description: "SARVA connects conversations, documents, knowledge, workflows and AI into one unified workspace.",
+    title: "SARVA AI — Enterprise AI Workspace & Conversational Platform",
+    description: "SARVA connects your conversations, PDF documents, knowledge base, team workflows, and multi-model AI into one secure workspace.",
     canonicalPath: "/",
     jsonLd: {
       "@context": "https://schema.org",
@@ -81,10 +81,11 @@ function Home() {
           "@id": "https://sarva-ai-one.vercel.app/#website",
           "url": "https://sarva-ai-one.vercel.app/",
           "name": "SARVA AI",
-          "description": "SARVA — Intelligence Infrastructure",
-          "author": {
-            "@type": "Person",
-            "name": "Karan Garg"
+          "description": "SARVA AI — Enterprise AI Workspace & Conversational Platform",
+          "publisher": {
+            "@type": "Organization",
+            "name": "SARVA AI",
+            "url": "https://sarva-ai-one.vercel.app/"
           }
         },
         {

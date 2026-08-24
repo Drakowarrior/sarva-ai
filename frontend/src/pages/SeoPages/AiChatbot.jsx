@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiMessageSquare, FiClock, FiCpu, FiLock, FiFileText, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const AiChatbot = () => {
   useSeo({
-    title: "AI Chatbot – Intelligent Conversations | SARVA AI",
-    description: "SARVA AI Chatbot provides natural context-aware conversations, dynamic model selection, persistent session history, file interactions, and enterprise privacy.",
+    title: "AI Chatbot Engine — Llama 3.3 & Multi-Turn AI Conversations",
+    description: "Powered by Groq LPUs and Llama 3.3 70B models for fast, context-aware AI chat, persistent session history, and PDF document context.",
     canonicalPath: "/ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",
@@ -24,6 +25,7 @@ const AiChatbot = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "AI Chatbot", path: "/ai-chatbot" }]} />
         <div className="seo-hero-badge">Conversational AI Engine</div>
         <h1 className="seo-page-title">AI Chatbot – Intelligent Conversations</h1>
         <p className="seo-page-subtitle">

@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiLayers, FiCpu, FiFileText, FiRefreshCw, FiMoon, FiShield, FiStar, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const Features = () => {
   useSeo({
-    title: "SARVA AI Features – Conversational AI, PDF Analysis & Memory",
-    description: "Discover SARVA AI features: dynamic LLM model switching, document PDF parsing, MongoDB session memory, enterprise auth, dark/light themes, and user feedback.",
+    title: "SARVA AI Features — Conversational Suite, Documents & Memory",
+    description: "Explore SARVA's full capability suite: multi-turn chat threads, PDF document parsing, model routing, and role-based security.",
     canonicalPath: "/features",
     jsonLd: {
       "@context": "https://schema.org",
@@ -24,6 +25,7 @@ const Features = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "Features", path: "/features" }]} />
         <div className="seo-hero-badge">Core Platform Capabilities</div>
         <h1 className="seo-page-title">SARVA AI Platform Features</h1>
         <p className="seo-page-subtitle">

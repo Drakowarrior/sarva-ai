@@ -7,8 +7,15 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import { useSession } from "../../context/SessionContext";
 import Loader from "../../components/Loader/Loader";
+import useSeo from "../../hooks/useSeo";
 
 function PendingApproval() {
+  useSeo({
+    title: "Account Pending Approval | SARVA AI",
+    description: "Account registration is awaiting administrator review.",
+    noindex: true
+  });
+
   const { isAuthenticated, user, checkingAuth, logout, checkAuthStatus } = useAuth();
   const { setIsFeedbackOpen } = useSession();
   const navigate = useNavigate();

@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { FiClock, FiCode, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleArchitectureDeployment = () => {
   useSeo({
-    title: "React + FastAPI + MongoDB: Full-Stack AI Architecture | SARVA AI",
-    description: "Production breakdown of hosting React SPAs on Vercel and FastAPI microservices with MongoDB Atlas state management.",
+    title: "React + FastAPI + MongoDB: Production Full-Stack AI Guide | SARVA AI",
+    description: "Production deployment guide for hosting React SPAs on Vercel Edge and FastAPI microservices on cloud APIs.",
     canonicalPath: "/blog/full-stack-ai-architecture",
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "React + FastAPI + MongoDB: Full-Stack AI Architecture",
-      "description": "Comprehensive engineering breakdown of deploying full-stack AI applications.",
-      "author": { "@type": "Person", "name": "Karan Garg" },
-      "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-02"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+            { "@type": "ListItem", "position": 3, "name": "Full-Stack AI Architecture", "item": "https://sarva-ai-one.vercel.app/blog/full-stack-ai-architecture" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "React + FastAPI + MongoDB: Full-Stack AI Architecture",
+          "description": "Comprehensive engineering breakdown of deploying full-stack AI applications.",
+          "author": { "@type": "Person", "name": "Karan Garg" },
+          "publisher": { "@type": "Organization", "name": "SARVA AI" },
+          "datePublished": "2026-08-02"
+        }
+      ]
     }
   });
 
@@ -27,11 +40,7 @@ const ArticleArchitectureDeployment = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
-          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
-          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>Full-Stack AI Architecture</span>
-        </div>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: "Full-Stack AI Architecture", path: "/blog/full-stack-ai-architecture" }]} />
 
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
           React + FastAPI + MongoDB: Full-Stack AI Architecture

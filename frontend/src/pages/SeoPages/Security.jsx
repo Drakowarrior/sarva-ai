@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiShield, FiKey, FiLock, FiServer, FiDatabase, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const Security = () => {
   useSeo({
-    title: "Enterprise Security & Privacy Architecture | SARVA AI",
-    description: "Learn how SARVA AI protects user data through JWT authentication, bcrypt password encryption, MongoDB session isolation, and HTTPS transport security.",
+    title: "SARVA Security & Privacy — JWT Auth, Bcrypt & Data Protection",
+    description: "Enterprise session isolation, JWT bearer token security, bcrypt hashing, and strict data privacy compliance.",
     canonicalPath: "/security",
     jsonLd: {
       "@context": "https://schema.org",
@@ -24,6 +25,7 @@ const Security = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "Security", path: "/security" }]} />
         <div className="seo-hero-badge">Enterprise Security Standards</div>
         <h1 className="seo-page-title">Security & Privacy Architecture</h1>
         <p className="seo-page-subtitle">

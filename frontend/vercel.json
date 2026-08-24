@@ -1,4 +1,9 @@
 {
+  "redirects": [
+    { "source": "/blog/fastapi-groq-ai-chatbot", "destination": "/blog/fastapi-groq-chatbot", "permanent": true },
+    { "source": "/blog/jwt-ai-chatbot-security", "destination": "/blog/jwt-ai-chatbot", "permanent": true },
+    { "source": "/blog/mongodb-chat-memory", "destination": "/blog/chat-history-memory", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

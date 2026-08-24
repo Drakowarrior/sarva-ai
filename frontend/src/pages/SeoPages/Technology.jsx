@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiCode, FiLayers, FiDatabase, FiCpu, FiArrowRight, FiZap } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const Technology = () => {
   useSeo({
-    title: "SARVA AI Technology Stack | React, FastAPI & MongoDB",
-    description: "Explore the SARVA AI tech stack architecture: React frontend, FastAPI async backend, MongoDB Atlas database, and Groq high-speed LLM inference engine.",
+    title: "SARVA Technology Stack — React 19, FastAPI & MongoDB Atlas",
+    description: "Full-stack engineering breakdown: React single-page frontend, FastAPI async backend, Groq LPUs, and MongoDB Atlas.",
     canonicalPath: "/technology",
     jsonLd: {
       "@context": "https://schema.org",
@@ -34,6 +35,7 @@ const Technology = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "Technology Stack", path: "/technology" }]} />
         <div className="seo-hero-badge">Modern Full-Stack Architecture</div>
         <h1 className="seo-page-title">SARVA AI Technology Stack</h1>
         <p className="seo-page-subtitle">

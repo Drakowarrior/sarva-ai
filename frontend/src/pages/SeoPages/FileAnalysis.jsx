@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiFileText, FiSearch, FiCheckCircle, FiShield, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const FileAnalysis = () => {
   useSeo({
-    title: "AI File & Document Analysis | SARVA AI",
-    description: "Upload PDFs, Word documents, text files, and images to SARVA AI for instant text extraction, summary generation, and contextual query answering.",
+    title: "AI Document Analysis — Chat With PDFs, Resumes & Reports",
+    description: "Parse multi-page PDF files, extract structured insights, and ask context-grounded questions with SARVA AI.",
     canonicalPath: "/file-analysis",
     jsonLd: {
       "@context": "https://schema.org",
@@ -24,6 +25,7 @@ const FileAnalysis = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "File Analysis", path: "/file-analysis" }]} />
         <div className="seo-hero-badge">Intelligent Document Comprehension</div>
         <h1 className="seo-page-title">File Analysis & AI Assistance</h1>
         <p className="seo-page-subtitle">

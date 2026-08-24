@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiShield, FiDatabase, FiCloud, FiKey, FiServer, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const EnterpriseAi = () => {
   useSeo({
-    title: "Enterprise AI Assistant & Conversational Platform | SARVA AI",
-    description: "SARVA AI delivers enterprise conversational AI with JWT authentication, session management, file processing, FastAPI microservices, and cloud infrastructure.",
+    title: "Enterprise AI Assistant & Governance Platform | SARVA AI",
+    description: "Scalable private AI assistant workflows, role-based controls, JWT security, and enterprise workspace isolation.",
     canonicalPath: "/enterprise-ai",
     jsonLd: {
       "@context": "https://schema.org",
@@ -24,8 +25,9 @@ const EnterpriseAi = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "Enterprise AI", path: "/enterprise-ai" }]} />
         <div className="seo-hero-badge">Enterprise Grade AI Architecture</div>
-        <h1 className="seo-page-title">Enterprise AI Assistant & Conversational Platform</h1>
+        <h1 className="seo-page-title">Enterprise AI Assistant & Governance Platform</h1>
         <p className="seo-page-subtitle">
           Engineered for scale, reliability, and corporate data governance. SARVA AI empowers organizations with private AI assistant workflows, role-based controls, and seamless cloud integrations.
         </p>

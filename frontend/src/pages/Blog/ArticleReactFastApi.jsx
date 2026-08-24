@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { FiArrowRight, FiCode, FiLayers, FiCheckCircle, FiBookOpen, FiClock, FiCpu } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleReactFastApi = () => {
   useSeo({
-    title: "How to Build an AI Chatbot with React and FastAPI | SARVA AI",
+    title: "How to Build an AI Chatbot with React 19 & FastAPI | SARVA AI",
     description: "Learn how to construct a full-stack conversational AI application using React 19, FastAPI, Server-Sent Events (SSE), and asynchronous model pipelines.",
     canonicalPath: "/blog/react-fastapi-ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "How to Build an AI Chatbot with React and FastAPI",
-      "description": "Step-by-step technical guide to integrating React single-page frontend with FastAPI backend for asynchronous AI response processing.",
-      "author": { "@type": "Person", "name": "Karan Garg" },
-      "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-13"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+            { "@type": "ListItem", "position": 3, "name": "React + FastAPI AI Chatbot", "item": "https://sarva-ai-one.vercel.app/blog/react-fastapi-ai-chatbot" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "How to Build an AI Chatbot with React and FastAPI",
+          "description": "Step-by-step technical guide to integrating React single-page frontend with FastAPI backend.",
+          "author": { "@type": "Person", "name": "Karan Garg" },
+          "publisher": { "@type": "Organization", "name": "SARVA AI" },
+          "datePublished": "2026-08-13"
+        }
+      ]
     }
   });
 
@@ -27,12 +40,7 @@ const ArticleReactFastApi = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
-        {/* Article Breadcrumbs */}
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
-          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
-          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>React + FastAPI AI Chatbot</span>
-        </div>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: "React + FastAPI AI Chatbot", path: "/blog/react-fastapi-ai-chatbot" }]} />
 
         {/* Title & Metadata */}
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>

@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { FiClock, FiShield, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleJwtSecurity = () => {
   useSeo({
     title: "How JWT Authentication Works in AI Chatbot Applications | SARVA AI",
-    description: "Designing secure JWT authentication, bcrypt password hashing, token validation, and user session isolation in AI platforms.",
+    description: "Security compliance, bcrypt password hashing, token validation, and multi-tenant session privacy.",
     canonicalPath: "/blog/jwt-ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "How JWT Authentication Works in AI Chatbot Applications",
-      "description": "Technical guide on implementing JWT bearer security in AI chatbot applications.",
-      "author": { "@type": "Person", "name": "Karan Garg" },
-      "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-05"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+            { "@type": "ListItem", "position": 3, "name": "JWT AI Chatbot Security", "item": "https://sarva-ai-one.vercel.app/blog/jwt-ai-chatbot" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "How JWT Authentication Works in AI Chatbot Applications",
+          "description": "Technical guide on implementing JWT bearer security in AI chatbot applications.",
+          "author": { "@type": "Person", "name": "Karan Garg" },
+          "publisher": { "@type": "Organization", "name": "SARVA AI" },
+          "datePublished": "2026-08-05"
+        }
+      ]
     }
   });
 
@@ -27,11 +40,7 @@ const ArticleJwtSecurity = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
-          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
-          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>JWT AI Chatbot Security</span>
-        </div>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: "JWT AI Chatbot Security", path: "/blog/jwt-ai-chatbot" }]} />
 
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
           How JWT Authentication Works in AI Chatbot Applications

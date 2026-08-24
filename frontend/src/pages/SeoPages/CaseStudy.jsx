@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { FiCode, FiCpu, FiDatabase, FiShield, FiServer, FiLayers, FiCheckCircle, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const CaseStudy = () => {
   useSeo({
-    title: "SARVA AI Case Study – Building a Full-Stack Conversational AI Platform",
-    description: "In-depth engineering case study on SARVA AI: Problem, Solution, Architecture, React frontend, FastAPI backend, MongoDB Atlas, JWT Auth, Groq LLMs, Challenges, Results, and Future Roadmap.",
+    title: "SARVA AI Case Study — Full-Stack AI Architecture & Benchmarks",
+    description: "Technical case study detailing system design choices, latency benchmarks, Llama 3.3 LLM streaming, and security decisions.",
     canonicalPath: "/case-study",
     jsonLd: {
       "@context": "https://schema.org",
@@ -22,7 +23,7 @@ const CaseStudy = () => {
         {
           "@type": "TechArticle",
           "headline": "SARVA AI Case Study – Building a Full-Stack Conversational AI Platform",
-          "description": "Comprehensive 12-section technical case study detailing the engineering of SARVA AI.",
+          "description": "Comprehensive technical case study detailing the engineering of SARVA AI.",
           "author": { "@type": "Person", "name": "Karan Garg" }
         }
       ]
@@ -34,6 +35,7 @@ const CaseStudy = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "1050px" }}>
+        <SeoBreadcrumbs items={[{ name: "Case Study", path: "/case-study" }]} />
         <div className="seo-hero-badge">Engineering Case Study</div>
         <h1 className="seo-page-title">SARVA AI Case Study – Building a Full-Stack Conversational AI Platform</h1>
         <p className="seo-page-subtitle">

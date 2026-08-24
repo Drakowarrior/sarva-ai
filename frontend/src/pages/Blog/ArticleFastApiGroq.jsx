@@ -3,22 +3,35 @@ import { Link } from "react-router-dom";
 import { FiClock, FiCpu, FiArrowRight } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
 const ArticleFastApiGroq = () => {
   useSeo({
-    title: "How to Build an AI Chatbot with Groq and LLaMA | SARVA AI",
+    title: "How to Build an AI Chatbot with Groq LPU & LLaMA 3.3 | SARVA AI",
     description: "Step-by-step technical guide to constructing ultra-fast conversational AI platforms using Groq LPU inference and Llama 3.3 70B models.",
     canonicalPath: "/blog/fastapi-groq-chatbot",
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "How to Build an AI Chatbot with Groq and LLaMA",
-      "description": "Technical guide explaining Groq LPU streaming integration with FastAPI backend.",
-      "author": { "@type": "Person", "name": "Karan Garg" },
-      "publisher": { "@type": "Organization", "name": "SARVA AI" },
-      "datePublished": "2026-08-12"
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+            { "@type": "ListItem", "position": 3, "name": "Groq + LLaMA AI Chatbot", "item": "https://sarva-ai-one.vercel.app/blog/fastapi-groq-chatbot" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "How to Build an AI Chatbot with Groq and LLaMA",
+          "description": "Technical guide explaining Groq LPU streaming integration with FastAPI backend.",
+          "author": { "@type": "Person", "name": "Karan Garg" },
+          "publisher": { "@type": "Organization", "name": "SARVA AI" },
+          "datePublished": "2026-08-12"
+        }
+      ]
     }
   });
 
@@ -27,11 +40,7 @@ const ArticleFastApiGroq = () => {
       <SeoHeader />
 
       <main className="seo-page-content" style={{ maxWidth: "860px", margin: "0 auto", padding: "40px 24px" }}>
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", display: "flex", gap: "8px", alignItems: "center" }}>
-          <Link to="/" style={{ color: "var(--accent)", textDecoration: "none" }}>Home</Link> / 
-          <Link to="/blog" style={{ color: "var(--accent)", textDecoration: "none" }}>Blog</Link> / 
-          <span>Groq + LLaMA AI Chatbot</span>
-        </div>
+        <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: "Groq + LLaMA AI Chatbot", path: "/blog/fastapi-groq-chatbot" }]} />
 
         <h1 className="seo-page-title" style={{ textAlign: "left", fontSize: "2.4rem", lineHeight: "1.25" }}>
           How to Build an AI Chatbot with Groq and LLaMA

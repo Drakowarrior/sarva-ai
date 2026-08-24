@@ -4,12 +4,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
+import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
 const Contact = () => {
   useSeo({
-    title: "Contact SARVA AI Team & Developer Inquiries",
-    description: "Get in touch with the SARVA AI team, submit developer inquiries, request platform features, or explore open source contributions.",
+    title: "Contact SARVA AI — Developer Team & Platform Support",
+    description: "Get in touch with the core engineering team for platform inquiries, feature requests, and enterprise support.",
     canonicalPath: "/contact",
     jsonLd: {
       "@context": "https://schema.org",
@@ -37,7 +38,7 @@ const Contact = () => {
     e.preventDefault();
     setSubmitting(true);
     setTimeout(() => {
-      toast.success("Thank you! Your message has been sent to the SARVA AI team.");
+      toast.success("Thank you for your message! Our team will get back to you soon.");
       setForm({ name: "", email: "", subject: "", message: "" });
       setSubmitting(false);
     }, 1000);
@@ -48,6 +49,7 @@ const Contact = () => {
       <SeoHeader />
 
       <main className="seo-page-content">
+        <SeoBreadcrumbs items={[{ name: "Contact", path: "/contact" }]} />
         <div className="seo-hero-badge">Developer Contact & Support</div>
         <h1 className="seo-page-title">Get in Touch with SARVA AI</h1>
         <p className="seo-page-subtitle">

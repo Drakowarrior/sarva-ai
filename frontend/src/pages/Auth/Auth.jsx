@@ -10,9 +10,16 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import useSeo from "../../hooks/useSeo";
 import "./Auth.css";
 
 function Auth() {
+  useSeo({
+    title: "Sign In / Register | SARVA AI",
+    description: "Sign in or create an account to access SARVA AI workspace.",
+    noindex: true
+  });
+
   const [authMode, setAuthMode] = useState("login"); // "login" | "register" | "forgot" | "reset"
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
