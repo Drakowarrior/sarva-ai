@@ -53,9 +53,10 @@ export const useSeo = ({
       setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
     }
 
-    // 4. OpenGraph URL & Type
+    // 4. OpenGraph URL, Type & Images
     setMetaTag('meta[property="og:url"]', 'property', 'og:url', targetUrl);
     setMetaTag('meta[property="og:type"]', 'property', 'og:type', type);
+    setMetaTag('meta[property="og:image"]', 'property', 'og:image', `${baseUrl}/logo.jpg`);
     setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
     setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', `${baseUrl}/logo.jpg`);
 

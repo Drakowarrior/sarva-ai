@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import * as orgService from "../../services/orgService";
 import api from "../../services/api";
+import useSeo from "../../hooks/useSeo";
 import ImageWithFallback from "../../components/Common/ImageWithFallback";
 import "./OrgDashboard.css";
 
@@ -34,6 +35,8 @@ const ROLE_PERMISSIONS = {
 };
 
 function OrgDashboard() {
+  useSeo({ title: "SARVA AI - Organization Dashboard", noindex: true });
+
   const { user } = useAuth();
   const navigate = useNavigate();
 

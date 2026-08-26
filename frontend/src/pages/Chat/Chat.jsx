@@ -7,8 +7,11 @@ import Settings from "../../components/Settings/Settings";
 import ShareModal from "../../components/ShareModal/ShareModal";
 import { useSession } from "../../context/SessionContext";
 import { useChat } from "../../context/ChatContext";
+import useSeo from "../../hooks/useSeo";
 
 function Chat() {
+  useSeo({ title: "SARVA AI - Chat", noindex: true });
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
