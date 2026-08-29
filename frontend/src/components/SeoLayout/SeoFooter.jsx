@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FiGithub, FiExternalLink, FiShield, FiCpu, FiFileText } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiShield, FiCpu, FiFileText, FiArrowRight } from "react-icons/fi";
 import "./SeoLayout.css";
 
 const SeoFooter = () => {
@@ -24,14 +24,14 @@ const SeoFooter = () => {
               className="seo-social-link"
               aria-label="GitHub Repository"
             >
-              <FiGithub /> SARVA AI GitHub
+              <FiGithub aria-hidden="true" /> SARVA AI GitHub
             </a>
           </div>
         </div>
 
         {/* Column 2: Platform Links */}
         <div className="seo-footer-col">
-          <h4 className="seo-footer-title">Platform</h4>
+          <h2 className="seo-footer-title">Platform</h2>
           <ul className="seo-footer-links">
             <li><Link to="/ai-chatbot">AI Chatbot</Link></li>
             <li><Link to="/enterprise-ai">Enterprise AI</Link></li>
@@ -41,40 +41,46 @@ const SeoFooter = () => {
           </ul>
         </div>
 
-        {/* Column 3: Tech & Security */}
+        {/* Column 3: Architecture & Security */}
         <div className="seo-footer-col">
-          <h4 className="seo-footer-title">Architecture</h4>
+          <h2 className="seo-footer-title">Architecture</h2>
           <ul className="seo-footer-links">
             <li><Link to="/technology">Technology Stack</Link></li>
             <li><Link to="/security">Security & Privacy</Link></li>
             <li><Link to="/about">About Project</Link></li>
             <li><Link to="/contact">Developer Contact</Link></li>
-            <li><a href="https://sarva-ai-one.vercel.app/" target="_blank" rel="noopener noreferrer">Live Vercel Demo <FiExternalLink /></a></li>
+            <li>
+              <a href="https://sarva-ai-one.vercel.app/" target="_blank" rel="noopener noreferrer">
+                Live Vercel Demo <FiExternalLink aria-hidden="true" />
+              </a>
+            </li>
           </ul>
         </div>
 
-        {/* Column 4: Engineering Articles */}
+        {/* Column 4: Engineering Articles (Top 5 + View All link) */}
         <div className="seo-footer-col">
-          <h4 className="seo-footer-title">Engineering Articles</h4>
+          <h2 className="seo-footer-title">Engineering Articles</h2>
           <ul className="seo-footer-links">
-            <li><Link to="/blog">Blog Hub Overview</Link></li>
             <li><Link to="/blog/react-fastapi-ai-chatbot">React + FastAPI Chatbot</Link></li>
             <li><Link to="/blog/fastapi-groq-chatbot">Groq LPU LLaMA 3.3</Link></li>
             <li><Link to="/blog/chat-with-pdf">Chat With PDF Documents</Link></li>
             <li><Link to="/blog/ai-document-analysis">AI Document Analysis</Link></li>
             <li><Link to="/blog/full-stack-ai-architecture">Full-Stack AI Architecture</Link></li>
-            <li><Link to="/blog/jwt-ai-chatbot">JWT Security & Auth</Link></li>
-            <li><Link to="/blog/chat-history-memory">MongoDB Thread Memory</Link></li>
+            <li>
+              <Link to="/blog" className="seo-footer-view-all">
+                View all articles <FiArrowRight aria-hidden="true" />
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* Column 5: Quick Overview */}
+        {/* Column 5: Key Capabilities */}
         <div className="seo-footer-col">
-          <h4 className="seo-footer-title">Key Capabilities</h4>
+          <h2 className="seo-footer-title">Key Capabilities</h2>
           <ul className="seo-footer-badges">
-            <li><FiCpu /> Multi-LLM Engine (Llama 3.3, Gemma)</li>
-            <li><FiFileText /> PDF & Vision Multimodal Parsing</li>
-            <li><FiShield /> JWT & MongoDB Cloud Security</li>
+            <li><FiCpu className="seo-footer-icon" aria-hidden="true" /> Multi-LLM Engine (Llama 3.3, Gemma)</li>
+            <li><FiFileText className="seo-footer-icon" aria-hidden="true" /> PDF & Vision Multimodal Parsing</li>
+            <li><FiShield className="seo-footer-icon" aria-hidden="true" /> JWT & MongoDB Cloud Security</li>
           </ul>
         </div>
       </div>

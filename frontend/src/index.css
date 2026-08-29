@@ -98,14 +98,30 @@ html, body {
   --warning-soft: rgba(245, 158, 11, 0.1);
   --info: #3b82f6;
 
+  /* ─── Typography Scale ─── */
+  --sarva-text-xs: 0.75rem;      /* 12px */
+  --sarva-text-sm: 0.875rem;     /* 14px */
+  --sarva-text-base: 1rem;       /* 16px */
+  --sarva-text-md: 1.125rem;     /* 18px */
+  --sarva-text-lg: 1.25rem;      /* 20px */
+
+  --sarva-heading-sm: 1.5rem;    /* 24px */
+  --sarva-heading-md: 2rem;      /* 32px */
+  --sarva-heading-lg: 2.75rem;   /* 44px */
+  --sarva-heading-xl: 3.5rem;    /* 56px */
+
   /* ─── SARVA Semantic Token Mapping ─── */
   --sarva-bg: var(--bg-primary);
   --sarva-bg-secondary: var(--bg-secondary);
   --sarva-surface: var(--bg-secondary);
   --sarva-surface-elevated: var(--bg-card);
   --sarva-surface-hover: rgba(59, 130, 246, 0.06);
-  --sarva-text-primary: var(--text-primary);
-  --sarva-text-secondary: var(--text-secondary);
+  --sarva-text-primary: #F5F7FA;
+  --sarva-text-secondary: #98A2B3;
+  --sarva-text-tertiary: #667085;
+  --sarva-text-inverse: #101828;
+  --sarva-text-accent: #3B82F6;
+  --sarva-text-teal: #14B8A6;
   --sarva-text-muted: var(--text-tertiary);
   --sarva-text-disabled: rgba(255, 255, 255, 0.25);
   --sarva-accent: var(--accent);
@@ -132,14 +148,20 @@ html, body {
   --space-16: 64px;
   --space-20: 80px;
 
+  /* ─── Standard Border-Radius Scale ─── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
   /* ─── Geometry & Radii ─── */
-  --sarva-radius-xs: 4px;
-  --sarva-radius-sm: 6px;
-  --sarva-radius-md: 8px;
-  --sarva-radius-lg: 12px;
-  --sarva-radius-xl: 16px;
-  --sarva-radius-2xl: 20px;
-  --sarva-radius-full: 9999px;
+  --sarva-radius-none: 0;
+  --sarva-radius-sm: var(--radius-sm);
+  --sarva-radius-md: var(--radius-md);
+  --sarva-radius-lg: var(--radius-lg);
+  --sarva-radius-xl: var(--radius-lg);
+  --sarva-radius-2xl: var(--radius-lg);
+  --sarva-radius-full: var(--radius-pill);
 
   /* ─── Transitions ─── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -151,7 +173,7 @@ html, body {
   /* ─── Layout Tokens ─── */
   --sarva-sidebar-width: 280px;
   --sarva-header-height: 60px;
-  --sarva-composer-max-width: 800px;
+  --sarva-composer-max-width: 960px;
 
   /* ─── Layer Stacking Hierarchy (Z-Index Tokens) ─── */
   --z-base: 1;
@@ -176,6 +198,94 @@ html, body {
   --blue-gradient: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
   --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* ─── Global Focus-Visible & Accessibility Utility ─── */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent, #38bdf8);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Core Button System ─── */
+.btn-primary {
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: var(--sarva-text-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  min-height: 40px;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  font-weight: 600;
+  font-size: var(--sarva-text-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--border-accent);
+  background: var(--sarva-surface-hover);
+  color: var(--sarva-text-accent);
+}
+
+.btn-ghost {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--sarva-surface-hover);
+  color: var(--text-primary);
 }
 
 /* ─── Light Theme (Warm Technical Surface #F6F6F2) ─── */
@@ -221,8 +331,12 @@ html, body {
   --sarva-surface: var(--bg-secondary);
   --sarva-surface-elevated: var(--bg-card);
   --sarva-surface-hover: rgba(37, 99, 235, 0.05);
-  --sarva-text-primary: var(--text-primary);
-  --sarva-text-secondary: var(--text-secondary);
+  --sarva-text-primary: #101828;
+  --sarva-text-secondary: #667085;
+  --sarva-text-tertiary: #98A2B3;
+  --sarva-text-inverse: #F5F7FA;
+  --sarva-text-accent: #2563EB;
+  --sarva-text-teal: #0EA5A8;
   --sarva-text-muted: var(--text-tertiary);
   --sarva-text-disabled: rgba(0, 0, 0, 0.25);
   --sarva-accent: var(--accent);
@@ -501,6 +615,7 @@ body.modal-open {
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -623,6 +738,8 @@ body.modal-open {
   color: var(--text-secondary);
   cursor: pointer;
   padding: 6px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: var(--sarva-radius-sm);
   display: flex;
   align-items: center;
@@ -686,13 +803,16 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .message-wrapper {
   display: flex;
   width: 100%;
   gap: var(--space-3);
-  max-width: 800px;
+  max-width: 920px;
   margin: 0 auto;
   min-width: 0;
 }
@@ -746,6 +866,54 @@ body.modal-open {
   font-size: 0.95rem;
 }
 
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.message-content h1 { font-size: 1.35rem; }
+.message-content h2 { font-size: 1.2rem; }
+.message-content h3 { font-size: 1.05rem; }
+
+.message-content p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.65;
+}
+
+.message-content ul,
+.message-content ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.4rem;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+}
+
+.message-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.message-content hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 1.25rem 0;
+}
+
 .user .message-content {
   background: var(--chat-user-bg);
   color: var(--chat-user-text);
@@ -782,13 +950,15 @@ body.modal-open {
 .message-action-btn {
   background: transparent;
   border: none;
-  color: var(--text-tertiary);
-  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-size: var(--sarva-text-xs);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 6px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 4px 8px;
   border-radius: var(--sarva-radius-sm);
   transition: all var(--sarva-transition-fast);
 }
@@ -1134,6 +1304,7 @@ body.modal-open {
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, var(--accent), #c084fc);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1653,6 +1824,7 @@ body.modal-open {
   letter-spacing: -0.04em;
   background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

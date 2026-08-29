@@ -233,29 +233,34 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
         justifyContent: "space-between",
         alignItems: "center"
       }}>
-        <span style={{
-          fontSize: "0.7rem",
-          color: "var(--text-tertiary)",
+        <label htmlFor="chat-sort-select" style={{
+          fontSize: "var(--sarva-text-xs)",
+          color: "var(--text-secondary)",
           fontWeight: "600",
           textTransform: "uppercase",
           letterSpacing: "0.06em"
-        }}>Sort by</span>
+        }}>Sort by</label>
         <select
+          id="chat-sort-select"
+          aria-label="Sort conversations"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
           style={{
-            background: "transparent",
-            border: "none",
-            color: "var(--accent)",
-            fontSize: "0.72rem",
+            background: "var(--bg-secondary)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-sm)",
+            color: "var(--text-primary)",
+            fontSize: "var(--sarva-text-xs)",
             fontWeight: "600",
             cursor: "pointer",
-            outline: "none"
+            outline: "none",
+            minHeight: "36px",
+            padding: "4px 8px"
           }}
         >
-          <option value="recent" style={{ background: "var(--bg-secondary)", color: "var(--text-primary)" }}>Recent</option>
-          <option value="title" style={{ background: "var(--bg-secondary)", color: "var(--text-primary)" }}>Name</option>
-          <option value="pinned" style={{ background: "var(--bg-secondary)", color: "var(--text-primary)" }}>Pinned First</option>
+          <option value="recent">Recent</option>
+          <option value="title">Name</option>
+          <option value="pinned">Pinned First</option>
         </select>
       </div>
 
@@ -508,8 +513,8 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                   {user.username}
                 </span>
                 <span style={{
-                  fontSize: "0.68rem",
-                  color: "var(--text-tertiary)",
+                  fontSize: "var(--sarva-text-xs)",
+                  color: "var(--text-secondary)",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis"
@@ -538,10 +543,11 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                 transition: "color 0.15s ease"
               }}
               title="Sign Out"
+              aria-label="Sign Out"
               onMouseEnter={(e) => e.currentTarget.style.color = "var(--danger)"}
               onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
             >
-              <FiLogOut style={{ fontSize: "0.95rem" }} />
+              <FiLogOut style={{ fontSize: "0.95rem" }} aria-hidden="true" />
             </button>
           </div>
         )}
@@ -561,19 +567,19 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
               boxShadow: "none"
             }}
           >
-            <FiBriefcase style={{ flexShrink: 0 }} /> Organization Dashboard
+            <FiBriefcase style={{ flexShrink: 0 }} aria-hidden="true" /> Organization Dashboard
           </button>
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
+            <span style={{ fontSize: "var(--sarva-text-xs)", color: "var(--text-tertiary)" }}>
               SARVA AI Client v1.1
             </span>
-            <button className="sidebar-footer-btn" onClick={onOpenSettings} title="Settings">
-              <FiSettings style={{ fontSize: "1.1rem" }} />
+            <button className="sidebar-footer-btn" onClick={onOpenSettings} title="Settings" aria-label="Settings">
+              <FiSettings style={{ fontSize: "1.1rem" }} aria-hidden="true" />
             </button>
           </div>
-          <span style={{ fontSize: "0.65rem", color: "var(--text-tertiary)", opacity: 0.7, textAlign: "left" }}>
+          <span style={{ fontSize: "var(--sarva-text-xs)", color: "var(--text-secondary)", textAlign: "left" }}>
             Made by Karan Garg (Intern at IGT Solutions)
           </span>
         </div>

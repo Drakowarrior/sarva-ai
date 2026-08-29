@@ -10,7 +10,11 @@ import { useChat } from "../../context/ChatContext";
 import useSeo from "../../hooks/useSeo";
 
 function Chat() {
-  useSeo({ title: "SARVA AI - Chat", noindex: true });
+  useSeo({
+    title: "SARVA AI - Chat",
+    description: "Private AI Workspace and Chat Interface",
+    robots: "noindex, nofollow"
+  });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -61,6 +65,7 @@ function Chat() {
       />
 
       <main className="chat-main">
+        <h1 className="sr-only">SARVA AI Chat Interface</h1>
         <Navbar
           onToggleSidebar={toggleSidebar}
           onOpenSettings={openSettings}

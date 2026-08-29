@@ -187,7 +187,7 @@ function Home() {
       {/* 4. PLATFORM ARCHITECTURE CAPABILITIES */}
       <section id="capabilities" className="sarva-section">
         <div className="sarva-section-header">
-          <span className="sarva-section-tag">SYSTEM CAPABILITIES</span>
+          <span className="sarva-section-tag">System capabilities</span>
           <h2 className="sarva-section-title">One intelligence layer for your organization.</h2>
           <p className="sarva-section-subtitle">
             Structure your knowledge, execute multi-model analysis, and collaborate seamlessly.
@@ -222,7 +222,7 @@ function Home() {
         {/* SHOWCASE A: AI CONVERSATIONS */}
         <div className="sarva-showcase-row">
           <div className="sarva-showcase-text">
-            <span className="sarva-showcase-tag">01 · CONVERSATIONAL ENGINE</span>
+            <span className="sarva-showcase-tag">01 · Conversational engine</span>
             <h2 className="sarva-showcase-title">High-throughput token generation at 300+ tok/sec.</h2>
             <p className="sarva-showcase-desc">
               Experience instant answers powered by Groq LPU hardware acceleration. Switch between Llama 4 Scout (17B), Qwen 3 (32B), and instant fast models seamlessly.
@@ -244,7 +244,7 @@ function Home() {
             <DocumentPreview />
           </div>
           <div className="sarva-showcase-text">
-            <span className="sarva-showcase-tag">02 · DOCUMENT INTELLIGENCE</span>
+            <span className="sarva-showcase-tag">02 · Document intelligence</span>
             <h2 className="sarva-showcase-title">Upload documents and extract grounded answers.</h2>
             <p className="sarva-showcase-desc">
               Parse PDF financial reports, technical documentation, resumes, and text files. Extract structured insights directly from file contents without manual searching.
@@ -260,7 +260,7 @@ function Home() {
         {/* SHOWCASE C: TECHNICAL WORKFLOWS */}
         <div className="sarva-showcase-row">
           <div className="sarva-showcase-text">
-            <span className="sarva-showcase-tag">03 · TECHNICAL WORKFLOWS</span>
+            <span className="sarva-showcase-tag">03 · Technical workflows</span>
             <h2 className="sarva-showcase-title">Engineered for software & AI developers.</h2>
             <p className="sarva-showcase-desc">
               Debug complex code, inspect stack trace errors, format API endpoints, and export conversation transcripts directly to Markdown, Plain Text, or PDF.
@@ -280,7 +280,7 @@ function Home() {
       {/* 6. "HOW SARVA AI WORKS" ARCHITECTURE TIMELINE */}
       <section className="sarva-section">
         <div className="sarva-section-header">
-          <span className="sarva-section-tag">ARCHITECTURE PIPELINE</span>
+          <span className="sarva-section-tag">Architecture pipeline</span>
           <h2 className="sarva-section-title">How SARVA AI Operates</h2>
           <p className="sarva-section-subtitle">
             From user prompt to high-speed LPU generation, stateful storage, and grounded context delivery.
@@ -322,43 +322,61 @@ function Home() {
       <section className="sarva-section">
         <div className="sarva-security-panel">
           <div className="sarva-section-header" style={{ textAlign: "left", margin: 0 }}>
-            <span className="sarva-section-tag" style={{ color: "#10b981" }}>ENTERPRISE PRIVACY & SECURITY</span>
-            <h2 className="sarva-section-title" style={{ fontSize: "2rem" }}>Built for Enterprise Confidence.</h2>
+            <span className="sarva-section-tag">Enterprise privacy & security</span>
+            <h2 className="sarva-section-title" style={{ fontSize: "var(--sarva-heading-md)" }}>Built for Enterprise Confidence.</h2>
             <p className="sarva-section-subtitle">
               Strict authentication, multi-tenant isolation, and encrypted session security standards.
             </p>
           </div>
 
           <div className="sarva-security-grid">
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiLock style={{ color: "#10b981" }} /> JWT Bearer Tokens</div>
+            <article className="sarva-security-item category-security">
+              <div className="sarva-sec-title">
+                <FiLock className="sarva-sec-icon blue" />
+                <h3>JWT Bearer Tokens</h3>
+              </div>
               <p className="sarva-sec-desc">Stateless token authentication signed with HS256 algorithm and expiration validation.</p>
-            </div>
+            </article>
 
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiShield style={{ color: "#38bdf8" }} /> RBAC Permissions</div>
-              <div className="sarva-sec-desc">Hierarchical permissions for Head, Team Lead, HR, Executive, and Intern roles.</div>
-            </div>
+            <article className="sarva-security-item category-security">
+              <div className="sarva-sec-title">
+                <FiShield className="sarva-sec-icon blue" />
+                <h3>RBAC Permissions</h3>
+              </div>
+              <p className="sarva-sec-desc">Hierarchical role permissions for Head, Team Lead, HR, Executive, and Intern access controls.</p>
+            </article>
 
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiDatabase style={{ color: "#a855f7" }} /> Multi-Tenant Isolation</div>
+            <article className="sarva-security-item category-privacy">
+              <div className="sarva-sec-title">
+                <FiDatabase className="sarva-sec-icon teal" />
+                <h3>Multi-Tenant Isolation</h3>
+              </div>
               <p className="sarva-sec-desc">Database collection isolation ensures users and organizations only access authorized data.</p>
-            </div>
+            </article>
 
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiKey style={{ color: "#ec4899" }} /> Bcrypt Salt Hashing</div>
+            <article className="sarva-security-item category-security">
+              <div className="sarva-sec-title">
+                <FiKey className="sarva-sec-icon blue" />
+                <h3>Bcrypt Salt Hashing</h3>
+              </div>
               <p className="sarva-sec-desc">Passwords are hashed using Bcrypt algorithm with salt rounds before backend storage.</p>
-            </div>
+            </article>
 
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiGlobe style={{ color: "#f59e0b" }} /> CORS Origin Protection</div>
+            <article className="sarva-security-item category-infra">
+              <div className="sarva-sec-title">
+                <FiGlobe className="sarva-sec-icon neutral" />
+                <h3>CORS Origin Protection</h3>
+              </div>
               <p className="sarva-sec-desc">Restricted API domain whitelist prevents unauthorized cross-origin requests.</p>
-            </div>
+            </article>
 
-            <div className="sarva-security-item">
-              <div className="sarva-sec-title"><FiActivity style={{ color: "#10b981" }} /> Protected API Architecture</div>
+            <article className="sarva-security-item category-infra">
+              <div className="sarva-sec-title">
+                <FiActivity className="sarva-sec-icon neutral" />
+                <h3>Protected API Architecture</h3>
+              </div>
               <p className="sarva-sec-desc">FastAPI input schemas validate payloads and sanitize requests automatically.</p>
-            </div>
+            </article>
           </div>
         </div>
       </section>
@@ -366,7 +384,7 @@ function Home() {
       {/* 8. LIVE PRODUCT DEMO */}
       <section className="sarva-section" style={{ padding: "40px 24px" }}>
         <div className="sarva-section-header">
-          <span className="sarva-section-tag">LIVE INTERACTIVE DEMO</span>
+          <span className="sarva-section-tag">Live interactive demo</span>
           <h2 className="sarva-section-title">Experience SARVA AI Live</h2>
           <p className="sarva-section-subtitle">
             Try asking questions, inspecting responses, or testing prompts right now in your browser.
@@ -390,7 +408,6 @@ function Home() {
               trackTrySarvaClick("home_bottom");
             }}
             className="sarva-btn-primary"
-            style={{ padding: "16px 36px", fontSize: "1.1rem" }}
           >
             {isAuthenticated ? "Launch Dashboard" : "Try SARVA AI Free"} <FiArrowRight />
           </Link>

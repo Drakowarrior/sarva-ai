@@ -123,25 +123,27 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
         )}
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         {currentSession && (
           <>
             <button
               className="chat-input-action-btn"
               onClick={onOpenShare}
+              aria-label="Share chat session"
               title="Share Chat"
             >
-              <FiShare2 style={{ fontSize: "1.1rem" }} />
+              <FiShare2 style={{ fontSize: "1.1rem" }} aria-hidden="true" />
             </button>
             
             <div style={{ position: "relative" }}>
               <button
                 className="chat-input-action-btn"
                 onClick={() => setDownloadMenuOpen(!downloadMenuOpen)}
+                aria-label="Download or export chat session"
                 title="Download / Export Chat"
                 style={{ color: downloadMenuOpen ? "var(--accent)" : undefined }}
               >
-                <FiDownload style={{ fontSize: "1.1rem" }} />
+                <FiDownload style={{ fontSize: "1.1rem" }} aria-hidden="true" />
               </button>
               {downloadMenuOpen && (
                 <div style={{
@@ -175,7 +177,7 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
                         padding: "8px 12px",
                         borderRadius: "var(--sarva-radius-sm)",
                         cursor: "pointer",
-                        fontSize: "0.82rem",
+                        fontSize: "var(--sarva-text-xs)",
                         transition: "background 0.15s ease"
                       }}
                       onClick={() => { handler(); setDownloadMenuOpen(false); }}
@@ -192,9 +194,10 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
             <button
               className={`chat-input-action-btn ${searchOpen ? "active" : ""}`}
               onClick={toggleSearch}
+              aria-label={searchOpen ? "Close message search" : "Search messages"}
               title="Search Messages"
             >
-              {searchOpen ? <FiX style={{ fontSize: "1.1rem" }} /> : <FiSearch style={{ fontSize: "1.1rem" }} />}
+              {searchOpen ? <FiX style={{ fontSize: "1.1rem" }} aria-hidden="true" /> : <FiSearch style={{ fontSize: "1.1rem" }} aria-hidden="true" />}
             </button>
           </>
         )}
@@ -203,19 +206,21 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
           <button
             className="chat-input-action-btn"
             onClick={() => navigate("/org-dashboard")}
+            aria-label="Organization Dashboard"
             title="Organization Dashboard"
             style={{ color: "var(--accent)" }}
           >
-            <FiBriefcase style={{ fontSize: "1.1rem" }} />
+            <FiBriefcase style={{ fontSize: "1.1rem" }} aria-hidden="true" />
           </button>
         )}
 
         <button
           className="chat-input-action-btn"
           onClick={onOpenSettings}
+          aria-label="Settings and preferences"
           title="Settings & Preferences"
         >
-          <FiSettings style={{ fontSize: "1.1rem" }} />
+          <FiSettings style={{ fontSize: "1.1rem" }} aria-hidden="true" />
         </button>
       </div>
     </nav>

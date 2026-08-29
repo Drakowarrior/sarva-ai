@@ -17,7 +17,7 @@ function Auth() {
   useSeo({
     title: "Sign In / Register | SARVA AI",
     description: "Sign in or create an account to access SARVA AI workspace.",
-    noindex: true
+    robots: "noindex, follow"
   });
 
   const [authMode, setAuthMode] = useState("login"); // "login" | "register" | "forgot" | "reset"
@@ -302,15 +302,15 @@ function Auth() {
           {/* Speech Bubble */}
           <AnimatePresence mode="wait">
             <motion.div
-              key={authMode}
+              key={`${authMode}-${accountType}`}
               initial={{ opacity: 0, scale: 0.7, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.7, y: 15 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
               className="auth-speech-bubble"
             >
-              {authMode === "login" && "Welcome back to SARVA Workspace"}
-              {authMode === "register" && "Setup your SARVA organization workspace"}
+              {authMode === "login" && "Welcome back to SARVA AI"}
+              {authMode === "register" && (accountType === "organization" ? "Let's set up your organization workspace" : "Let's set up your personal workspace")}
               {authMode === "forgot" && "Verify your account identity"}
               {authMode === "reset" && "Create your new password"}
               <div className="auth-speech-tail" />
@@ -456,12 +456,12 @@ function Auth() {
           >
             {/* Header */}
             <div>
-              <h2 className="auth-gradient-title">
-                {authMode === "login" && "Welcome Back"}
-                {authMode === "register" && "Create Account"}
-                {authMode === "forgot" && "Forgot Password"}
-                {authMode === "reset" && "Reset Password"}
-              </h2>
+              <h1 className="auth-gradient-title">
+                {authMode === "login" && "Sign in to SARVA AI"}
+                {authMode === "register" && "Create your SARVA AI account"}
+                {authMode === "forgot" && "Reset your SARVA AI password"}
+                {authMode === "reset" && "Update your SARVA AI password"}
+              </h1>
               <p className="auth-subtitle">
                 {authMode === "login" && "Sign in to access your secure AI sessions"}
                 {authMode === "register" && "Register to unlock unlimited features"}
@@ -470,12 +470,13 @@ function Auth() {
               </p>
             </div>
 
-            {/* Sliding Pill Tab Switcher */}
+            {/* Segmented Control Tab Switcher */}
             {(authMode === "login" || authMode === "register") ? (
-              <div className={`auth-tab-switcher ${authMode === "register" ? "register-mode" : ""}`}>
-                <div className="auth-pill-indicator" />
+              <div className="auth-tabs" role="tablist" aria-label="Authentication options">
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={authMode === "login"}
                   onClick={() => { setAuthMode("login"); setError(""); }}
                   className={`auth-tab-btn ${authMode === "login" ? "active" : ""}`}
                 >
@@ -483,6 +484,8 @@ function Auth() {
                 </button>
                 <button
                   type="button"
+                  role="tab"
+                  aria-selected={authMode === "register"}
                   onClick={() => { setAuthMode("register"); setError(""); }}
                   className={`auth-tab-btn ${authMode === "register" ? "active" : ""}`}
                 >
@@ -497,7 +500,7 @@ function Auth() {
                   className="auth-back-btn"
                   style={{ background: "transparent" }}
                 >
-                  <FiArrowLeft /> Return to Sign In
+                  <FiArrowLeft aria-hidden="true" /> Return to Sign In
                 </button>
               </div>
             )}
@@ -514,98 +517,81 @@ function Auth() {
                     border: "1px solid rgba(239, 68, 68, 0.3)",
                     color: "var(--danger)",
                     padding: "10px 14px",
-                    borderRadius: "12px",
-                    fontSize: "0.86rem",
+                    borderRadius: "var(--radius-md)",
+                    fontSize: "var(--sarva-text-sm)",
                     marginBottom: "16px",
                     textAlign: "left"
                   }}
                 >
-                  <FiAlertCircle style={{ flexShrink: 0 }} /> {error}
+                  <FiAlertCircle style={{ flexShrink: 0 }} aria-hidden="true" /> {error}
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* Form */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="auth-form-container">
               {/* Workspace Selection (Register Mode) */}
               {authMode === "register" && (
-                <div style={{ marginBottom: "16px" }}>
-                  <label style={{ fontSize: "0.78rem", fontWeight: "700", color: "var(--text-secondary)", display: "block", marginBottom: "8px" }}>
-                    WORKSPACE TYPE
-                  </label>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                    <div 
-                      onClick={() => setAccountType("personal")}
-                      style={{
-                        padding: "10px",
-                        borderRadius: "12px",
-                        background: accountType === "personal" ? "rgba(56, 189, 248, 0.14)" : "rgba(0,0,0,0.15)",
-                        border: accountType === "personal" ? "2px solid #38bdf8" : "1px solid var(--border)",
-                        cursor: "pointer",
-                        textAlign: "center"
-                      }}
-                    >
-                      <FiUser style={{ color: accountType === "personal" ? "#38bdf8" : "var(--text-secondary)" }} />
-                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)", marginTop: "2px" }}>Personal</div>
-                    </div>
-                    <div 
-                      onClick={() => setAccountType("organization")}
-                      style={{
-                        padding: "10px",
-                        borderRadius: "12px",
-                        background: accountType === "organization" ? "rgba(56, 189, 248, 0.14)" : "rgba(0,0,0,0.15)",
-                        border: accountType === "organization" ? "2px solid #38bdf8" : "1px solid var(--border)",
-                        cursor: "pointer",
-                        textAlign: "center"
-                      }}
-                    >
-                      <FiLayers style={{ color: accountType === "organization" ? "#38bdf8" : "var(--text-secondary)" }} />
-                      <div style={{ fontWeight: "600", fontSize: "0.8rem", color: "var(--text-primary)", marginTop: "2px" }}>Organization</div>
-                    </div>
+                <fieldset className="workspace-fieldset" style={{ border: "none", padding: 0, margin: "0 0 16px 0" }}>
+                  <legend className="sr-only">Workspace type</legend>
+                  <div className="workspace-options-grid">
+                    <label className={`workspace-option ${accountType === "personal" ? "selected" : ""}`}>
+                      <input
+                        type="radio"
+                        name="workspaceType"
+                        value="personal"
+                        checked={accountType === "personal"}
+                        onChange={() => setAccountType("personal")}
+                        className="sr-only"
+                      />
+                      <FiUser className="workspace-icon" aria-hidden="true" />
+                      <div className="workspace-title">Personal</div>
+                    </label>
+                    <label className={`workspace-option ${accountType === "organization" ? "selected" : ""}`}>
+                      <input
+                        type="radio"
+                        name="workspaceType"
+                        value="organization"
+                        checked={accountType === "organization"}
+                        onChange={() => setAccountType("organization")}
+                        className="sr-only"
+                      />
+                      <FiLayers className="workspace-icon" aria-hidden="true" />
+                      <div className="workspace-title">Organization</div>
+                    </label>
                   </div>
-                </div>
+                </fieldset>
               )}
 
               {/* Organization Mode Selection */}
               {authMode === "register" && accountType === "organization" && (
-                <div style={{ marginBottom: "16px" }}>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <button
-                      type="button"
-                      onClick={() => setOrgFlow("create")}
-                      style={{
-                        flex: 1,
-                        padding: "8px",
-                        borderRadius: "8px",
-                        border: "1px solid var(--border)",
-                        background: orgFlow === "create" ? "var(--accent)" : "transparent",
-                        color: orgFlow === "create" ? "#fff" : "var(--text-secondary)",
-                        fontWeight: "600",
-                        fontSize: "0.8rem",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Create Org
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setOrgFlow("join")}
-                      style={{
-                        flex: 1,
-                        padding: "8px",
-                        borderRadius: "8px",
-                        border: "1px solid var(--border)",
-                        background: orgFlow === "join" ? "var(--accent)" : "transparent",
-                        color: orgFlow === "join" ? "#fff" : "var(--text-secondary)",
-                        fontWeight: "600",
-                        fontSize: "0.8rem",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Join Org
-                    </button>
+                <fieldset className="organization-mode-fieldset" style={{ border: "none", padding: 0, margin: "0 0 16px 0" }}>
+                  <legend className="sr-only">Organization setup</legend>
+                  <div className="org-mode-options">
+                    <label className={`org-mode-option ${orgFlow === "create" ? "active" : ""}`}>
+                      <input
+                        type="radio"
+                        name="organizationMode"
+                        value="create"
+                        checked={orgFlow === "create"}
+                        onChange={() => setOrgFlow("create")}
+                        className="sr-only"
+                      />
+                      Create organization
+                    </label>
+                    <label className={`org-mode-option ${orgFlow === "join" ? "active" : ""}`}>
+                      <input
+                        type="radio"
+                        name="organizationMode"
+                        value="join"
+                        checked={orgFlow === "join"}
+                        onChange={() => setOrgFlow("join")}
+                        className="sr-only"
+                      />
+                      Join organization
+                    </label>
                   </div>
-                </div>
+                </fieldset>
               )}
 
               {/* Full Name (Register only) */}
@@ -618,10 +604,11 @@ function Auth() {
                     placeholder=" "
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    autoComplete="name"
                     required
                   />
                   <label htmlFor="fullName" className="auth-floating-label">Full Name</label>
-                  <FiUser className="auth-field-icon" />
+                  <FiUser className="auth-field-icon" aria-hidden="true" />
                 </div>
               )}
 
@@ -639,7 +626,7 @@ function Auth() {
                       required
                     />
                     <label htmlFor="orgName" className="auth-floating-label">Organization Name</label>
-                    <FiBriefcase className="auth-field-icon" />
+                    <FiBriefcase className="auth-field-icon" aria-hidden="true" />
                   </div>
                 </>
               )}
@@ -657,7 +644,7 @@ function Auth() {
                     required
                   />
                   <label htmlFor="inviteCode" className="auth-floating-label">Invitation Code</label>
-                  <FiShield className="auth-field-icon" />
+                  <FiShield className="auth-field-icon" aria-hidden="true" />
                 </div>
               )}
 
@@ -674,7 +661,7 @@ function Auth() {
                     required
                   />
                   <label htmlFor="department" className="auth-floating-label">Department Name</label>
-                  <FiBriefcase className="auth-field-icon" />
+                  <FiBriefcase className="auth-field-icon" aria-hidden="true" />
                 </div>
               )}
 
@@ -687,35 +674,52 @@ function Auth() {
                   placeholder=" "
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   required
                 />
                 <label htmlFor="email" className="auth-floating-label">Email Address</label>
-                <FiMail className="auth-field-icon" />
-                {isEmailValid && <FiCheck className="auth-valid-check" />}
+                <FiMail className="auth-field-icon" aria-hidden="true" />
+                {isEmailValid && <FiCheck className="auth-valid-check" aria-hidden="true" />}
               </div>
 
-              {/* Password Field (Login & Register) */}
+              {/* Password Field Group (Login & Register) */}
               {(authMode === "login" || authMode === "register") && (
-                <div className={`auth-input-group ${error && !password ? "shake" : ""}`}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    className="auth-input-field"
-                    placeholder=" "
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <label htmlFor="password" className="auth-floating-label">Password</label>
-                  <FiLock className="auth-field-icon" />
-                  <button
-                    type="button"
-                    className="auth-right-icon-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                    tabIndex="-1"
-                  >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
-                  </button>
+                <div className="password-field-group">
+                  <div className={`auth-input-group ${error && !password ? "shake" : ""}`}>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete={authMode === "register" ? "new-password" : "current-password"}
+                      required
+                    />
+                    <label htmlFor="password" className="auth-floating-label">Password</label>
+                    <FiLock className="auth-field-icon" aria-hidden="true" />
+                    <button
+                      type="button"
+                      className="auth-right-icon-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex="-1"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                    </button>
+                  </div>
+
+                  {authMode === "login" && (
+                    <div style={{ textAlign: "right", marginTop: "-12px", marginBottom: "16px" }}>
+                      <button
+                        type="button"
+                        onClick={() => { setAuthMode("forgot"); setError(""); }}
+                        className="forgot-password-link"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -729,17 +733,19 @@ function Auth() {
                     placeholder=" "
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    autoComplete="new-password"
                     required
                   />
                   <label htmlFor="confirmPassword" className="auth-floating-label">Confirm Password</label>
-                  <FiLock className="auth-field-icon" />
+                  <FiLock className="auth-field-icon" aria-hidden="true" />
                   <button
                     type="button"
                     className="auth-right-icon-btn"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     tabIndex="-1"
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
-                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                    {showConfirmPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
                   </button>
                 </div>
               )}

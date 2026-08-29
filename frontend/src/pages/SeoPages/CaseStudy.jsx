@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FiCode, FiCpu, FiDatabase, FiShield, FiServer, FiLayers, FiCheckCircle, FiArrowRight } from "react-icons/fi";
+import { FiCode, FiCpu, FiDatabase, FiShield, FiServer, FiLayers, FiCheckCircle, FiArrowRight, FiZap } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
@@ -157,14 +157,14 @@ const CaseStudy = () => {
         {/* 10. Challenges & 11. Results */}
         <div className="seo-grid-2">
           <div className="seo-card">
-            <h3 className="seo-card-title">10. Challenges Overcome</h3>
+            <h2 className="seo-card-title"><FiCheckCircle className="seo-card-icon" aria-hidden="true" /> 10. Challenges Overcome</h2>
             <p className="seo-card-text">
               Handling large document context windows without blowing past rate limits was solved by truncating long transcripts and summarizing pre-pass contexts. Preserving React state across async session loading was resolved using ref-backed message pointers.
             </p>
           </div>
 
           <div className="seo-card">
-            <h3 className="seo-card-title">11. Key Engineering Results</h3>
+            <h2 className="seo-card-title"><FiCheckCircle className="seo-card-icon" aria-hidden="true" /> 11. Key Engineering Results</h2>
             <p className="seo-card-text">
               Achieved under 500ms initial response latency on Groq models, 100% test coverage on authentication endpoints, zero-downtime Vercel/Render CI/CD deployments, and complete multi-format file comprehension.
             </p>
@@ -173,21 +173,21 @@ const CaseStudy = () => {
 
         {/* 12. Future Improvements */}
         <section className="seo-card" style={{ marginTop: "32px" }}>
-          <h2 className="seo-card-title">12. Future Roadmap & Enhancements</h2>
+          <h2 className="seo-card-title"><FiZap className="seo-card-icon" aria-hidden="true" /> 12. Future Roadmap & Enhancements</h2>
           <ul className="seo-card-text" style={{ paddingLeft: "20px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <li><strong>Vector RAG Search:</strong> Integrate MongoDB Vector Search for semantic document retrieval across large enterprise PDF libraries.</li>
             <li><strong>Real-Time Voice Input:</strong> Web Speech API / Whisper transcription integration for hands-free voice interactions.</li>
-            <li><strong>Custom System Prompts:</strong> Allow users to configure persona rules, system system instructions, and temperature parameters per session.</li>
+            <li><strong>Custom System Prompts:</strong> Allow users to configure persona rules, system instructions, and temperature parameters per session.</li>
           </ul>
         </section>
 
         <section className="seo-card" style={{ marginTop: "40px", textAlign: "center" }}>
-          <h3 className="seo-card-title">Experience SARVA AI Production App</h3>
+          <h2 className="seo-card-title">Experience SARVA AI Production App</h2>
           <p className="seo-card-text" style={{ marginBottom: "20px" }}>
             Test out the full system live on Vercel.
           </p>
           <Link to="/chat" className="seo-cta-btn" style={{ padding: "12px 28px" }}>
-            Launch SARVA AI <FiArrowRight />
+            Launch App <FiArrowRight aria-hidden="true" />
           </Link>
         </section>
       </main>

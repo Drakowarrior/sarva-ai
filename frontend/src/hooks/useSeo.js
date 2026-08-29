@@ -10,7 +10,8 @@ export const useSeo = ({
   canonicalPath = "", 
   jsonLd = null,
   type = "website",
-  noindex = false
+  noindex = false,
+  robots = null
 }) => {
   useEffect(() => {
     const baseUrl = "https://sarva-ai-one.vercel.app";
@@ -34,11 +35,13 @@ export const useSeo = ({
     };
 
     // Robots meta tag
-    if (noindex) {
-      setMetaTag('meta[name="robots"]', 'name', 'robots', 'noindex, nofollow');
-    } else {
-      setMetaTag('meta[name="robots"]', 'name', 'robots', 'index, follow');
+    let robotsValue = "index, follow";
+    if (robots) {
+      robotsValue = robots;
+    } else if (noindex) {
+      robotsValue = "noindex, follow";
     }
+    setMetaTag('meta[name="robots"]', 'name', 'robots', robotsValue);
 
     // 2. Meta Description
     if (description) {

@@ -394,8 +394,13 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
 
         {/* Message Actions */}
         <div className="message-actions">
-          <button onClick={handleCopy} className={`message-action-btn ${copied ? "success" : ""}`} title="Copy Message">
-            {copied ? <FiCheck /> : <FiCopy />}
+          <button
+            onClick={handleCopy}
+            className={`message-action-btn ${copied ? "success" : ""}`}
+            aria-label="Copy message text"
+            title="Copy Message"
+          >
+            {copied ? <FiCheck aria-hidden="true" /> : <FiCopy aria-hidden="true" />}
             <span>{copied ? "Copied" : "Copy"}</span>
           </button>
           
@@ -405,9 +410,11 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
                 onClick={handleLike}
                 className={`message-action-btn ${feedback?.type === "like" ? "active" : ""}`}
                 style={{ color: feedback?.type === "like" ? "var(--success)" : "inherit" }}
+                aria-label="Like response"
+                aria-pressed={feedback?.type === "like"}
                 title="Like Response"
               >
-                <FiThumbsUp />
+                <FiThumbsUp aria-hidden="true" />
                 <span>Like</span>
               </button>
               <button
@@ -420,17 +427,24 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
                 }}
                 className={`message-action-btn ${feedback?.type === "dislike" ? "active" : ""}`}
                 style={{ color: feedback?.type === "dislike" ? "var(--danger)" : "inherit" }}
+                aria-label="Dislike response"
+                aria-pressed={feedback?.type === "dislike"}
                 title="Dislike Response"
               >
-                <FiThumbsDown />
+                <FiThumbsDown aria-hidden="true" />
                 <span>Dislike</span>
               </button>
             </>
           )}
 
           {!isUser && isLast && (
-            <button onClick={onRegenerate} className="message-action-btn" title="Regenerate Response">
-              <FiRotateCw />
+            <button
+              onClick={onRegenerate}
+              className="message-action-btn"
+              aria-label="Regenerate response"
+              title="Regenerate Response"
+            >
+              <FiRotateCw aria-hidden="true" />
               <span>Regenerate</span>
             </button>
           )}

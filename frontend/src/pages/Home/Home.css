@@ -5,8 +5,8 @@
 .sarva-home-root {
   width: 100%;
   min-height: 100vh;
-  background: var(--bg-primary, #060918);
-  color: var(--text-primary, #f8fafc);
+  background: var(--sarva-bg, #080B12);
+  color: var(--sarva-text-primary, #F5F7FA);
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -32,34 +32,34 @@
   gap: 8px;
   padding: 5px 14px;
   border-radius: var(--sarva-radius-sm, 6px);
-  background: var(--accent-soft);
+  background: var(--sarva-accent-soft);
   border: 1px solid var(--border-accent);
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  color: var(--sarva-text-accent);
+  font-size: var(--sarva-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
 
 .sarva-hero-title {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-size: clamp(2.4rem, 5vw, var(--sarva-heading-xl));
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin: 0 0 16px 0;
   max-width: 900px;
-  color: var(--text-primary);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-hero-title-accent {
-  color: var(--accent);
+  color: var(--sarva-text-accent);
   display: inline;
 }
 
 .sarva-hero-subtitle {
-  font-size: clamp(1rem, 1.6vw, 1.18rem);
-  color: var(--text-secondary);
+  font-size: var(--sarva-text-md);
+  color: var(--sarva-text-secondary);
   max-width: 720px;
   margin: 0 auto 32px;
   line-height: 1.6;
@@ -75,14 +75,16 @@
 }
 
 .sarva-btn-primary {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 26px;
-  border-radius: var(--sarva-radius-md, 8px);
-  background: var(--accent);
+  padding: 12px 20px;
+  border-radius: var(--sarva-radius-md);
+  background: var(--sarva-accent);
   color: #ffffff;
-  font-size: 0.95rem;
+  font-size: var(--sarva-text-base);
   font-weight: 700;
   text-decoration: none;
   border: none;
@@ -91,25 +93,33 @@
   transition: all 0.18s ease;
 }
 
+.sarva-btn-primary svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
 .sarva-btn-primary:hover {
-  background: var(--accent-hover);
+  background: var(--sarva-accent-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
   color: #ffffff;
 }
 
 .sarva-btn-secondary {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  border-radius: var(--sarva-radius-md, 8px);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  font-size: 0.95rem;
+  padding: 12px 20px;
+  border-radius: var(--sarva-radius-md);
+  background: var(--sarva-surface);
+  color: var(--sarva-text-primary);
+  font-size: var(--sarva-text-base);
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid var(--border);
+  border: 1px solid var(--sarva-border);
   cursor: pointer;
   transition: all 0.18s ease;
 }
@@ -117,12 +127,12 @@
 .sarva-btn-secondary:hover {
   background: var(--sarva-surface-hover);
   border-color: var(--border-strong);
-  color: var(--text-primary);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-hero-subtext {
-  font-size: 0.78rem;
-  color: var(--text-tertiary);
+  font-size: var(--sarva-text-xs);
+  color: var(--sarva-text-tertiary);
   margin-top: 4px;
 }
 
@@ -141,17 +151,16 @@
   padding: 36px 24px;
   max-width: 1240px;
   margin: 0 auto 50px;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--sarva-border);
+  border-bottom: 1px solid var(--sarva-border);
   text-align: center;
 }
 
 .sarva-trust-label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  font-size: var(--sarva-text-xs);
+  font-weight: 700;
+  color: var(--sarva-text-tertiary);
+  letter-spacing: 0.08em;
   margin-bottom: 16px;
 }
 
@@ -165,12 +174,12 @@
 
 .sarva-trust-badge-item {
   padding: 6px 14px;
-  border-radius: var(--sarva-radius-sm, 6px);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  font-size: 0.82rem;
+  border-radius: var(--sarva-radius-sm);
+  background: var(--sarva-surface);
+  border: 1px solid var(--sarva-border);
+  font-size: var(--sarva-text-sm);
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--sarva-text-secondary);
 }
 
 /* ───────────────────────────────────────────────────────────
@@ -189,26 +198,25 @@
 }
 
 .sarva-section-tag {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--accent, #38bdf8);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: var(--sarva-text-sm);
+  font-weight: 700;
+  color: var(--sarva-text-accent);
+  letter-spacing: 0.05em;
   margin-bottom: 10px;
   display: block;
 }
 
 .sarva-section-title {
-  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-size: clamp(var(--sarva-heading-sm), 3.5vw, var(--sarva-heading-lg));
   font-weight: 800;
   letter-spacing: -0.03em;
   margin: 0 0 14px 0;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-section-subtitle {
-  font-size: 1.05rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-md);
+  color: var(--sarva-text-secondary);
   margin: 0;
   line-height: 1.6;
 }
@@ -220,28 +228,28 @@
 }
 
 .sarva-capability-card {
-  padding: 28px;
-  border-radius: 20px;
-  background: var(--bg-card, rgba(13, 18, 34, 0.6));
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  padding: 24px;
+  border-radius: var(--sarva-radius-lg);
+  background: var(--sarva-surface-elevated);
+  border: 1px solid var(--sarva-border);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s var(--ease-out);
   position: relative;
   overflow: hidden;
 }
 
 .sarva-capability-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-md);
 }
 
 .sarva-cap-num {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: var(--accent, #38bdf8);
+  font-size: var(--sarva-text-xs);
+  font-weight: 700;
+  color: var(--sarva-text-accent);
   letter-spacing: 0.05em;
   margin-bottom: 16px;
 }
@@ -249,26 +257,26 @@
 .sarva-cap-icon-box {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent, #38bdf8);
+  border-radius: var(--sarva-radius-lg);
+  background: var(--sarva-accent-soft);
+  color: var(--sarva-text-accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: var(--sarva-heading-sm);
   margin-bottom: 16px;
 }
 
 .sarva-cap-title {
-  font-size: 1.25rem;
-  font-weight: 750;
+  font-size: var(--sarva-heading-sm);
+  font-weight: 700;
   margin: 0 0 10px 0;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-cap-desc {
-  font-size: 0.9rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-sm);
+  color: var(--sarva-text-secondary);
   line-height: 1.55;
   margin: 0;
 }
@@ -303,25 +311,25 @@
 }
 
 .sarva-showcase-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--accent, #38bdf8);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: var(--sarva-text-sm);
+  font-weight: 700;
+  color: var(--sarva-text-accent);
+  line-height: 1.4;
+  letter-spacing: 0.05em;
 }
 
 .sarva-showcase-title {
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-size: clamp(1.8rem, 3vw, var(--sarva-heading-md));
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.025em;
   margin: 0;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-showcase-desc {
-  font-size: 1rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-base);
+  color: var(--sarva-text-secondary);
   line-height: 1.6;
   margin: 0;
 }
@@ -337,14 +345,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.9rem;
+  font-size: var(--sarva-text-sm);
   font-weight: 600;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-bullet-icon {
-  color: #10b981;
-  font-size: 1rem;
+  color: var(--sarva-success);
+  font-size: var(--sarva-text-base);
 }
 
 /* ───────────────────────────────────────────────────────────
@@ -360,9 +368,9 @@
 
 .sarva-timeline-card {
   padding: 24px;
-  border-radius: 18px;
-  background: var(--bg-card, rgba(13, 18, 34, 0.6));
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--sarva-radius-lg);
+  background: var(--sarva-surface-elevated);
+  border: 1px solid var(--sarva-border);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -370,37 +378,37 @@
 }
 
 .sarva-step-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--accent, #38bdf8);
+  font-size: var(--sarva-text-xs);
+  font-weight: 700;
+  color: var(--sarva-text-accent);
   letter-spacing: 0.08em;
 }
 
 .sarva-step-title {
-  font-size: 1.15rem;
-  font-weight: 750;
+  font-size: var(--sarva-text-md);
+  font-weight: 700;
   margin: 0;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-step-desc {
-  font-size: 0.88rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-sm);
+  color: var(--sarva-text-secondary);
   line-height: 1.5;
   margin: 0;
 }
 
 /* ───────────────────────────────────────────────────────────
-   6. ENTERPRISE SECURITY ARCHITECTURE SECTION
+   6. ENTERPRISE SECURITY ARCHITECTURE SECTION (Issue 11 Fix)
    ─────────────────────────────────────────────────────────── */
 .sarva-security-panel {
-  padding: 40px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.04) 0%, rgba(56, 189, 248, 0.04) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 36px;
+  border-radius: var(--sarva-radius-xl);
+  background: var(--sarva-surface);
+  border: 1px solid var(--sarva-border);
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 28px;
 }
 
 .sarva-security-grid {
@@ -410,27 +418,54 @@
 }
 
 .sarva-security-item {
-  padding: 20px;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  padding: 24px;
+  border-radius: var(--sarva-radius-lg);
+  background: var(--sarva-surface-elevated);
+  border: 1px solid var(--sarva-border);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.sarva-security-item:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
 }
 
 .sarva-sec-title {
-  font-size: 0.95rem;
-  font-weight: 750;
-  color: var(--text-primary, #ffffff);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.sarva-sec-title h3 {
+  font-size: var(--sarva-text-base);
+  font-weight: 700;
+  color: var(--sarva-text-primary);
+  margin: 0;
+}
+
+.sarva-sec-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sarva-sec-icon.blue {
+  color: var(--sarva-text-accent);
+}
+
+.sarva-sec-icon.teal {
+  color: var(--sarva-text-teal);
+}
+
+.sarva-sec-icon.neutral {
+  color: var(--sarva-text-secondary);
 }
 
 .sarva-sec-desc {
-  font-size: 0.82rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-sm);
+  color: var(--sarva-text-secondary);
   line-height: 1.5;
   margin: 0;
 }
@@ -440,9 +475,9 @@
    ─────────────────────────────────────────────────────────── */
 .sarva-cta-banner {
   padding: 60px 40px;
-  border-radius: 28px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: var(--sarva-radius-xl);
+  background: var(--sarva-surface-elevated);
+  border: 1px solid var(--sarva-border);
   text-align: center;
   max-width: 1040px;
   margin: 80px auto;
@@ -453,15 +488,15 @@
 }
 
 .sarva-cta-banner h2 {
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  font-weight: 850;
+  font-size: clamp(var(--sarva-heading-sm), 3.5vw, var(--sarva-heading-lg));
+  font-weight: 800;
   margin: 0;
-  color: var(--text-primary, #ffffff);
+  color: var(--sarva-text-primary);
 }
 
 .sarva-cta-banner p {
-  font-size: 1.1rem;
-  color: var(--text-secondary, #94a3b8);
+  font-size: var(--sarva-text-md);
+  color: var(--sarva-text-secondary);
   max-width: 600px;
   margin: 0;
 }
@@ -486,6 +521,7 @@
 
   .sarva-security-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 }
 
@@ -516,11 +552,12 @@
 
   .sarva-security-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .sarva-cta-banner {
     padding: 40px 20px;
-    border-radius: 20px;
+    border-radius: var(--sarva-radius-lg);
   }
 }
 
@@ -534,7 +571,7 @@
   }
 
   .sarva-trust-badge-item {
-    font-size: 0.78rem;
+    font-size: var(--sarva-text-xs);
     padding: 6px 12px;
   }
 

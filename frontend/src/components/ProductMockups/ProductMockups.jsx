@@ -97,7 +97,7 @@ export const ChatPreview = () => {
               <div className="mockup-code-box">
                 <div className="mockup-code-header">
                   <span>fastapi_groq_engine.py</span>
-                  <button onClick={handleCopy} className="mockup-copy-btn" type="button">
+                  <button onClick={handleCopy} className="mockup-copy-btn" type="button" aria-label="Copy code">
                     {copied ? <><FiCheck /> Copied</> : <><FiCopy /> Copy Code</>}
                   </button>
                 </div>

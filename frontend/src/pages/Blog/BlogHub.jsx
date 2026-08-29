@@ -131,37 +131,37 @@ const BlogHub = () => {
                 key={article.slug}
                 to={`/blog/${article.slug}`}
                 className="seo-card hover-lift"
-                style={{ textDecoration: "none", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
+                style={{ textDecoration: "none", display: "flex", flexDirection: "column", height: "100%" }}
               >
-                <div>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                     <span style={{
-                      fontSize: "0.78rem",
+                      fontSize: "var(--sarva-text-xs)",
                       fontWeight: "700",
                       padding: "4px 10px",
-                      borderRadius: "9999px",
-                      background: "rgba(56, 189, 248, 0.1)",
-                      color: article.iconColor,
-                      border: "1px solid rgba(56, 189, 248, 0.2)"
+                      borderRadius: "var(--sarva-radius-sm)",
+                      background: "var(--sarva-accent-soft)",
+                      color: "var(--sarva-text-accent)",
+                      border: "1px solid var(--border-accent)"
                     }}>
                       {article.category}
                     </span>
-                    <span style={{ fontSize: "0.8rem", color: "var(--text-tertiary)", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <FiClock /> {article.readTime}
+                    <span style={{ fontSize: "var(--sarva-text-xs)", color: "var(--sarva-text-tertiary)", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <FiClock aria-hidden="true" /> {article.readTime}
                     </span>
                   </div>
 
-                  <div className="seo-card-icon" style={{ color: article.iconColor }}><Icon /></div>
-                  <h2 className="seo-card-title" style={{ fontSize: "1.25rem", lineHeight: "1.4" }}>
+                  <div className="seo-card-icon" style={{ color: "var(--sarva-text-accent)" }}><Icon aria-hidden="true" /></div>
+                  <h2 className="seo-card-title" style={{ fontSize: "var(--sarva-heading-sm)", lineHeight: "1.4" }}>
                     {article.title}
                   </h2>
-                  <p className="seo-card-text" style={{ marginTop: "8px", fontSize: "0.92rem" }}>
+                  <p className="seo-card-text" style={{ marginTop: "8px", fontSize: "var(--sarva-text-sm)" }}>
                     {article.description}
                   </p>
                 </div>
 
-                <div style={{ marginTop: "20px", display: "flex", alignItems: "center", gap: "6px", fontWeight: "600", fontSize: "0.9rem", color: "var(--accent)" }}>
-                  Read Technical Article <FiArrowRight />
+                <div className="seo-card-action" style={{ marginTop: "auto", paddingTop: "20px", display: "flex", alignItems: "center", gap: "6px", fontWeight: "600", fontSize: "var(--sarva-text-sm)", color: "var(--sarva-text-accent)" }}>
+                  Read Technical Article <FiArrowRight aria-hidden="true" />
                 </div>
               </Link>
             );

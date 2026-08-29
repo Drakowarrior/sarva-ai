@@ -57,6 +57,7 @@ const SeoHeader = () => {
           <Link
             to="/"
             className={`seo-nav-link ${location.pathname === "/" ? "active" : ""}`}
+            aria-current={location.pathname === "/" ? "page" : undefined}
           >
             Home
           </Link>
@@ -69,36 +70,37 @@ const SeoHeader = () => {
                 setResourcesOpen(false);
               }}
               className={`seo-nav-link seo-dropdown-trigger ${isProductActive ? "active" : ""}`}
+              aria-expanded={productsOpen}
             >
-              Products <FiChevronDown className={`seo-chevron ${productsOpen ? "open" : ""}`} />
+              Products <FiChevronDown className={`seo-chevron ${productsOpen ? "open" : ""}`} aria-hidden="true" />
             </button>
 
             {productsOpen && (
               <div className="seo-dropdown-menu">
                 <div className="seo-dropdown-header">Platform Capabilities</div>
-                <Link to="/ai-chatbot" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#38bdf8" }}><FiMessageSquare /></div>
+                <Link to="/ai-chatbot" className="seo-dropdown-item" aria-current={location.pathname === "/ai-chatbot" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#38bdf8" }} aria-hidden="true"><FiMessageSquare /></div>
                   <div>
                     <div className="seo-dropdown-title">AI Chatbot</div>
                     <div className="seo-dropdown-sub">Context-aware multi-turn conversations</div>
                   </div>
                 </Link>
-                <Link to="/enterprise-ai" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#a855f7" }}><FiCpu /></div>
+                <Link to="/enterprise-ai" className="seo-dropdown-item" aria-current={location.pathname === "/enterprise-ai" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#a855f7" }} aria-hidden="true"><FiCpu /></div>
                   <div>
                     <div className="seo-dropdown-title">Enterprise AI</div>
                     <div className="seo-dropdown-sub">FastAPI backend & cloud infrastructure</div>
                   </div>
                 </Link>
-                <Link to="/file-analysis" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#ec4899" }}><FiFileText /></div>
+                <Link to="/file-analysis" className="seo-dropdown-item" aria-current={location.pathname === "/file-analysis" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#ec4899" }} aria-hidden="true"><FiFileText /></div>
                   <div>
                     <div className="seo-dropdown-title">File Analysis</div>
                     <div className="seo-dropdown-sub">PDF reports & resume comprehension</div>
                   </div>
                 </Link>
-                <Link to="/features" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#10b981" }}><FiZap /></div>
+                <Link to="/features" className="seo-dropdown-item" aria-current={location.pathname === "/features" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#10b981" }} aria-hidden="true"><FiZap /></div>
                   <div>
                     <div className="seo-dropdown-title">All Features</div>
                     <div className="seo-dropdown-sub">Explore full conversational suite</div>
@@ -116,43 +118,44 @@ const SeoHeader = () => {
                 setProductsOpen(false);
               }}
               className={`seo-nav-link seo-dropdown-trigger ${isResourceActive ? "active" : ""}`}
+              aria-expanded={resourcesOpen}
             >
-              Resources <FiChevronDown className={`seo-chevron ${resourcesOpen ? "open" : ""}`} />
+              Resources <FiChevronDown className={`seo-chevron ${resourcesOpen ? "open" : ""}`} aria-hidden="true" />
             </button>
 
             {resourcesOpen && (
               <div className="seo-dropdown-menu">
                 <div className="seo-dropdown-header">Technical Documentation</div>
-                <Link to="/blog" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#ec4899" }}><FiBookOpen /></div>
+                <Link to="/blog" className="seo-dropdown-item" aria-current={location.pathname.startsWith("/blog") ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#ec4899" }} aria-hidden="true"><FiBookOpen /></div>
                   <div>
                     <div className="seo-dropdown-title">Engineering Blog</div>
                     <div className="seo-dropdown-sub">Technical guides & tutorials</div>
                   </div>
                 </Link>
-                <Link to="/technology" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#38bdf8" }}><FiLayers /></div>
+                <Link to="/technology" className="seo-dropdown-item" aria-current={location.pathname === "/technology" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#38bdf8" }} aria-hidden="true"><FiLayers /></div>
                   <div>
                     <div className="seo-dropdown-title">Tech Stack</div>
                     <div className="seo-dropdown-sub">React, FastAPI & MongoDB Atlas</div>
                   </div>
                 </Link>
-                <Link to="/case-study" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#a855f7" }}><FiCode /></div>
+                <Link to="/case-study" className="seo-dropdown-item" aria-current={location.pathname === "/case-study" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#a855f7" }} aria-hidden="true"><FiCode /></div>
                   <div>
                     <div className="seo-dropdown-title">Engineering Case Study</div>
                     <div className="seo-dropdown-sub">Architecture & technical breakdown</div>
                   </div>
                 </Link>
-                <Link to="/security" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#10b981" }}><FiShield /></div>
+                <Link to="/security" className="seo-dropdown-item" aria-current={location.pathname === "/security" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#10b981" }} aria-hidden="true"><FiShield /></div>
                   <div>
                     <div className="seo-dropdown-title">Security & Privacy</div>
                     <div className="seo-dropdown-sub">JWT auth & session isolation</div>
                   </div>
                 </Link>
-                <Link to="/about" className="seo-dropdown-item">
-                  <div className="seo-dropdown-icon" style={{ color: "#f59e0b" }}><FiInfo /></div>
+                <Link to="/about" className="seo-dropdown-item" aria-current={location.pathname === "/about" ? "page" : undefined}>
+                  <div className="seo-dropdown-icon" style={{ color: "#f59e0b" }} aria-hidden="true"><FiInfo /></div>
                   <div>
                     <div className="seo-dropdown-title">About SARVA AI</div>
                     <div className="seo-dropdown-sub">Platform vision & mission</div>
@@ -165,6 +168,7 @@ const SeoHeader = () => {
           <Link
             to="/contact"
             className={`seo-nav-link ${location.pathname === "/contact" ? "active" : ""}`}
+            aria-current={location.pathname === "/contact" ? "page" : undefined}
           >
             Contact
           </Link>
@@ -178,20 +182,21 @@ const SeoHeader = () => {
             aria-label="Toggle theme"
             title="Toggle theme mode"
           >
-            {theme === "light" ? <FiMoon /> : <FiSun />}
+            {theme === "light" ? <FiMoon aria-hidden="true" /> : <FiSun aria-hidden="true" />}
           </button>
 
           <Link
             to={isAuthenticated ? "/chat" : "/auth"}
             className="seo-cta-btn"
           >
-            <span>{isAuthenticated ? "Dashboard" : "Launch App"}</span> <FiArrowRight />
+            <span>{isAuthenticated ? "Dashboard" : "Launch App"}</span> <FiArrowRight aria-hidden="true" />
           </Link>
 
           <button
             className="seo-mobile-toggle"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <FiX /> : <FiMenu />}
           </button>

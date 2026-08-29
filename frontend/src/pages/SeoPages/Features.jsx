@@ -34,48 +34,48 @@ const Features = () => {
 
         <div className="seo-grid-2">
           <div className="seo-card">
-            <div className="seo-card-icon"><FiCpu /></div>
-            <h3 className="seo-card-title">Dynamic LLM Engine</h3>
+            <div className="seo-card-icon"><FiCpu aria-hidden="true" /></div>
+            <h2 className="seo-card-title">Dynamic LLM Engine</h2>
             <p className="seo-card-text">
               Switch dynamically between leading open and closed models including Llama 3.3 70B, Llama 3.2 Vision, Gemma, and Mixtral to tailor reasoning depth to your precise prompt.
             </p>
           </div>
 
           <div className="seo-card">
-            <div className="seo-card-icon"><FiFileText /></div>
-            <h3 className="seo-card-title">Multi-Format Document Parsing</h3>
+            <div className="seo-card-icon"><FiFileText aria-hidden="true" /></div>
+            <h2 className="seo-card-title">Multi-Format Document Parsing</h2>
             <p className="seo-card-text">
               Upload PDF documents, resume files, text transcripts, or code source files. SARVA AI extracts text and vision features to answer in-context questions effortlessly.
             </p>
           </div>
 
           <div className="seo-card">
-            <div className="seo-card-icon"><FiRefreshCw /></div>
-            <h3 className="seo-card-title">Persistent MongoDB Memory</h3>
+            <div className="seo-card-icon"><FiRefreshCw aria-hidden="true" /></div>
+            <h2 className="seo-card-title">Persistent MongoDB Memory</h2>
             <p className="seo-card-text">
               Organize conversations into persistent chat threads. Rename, search, and delete chat sessions inline with real-time MongoDB Atlas synchronization.
             </p>
           </div>
 
           <div className="seo-card">
-            <div className="seo-card-icon"><FiStar /></div>
-            <h3 className="seo-card-title">User Feedback Loop</h3>
+            <div className="seo-card-icon"><FiStar aria-hidden="true" /></div>
+            <h2 className="seo-card-title">User Feedback Loop</h2>
             <p className="seo-card-text">
               Integrated feedback modal captures 1-5 star ratings, comments, exit intent signals, and route leave triggers to continuously improve model output alignment.
             </p>
           </div>
 
           <div className="seo-card">
-            <div className="seo-card-icon"><FiMoon /></div>
-            <h3 className="seo-card-title">Theme System & Glassmorphism</h3>
+            <div className="seo-card-icon"><FiMoon aria-hidden="true" /></div>
+            <h2 className="seo-card-title">Theme System & Glassmorphism</h2>
             <p className="seo-card-text">
               Smooth dark and light mode toggle backed by CSS variable tokens, glassmorphic UI panels, micro-animations, and full mobile viewport responsiveness.
             </p>
           </div>
 
           <div className="seo-card">
-            <div className="seo-card-icon"><FiShield /></div>
-            <h3 className="seo-card-title">Organization Governance</h3>
+            <div className="seo-card-icon"><FiShield aria-hidden="true" /></div>
+            <h2 className="seo-card-title">Organization Governance</h2>
             <p className="seo-card-text">
               Organization user creation, pending approval workflows, member listing dashboards, and administrative controls for enterprise workspaces.
             </p>
@@ -83,12 +83,12 @@ const Features = () => {
         </div>
 
         <section className="seo-card" style={{ marginTop: "40px", textAlign: "center" }}>
-          <h3 className="seo-card-title">Try All Features Live</h3>
+          <h2 className="seo-card-title">Try All Features Live</h2>
           <p className="seo-card-text" style={{ marginBottom: "20px" }}>
             Experience fast conversational AI with file support and dynamic model selection.
           </p>
           <Link to="/chat" className="seo-cta-btn" style={{ padding: "12px 28px" }}>
-            Get Started Free <FiArrowRight />
+            Get Started Free <FiArrowRight aria-hidden="true" />
           </Link>
         </section>
       </main>
