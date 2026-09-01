@@ -150,8 +150,9 @@ html, body {
 
   /* ─── Standard Border-Radius Scale ─── */
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-pill: 9999px;
 
   /* ─── Geometry & Radii ─── */
@@ -159,8 +160,8 @@ html, body {
   --sarva-radius-sm: var(--radius-sm);
   --sarva-radius-md: var(--radius-md);
   --sarva-radius-lg: var(--radius-lg);
-  --sarva-radius-xl: var(--radius-lg);
-  --sarva-radius-2xl: var(--radius-lg);
+  --sarva-radius-xl: var(--radius-xl);
+  --sarva-radius-2xl: var(--radius-xl);
   --sarva-radius-full: var(--radius-pill);
 
   /* ─── Transitions ─── */
@@ -201,13 +202,25 @@ html, body {
 }
 
 /* ─── Global Focus-Visible & Accessibility Utility ─── */
+.btn:focus-visible,
 button:focus-visible,
 a:focus-visible,
-input:focus-visible,
 select:focus-visible,
+input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--accent, #38bdf8);
+  outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .sr-only {
@@ -223,6 +236,21 @@ textarea:focus-visible {
 }
 
 /* ─── Core Button System ─── */
+.btn {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 600;
+  font-size: var(--sarva-text-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
 .btn-primary {
   min-height: 44px;
   padding: 0.75rem 1.25rem;

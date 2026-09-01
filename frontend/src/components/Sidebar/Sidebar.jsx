@@ -513,8 +513,8 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
                   {user.username}
                 </span>
                 <span style={{
-                  fontSize: "var(--sarva-text-xs)",
-                  color: "var(--text-secondary)",
+                  fontSize: "0.75rem",
+                  color: "var(--text-tertiary)",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis"
@@ -572,14 +572,14 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
         )}
         <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <span style={{ fontSize: "var(--sarva-text-xs)", color: "var(--text-tertiary)" }}>
+            <span style={{ fontSize: "0.75rem", color: "var(--text-tertiary)" }}>
               SARVA AI Client v1.1
             </span>
             <button className="sidebar-footer-btn" onClick={onOpenSettings} title="Settings" aria-label="Settings">
               <FiSettings style={{ fontSize: "1.1rem" }} aria-hidden="true" />
             </button>
           </div>
-          <span style={{ fontSize: "var(--sarva-text-xs)", color: "var(--text-secondary)", textAlign: "left" }}>
+          <span style={{ fontSize: "0.75rem", lineHeight: "1.4", color: "var(--text-tertiary)", textAlign: "left" }}>
             Made by Karan Garg (Intern at IGT Solutions)
           </span>
         </div>

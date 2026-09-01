@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
@@ -6,14 +6,13 @@ import ChatInput from "../../components/ChatInput/ChatInput";
 import Settings from "../../components/Settings/Settings";
 import ShareModal from "../../components/ShareModal/ShareModal";
 import { useSession } from "../../context/SessionContext";
-import { useChat } from "../../context/ChatContext";
 import useSeo from "../../hooks/useSeo";
 
 function Chat() {
   useSeo({
-    title: "SARVA AI - Chat",
+    title: "SARVA AI - Chat Workspace",
     description: "Private AI Workspace and Chat Interface",
-    robots: "noindex, nofollow"
+    robots: "noindex, follow"
   });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,11 +20,7 @@ function Chat() {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareSessionId, setShareSessionId] = useState(null);
 
-  const { currentSession, sessions, messages } = useSession();
-  const { exportChatAsTXT, exportChatAsPDF } = useChat();
-
-  const activeSession = sessions.find(s => s.session_id === currentSession);
-  const activeTitle = activeSession ? activeSession.title : "New Chat";
+  const { currentSession } = useSession();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);

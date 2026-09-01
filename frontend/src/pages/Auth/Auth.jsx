@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { 
   FiMail, FiLock, FiUser, FiArrowLeft, FiLoader, FiKey, 
   FiCheck, FiCheckCircle, FiLayers, FiBriefcase, FiShield, 
-  FiEye, FiEyeOff, FiMoon, FiSun, FiZap, FiArrowRight, FiAlertCircle 
+  FiEye, FiEyeOff, FiMoon, FiSun, FiArrowRight, FiAlertCircle 
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../../services/api";
@@ -15,20 +15,18 @@ import "./Auth.css";
 
 function Auth() {
   useSeo({
-    title: "Sign In / Register | SARVA AI",
-    description: "Sign in or create an account to access SARVA AI workspace.",
+    title: "Sign In or Create an Account | SARVA AI",
+    description: "Sign in or create an account to access your secure SARVA AI workspace.",
     robots: "noindex, follow"
   });
 
   const [authMode, setAuthMode] = useState("login"); // "login" | "register" | "forgot" | "reset"
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [resetToken, setResetToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [demoToken, setDemoToken] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -45,11 +43,10 @@ function Auth() {
   const [orgFlow, setOrgFlow] = useState("create"); // "create" | "join"
   const [fullName, setFullName] = useState("");
   const [organizationName, setOrganizationName] = useState("");
-  const [orgDescription, setOrgDescription] = useState("");
-  const [orgIndustry, setOrgIndustry] = useState("");
   const [department, setDepartment] = useState("");
-  const [role, setRole] = useState("Student");
   const [inviteCode, setInviteCode] = useState("");
+
+  const role = accountType === "organization" ? (orgFlow === "create" ? "Head" : "Student") : "Student";
 
   const { login, register, isAuthenticated, checkingAuth } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -82,13 +79,6 @@ function Auth() {
       navigate("/chat");
     }
   }, [isAuthenticated, checkingAuth, navigate]);
-
-  // Auto sync role state based on orgFlow selection
-  useEffect(() => {
-    if (accountType === "organization") {
-      setRole(orgFlow === "create" ? "Head" : "Student");
-    }
-  }, [accountType, orgFlow]);
 
   // Trigger Confetti Micro-burst
   const triggerConfetti = () => {
@@ -168,8 +158,6 @@ function Auth() {
         accountType: accountType,
         orgFlow: accountType === "organization" ? orgFlow : undefined,
         organizationName: (accountType === "organization" && orgFlow === "create") ? organizationName.trim() : undefined,
-        description: (accountType === "organization" && orgFlow === "create") ? orgDescription.trim() : undefined,
-        industry: (accountType === "organization" && orgFlow === "create") ? orgIndustry.trim() : undefined,
         department: accountType === "organization" ? department.trim() : undefined,
         role: accountType === "organization" ? role : undefined,
         inviteCode: (accountType === "organization" && orgFlow === "join") ? inviteCode.trim() : undefined
@@ -193,7 +181,6 @@ function Auth() {
         const response = await api.post("/auth/forgot-password", { email });
         if (response.data.success) {
           toast.success("Security reset code generated successfully.");
-          setDemoToken(response.data.demo_token || "");
         } else {
           setError(response.data.error || "Failed to generate security code.");
         }
@@ -229,7 +216,6 @@ function Auth() {
           setResetToken("");
           setNewPassword("");
           setConfirmNewPassword("");
-          setDemoToken("");
         } else {
           setError(response.data.error || "Failed to reset password.");
         }
@@ -310,7 +296,7 @@ function Auth() {
               className="auth-speech-bubble"
             >
               {authMode === "login" && "Welcome back to SARVA AI"}
-              {authMode === "register" && (accountType === "organization" ? "Let's set up your organization workspace" : "Let's set up your personal workspace")}
+              {authMode === "register" && (accountType === "organization" ? "Set up your SARVA organization workspace" : "Set up your personal SARVA workspace")}
               {authMode === "forgot" && "Verify your account identity"}
               {authMode === "reset" && "Create your new password"}
               <div className="auth-speech-tail" />
@@ -496,7 +482,7 @@ function Auth() {
               <div style={{ margin: "20px 0 10px" }}>
                 <button
                   type="button"
-                  onClick={() => { setAuthMode("login"); setError(""); setDemoToken(""); }}
+                  onClick={() => { setAuthMode("login"); setError(""); }}
                   className="auth-back-btn"
                   style={{ background: "transparent" }}
                 >
@@ -563,37 +549,6 @@ function Auth() {
                 </fieldset>
               )}
 
-              {/* Organization Mode Selection */}
-              {authMode === "register" && accountType === "organization" && (
-                <fieldset className="organization-mode-fieldset" style={{ border: "none", padding: 0, margin: "0 0 16px 0" }}>
-                  <legend className="sr-only">Organization setup</legend>
-                  <div className="org-mode-options">
-                    <label className={`org-mode-option ${orgFlow === "create" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="organizationMode"
-                        value="create"
-                        checked={orgFlow === "create"}
-                        onChange={() => setOrgFlow("create")}
-                        className="sr-only"
-                      />
-                      Create organization
-                    </label>
-                    <label className={`org-mode-option ${orgFlow === "join" ? "active" : ""}`}>
-                      <input
-                        type="radio"
-                        name="organizationMode"
-                        value="join"
-                        checked={orgFlow === "join"}
-                        onChange={() => setOrgFlow("join")}
-                        className="sr-only"
-                      />
-                      Join organization
-                    </label>
-                  </div>
-                </fieldset>
-              )}
-
               {/* Full Name (Register only) */}
               {authMode === "register" && (
                 <div className="auth-input-group">
@@ -609,59 +564,6 @@ function Auth() {
                   />
                   <label htmlFor="fullName" className="auth-floating-label">Full Name</label>
                   <FiUser className="auth-field-icon" aria-hidden="true" />
-                </div>
-              )}
-
-              {/* Create Org Fields */}
-              {authMode === "register" && accountType === "organization" && orgFlow === "create" && (
-                <>
-                  <div className="auth-input-group">
-                    <input
-                      type="text"
-                      id="orgName"
-                      className="auth-input-field"
-                      placeholder=" "
-                      value={organizationName}
-                      onChange={(e) => setOrganizationName(e.target.value)}
-                      required
-                    />
-                    <label htmlFor="orgName" className="auth-floating-label">Organization Name</label>
-                    <FiBriefcase className="auth-field-icon" aria-hidden="true" />
-                  </div>
-                </>
-              )}
-
-              {/* Join Org Invite Code */}
-              {authMode === "register" && accountType === "organization" && orgFlow === "join" && (
-                <div className="auth-input-group">
-                  <input
-                    type="text"
-                    id="inviteCode"
-                    className="auth-input-field"
-                    placeholder=" "
-                    value={inviteCode}
-                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                    required
-                  />
-                  <label htmlFor="inviteCode" className="auth-floating-label">Invitation Code</label>
-                  <FiShield className="auth-field-icon" aria-hidden="true" />
-                </div>
-              )}
-
-              {/* Department (Register Org) */}
-              {authMode === "register" && accountType === "organization" && (
-                <div className="auth-input-group">
-                  <input
-                    type="text"
-                    id="department"
-                    className="auth-input-field"
-                    placeholder=" "
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    required
-                  />
-                  <label htmlFor="department" className="auth-floating-label">Department Name</label>
-                  <FiBriefcase className="auth-field-icon" aria-hidden="true" />
                 </div>
               )}
 
@@ -750,6 +652,83 @@ function Auth() {
                 </div>
               )}
 
+              {/* Organization Mode & Detailed Setup (Register Org mode) */}
+              {authMode === "register" && accountType === "organization" && (
+                <>
+                  <fieldset className="organization-mode-fieldset" style={{ border: "none", padding: 0, margin: "0 0 16px 0" }}>
+                    <legend className="sr-only">Organization setup option</legend>
+                    <div className="org-mode-options">
+                      <label className={`org-mode-option ${orgFlow === "create" ? "active" : ""}`}>
+                        <input
+                          type="radio"
+                          name="organizationMode"
+                          value="create"
+                          checked={orgFlow === "create"}
+                          onChange={() => setOrgFlow("create")}
+                          className="sr-only"
+                        />
+                        Create organization
+                      </label>
+                      <label className={`org-mode-option ${orgFlow === "join" ? "active" : ""}`}>
+                        <input
+                          type="radio"
+                          name="organizationMode"
+                          value="join"
+                          checked={orgFlow === "join"}
+                          onChange={() => setOrgFlow("join")}
+                          className="sr-only"
+                        />
+                        Join organization
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  {orgFlow === "create" ? (
+                    <div className="auth-input-group">
+                      <input
+                        type="text"
+                        id="orgName"
+                        className="auth-input-field"
+                        placeholder=" "
+                        value={organizationName}
+                        onChange={(e) => setOrganizationName(e.target.value)}
+                        required
+                      />
+                      <label htmlFor="orgName" className="auth-floating-label">Organization Name</label>
+                      <FiBriefcase className="auth-field-icon" aria-hidden="true" />
+                    </div>
+                  ) : (
+                    <div className="auth-input-group">
+                      <input
+                        type="text"
+                        id="inviteCode"
+                        className="auth-input-field"
+                        placeholder=" "
+                        value={inviteCode}
+                        onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                        required
+                      />
+                      <label htmlFor="inviteCode" className="auth-floating-label">Invitation Code</label>
+                      <FiShield className="auth-field-icon" aria-hidden="true" />
+                    </div>
+                  )}
+
+                  <div className="auth-input-group">
+                    <input
+                      type="text"
+                      id="department"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="department" className="auth-floating-label">Department Name</label>
+                    <FiBriefcase className="auth-field-icon" aria-hidden="true" />
+                  </div>
+                </>
+              )}
+
               {/* Reset Password Token & Passwords */}
               {authMode === "reset" && (
                 <>
@@ -781,19 +760,6 @@ function Auth() {
                     <FiLock className="auth-field-icon" />
                   </div>
                 </>
-              )}
-
-              {/* Forgot password link */}
-              {authMode === "login" && (
-                <div style={{ textAlign: "right", marginTop: "-8px", marginBottom: "16px" }}>
-                  <button
-                    type="button"
-                    onClick={() => { setAuthMode("forgot"); setError(""); }}
-                    style={{ background: "transparent", border: "none", color: "#38bdf8", fontSize: "0.82rem", cursor: "pointer", fontWeight: "600" }}
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
               )}
 
               {/* Submit CTA Button */}
