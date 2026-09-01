@@ -19,15 +19,17 @@ export const useSeo = ({
   useEffect(() => {
     const baseUrl = "https://sarva-ai-one.vercel.app";
     const rawPath = canonical || canonicalPath || window.location.pathname;
-    const cleanPath = rawPath.startsWith("http")
+    const pathWithoutOrigin = rawPath.startsWith("http")
       ? rawPath.replace(baseUrl, "")
       : rawPath;
     
-    const normalizedPath = cleanPath === "/" || cleanPath === "" 
-      ? "" 
-      : cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
+    // Strip query parameters, hash fragments, and trailing slashes
+    const strippedPath = pathWithoutOrigin.split("?")[0].split("#")[0].replace(/\/+$/, "");
+    const normalizedPath = strippedPath === "" 
+      ? "/" 
+      : (strippedPath.startsWith("/") ? strippedPath : `/${strippedPath}`);
 
-    const targetUrl = `${baseUrl}${normalizedPath}`;
+    const targetUrl = `${baseUrl}${normalizedPath === "/" ? "/" : normalizedPath}`;
     const targetImage = image ? (image.startsWith("http") ? image : `${baseUrl}${image.startsWith("/") ? "" : "/"}${image}`) : `${baseUrl}/logo.jpg`;
 
     // 1. Set Document Title
