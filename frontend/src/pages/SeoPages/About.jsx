@@ -7,7 +7,7 @@ import useSeo from "../../hooks/useSeo";
 
 const About = () => {
   useSeo({
-    title: "About SARVA AI — Platform Vision & Engineering Mission",
+    title: "About SARVA AI – Enterprise Conversational AI & Engineering",
     description: "Built for scale, performance, and multi-model flexibility. Learn about SARVA AI's mission and full-stack software architecture.",
     canonicalPath: "/about",
     jsonLd: {

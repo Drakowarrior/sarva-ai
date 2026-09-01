@@ -1,9 +1,9 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { FiClock, FiFileText, FiArrowRight } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
+import TableOfContents from "../../components/Common/TableOfContents";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
@@ -53,6 +53,8 @@ const ArticleDocumentAnalysis = () => {
           <span>•</span>
           <span><FiClock /> 6 min read</span>
         </div>
+
+        <TableOfContents articleSelector=".article-body-content" />
 
         <div className="article-body-content" style={{ fontSize: "1.05rem", lineHeight: "1.75", color: "var(--text-primary)" }}>
           <p>

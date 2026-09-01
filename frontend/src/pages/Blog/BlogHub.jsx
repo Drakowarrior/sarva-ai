@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { FiCode, FiLayers, FiShield, FiFileText, FiCpu, FiArrowRight, FiClock, FiBookOpen } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
@@ -88,8 +87,8 @@ export const articlesData = [
 
 const BlogHub = () => {
   useSeo({
-    title: "SARVA Technical Blog — Engineering Articles & Guides",
-    description: "In-depth engineering articles on full-stack AI development with React 19, FastAPI, MongoDB Atlas, Groq LPUs, and cloud security.",
+    title: "AI Insights, Guides & Enterprise Technology Resources | SARVA AI",
+    description: "Explore SARVA AI technical engineering articles, software architecture breakdowns, and step-by-step guides on React, FastAPI, Groq LPUs, and AI document analysis.",
     canonicalPath: "/blog",
     jsonLd: {
       "@context": "https://schema.org",
@@ -118,7 +117,7 @@ const BlogHub = () => {
       <main className="seo-page-content" style={{ maxWidth: "1100px" }}>
         <SeoBreadcrumbs items={[{ name: "Blog", path: "/blog" }]} />
         <div className="seo-hero-badge"><FiBookOpen /> Technical Engineering Hub</div>
-        <h1 className="seo-page-title">SARVA AI Engineering Blog</h1>
+        <h1 className="seo-page-title">SARVA AI Engineering Blog & Insights</h1>
         <p className="seo-page-subtitle">
           In-depth technical guides, software architecture breakdowns, and practical tutorials written by developers for building modern AI applications.
         </p>

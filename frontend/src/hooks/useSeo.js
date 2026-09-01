@@ -1,30 +1,43 @@
 import { useEffect } from "react";
 
 /**
- * Enhanced Hook to set page title, meta description, canonical link, OpenGraph tags,
- * Twitter card tags, and JSON-LD structured data dynamically for SEO optimization.
+ * Single-source-of-truth Hook to manage document title, meta descriptions, canonical URLs,
+ * OpenGraph & Twitter Card tags, and JSON-LD structured data dynamically.
  */
 export const useSeo = ({ 
   title, 
   description, 
   canonicalPath = "", 
+  canonical = "",
   jsonLd = null,
+  structuredData = null,
   type = "website",
+  image = null,
   noindex = false,
   robots = null
 }) => {
   useEffect(() => {
     const baseUrl = "https://sarva-ai-one.vercel.app";
-    const currentPath = canonicalPath || window.location.pathname;
-    const targetUrl = `${baseUrl}${currentPath === "/" ? "" : currentPath}`;
+    const rawPath = canonical || canonicalPath || window.location.pathname;
+    const cleanPath = rawPath.startsWith("http")
+      ? rawPath.replace(baseUrl, "")
+      : rawPath;
+    
+    const normalizedPath = cleanPath === "/" || cleanPath === "" 
+      ? "" 
+      : cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
+
+    const targetUrl = `${baseUrl}${normalizedPath}`;
+    const targetImage = image ? (image.startsWith("http") ? image : `${baseUrl}${image.startsWith("/") ? "" : "/"}${image}`) : `${baseUrl}/logo.jpg`;
 
     // 1. Set Document Title
     if (title) {
       document.title = title;
     }
 
-    // Helper function to set or create meta tag
+    // Helper function to set or create meta tag safely
     const setMetaTag = (selector, attributeName, attributeValue, contentValue) => {
+      if (!contentValue) return;
       let element = document.querySelector(selector);
       if (!element) {
         element = document.createElement("meta");
@@ -34,7 +47,7 @@ export const useSeo = ({
       element.setAttribute("content", contentValue);
     };
 
-    // Robots meta tag
+    // 2. Robots meta tag
     let robotsValue = "index, follow";
     if (robots) {
       robotsValue = robots;
@@ -43,59 +56,60 @@ export const useSeo = ({
     }
     setMetaTag('meta[name="robots"]', 'name', 'robots', robotsValue);
 
-    // 2. Meta Description
+    // 3. Meta Description
     if (description) {
       setMetaTag('meta[name="description"]', 'name', 'description', description);
       setMetaTag('meta[property="og:description"]', 'property', 'og:description', description);
       setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', description);
     }
 
-    // 3. OpenGraph Title & Twitter Title
+    // 4. OpenGraph Title & Twitter Title
     if (title) {
       setMetaTag('meta[property="og:title"]', 'property', 'og:title', title);
       setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', title);
     }
 
-    // 4. OpenGraph URL, Type & Images
+    // 5. OpenGraph & Twitter Metadata
     setMetaTag('meta[property="og:url"]', 'property', 'og:url', targetUrl);
     setMetaTag('meta[property="og:type"]', 'property', 'og:type', type);
-    setMetaTag('meta[property="og:image"]', 'property', 'og:image', `${baseUrl}/logo.jpg`);
+    setMetaTag('meta[property="og:image"]', 'property', 'og:image', targetImage);
     setMetaTag('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
-    setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', `${baseUrl}/logo.jpg`);
+    setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', targetImage);
 
-    // 5. Set Canonical Link
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
+    // 6. Set Canonical Link
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.rel = "canonical";
+      document.head.appendChild(canonicalLink);
     }
-    canonical.href = targetUrl;
+    canonicalLink.href = targetUrl;
 
-    // 6. JSON-LD Structured Data Injection
+    // 7. JSON-LD Structured Data Injection
+    const schemaPayload = jsonLd || structuredData;
     const scriptId = "seo-json-ld-script";
     let existingScript = document.getElementById(scriptId);
 
-    if (jsonLd) {
+    if (schemaPayload) {
       if (!existingScript) {
         existingScript = document.createElement("script");
         existingScript.id = scriptId;
         existingScript.type = "application/ld+json";
         document.head.appendChild(existingScript);
       }
-      existingScript.text = JSON.stringify(jsonLd);
+      existingScript.text = JSON.stringify(schemaPayload);
     } else if (existingScript) {
       existingScript.remove();
     }
 
     return () => {
-      // Clean up script on unmount if needed
+      // Clean up dynamic script on unmount
       const scriptToRemove = document.getElementById(scriptId);
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
     };
-  }, [title, description, canonicalPath, jsonLd, type, noindex]);
+  }, [title, description, canonicalPath, canonical, jsonLd, structuredData, type, image, noindex, robots]);
 };
 
 export default useSeo;

@@ -1,9 +1,9 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiCode, FiLayers, FiCheckCircle, FiBookOpen, FiClock, FiCpu } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
+import TableOfContents from "../../components/Common/TableOfContents";
 import useSeo from "../../hooks/useSeo";
 import { trackCtaClick } from "../../utils/analytics";
 
@@ -12,27 +12,28 @@ const ArticleReactFastApi = () => {
     title: "How to Build an AI Chatbot with React 19 & FastAPI | SARVA AI",
     description: "Learn how to construct a full-stack conversational AI application using React 19, FastAPI, Server-Sent Events (SSE), and asynchronous model pipelines.",
     canonicalPath: "/blog/react-fastapi-ai-chatbot",
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
-            { "@type": "ListItem", "position": 3, "name": "React + FastAPI AI Chatbot", "item": "https://sarva-ai-one.vercel.app/blog/react-fastapi-ai-chatbot" }
-          ]
-        },
-        {
-          "@type": "TechArticle",
-          "headline": "How to Build an AI Chatbot with React and FastAPI",
-          "description": "Step-by-step technical guide to integrating React single-page frontend with FastAPI backend.",
-          "author": { "@type": "Person", "name": "Karan Garg" },
-          "publisher": { "@type": "Organization", "name": "SARVA AI" },
-          "datePublished": "2026-08-13"
-        }
-      ]
-    }
+    structuredData: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://sarva-ai-one.vercel.app/blog" },
+          { "@type": "ListItem", "position": 3, "name": "React + FastAPI AI Chatbot", "item": "https://sarva-ai-one.vercel.app/blog/react-fastapi-ai-chatbot" }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "How to Build an AI Chatbot with React and FastAPI",
+        "description": "Step-by-step technical guide to integrating React single-page frontend with FastAPI backend.",
+        "author": { "@type": "Person", "name": "Karan Garg" },
+        "publisher": { "@type": "Organization", "name": "SARVA AI" },
+        "datePublished": "2026-08-13",
+        "dateModified": "2026-08-13",
+        "mainEntityOfPage": "https://sarva-ai-one.vercel.app/blog/react-fastapi-ai-chatbot"
+      }
+    ]
   });
 
   return (
@@ -47,13 +48,16 @@ const ArticleReactFastApi = () => {
           How to Build an AI Chatbot with React and FastAPI
         </h1>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "16px 0 32px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "16px 0 24px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
           <span>By <strong>Karan Garg</strong></span>
           <span>•</span>
           <span>August 13, 2026</span>
           <span>•</span>
           <span><FiClock /> 8 min read</span>
         </div>
+
+        {/* Dynamic Table of Contents */}
+        <TableOfContents articleSelector=".article-body-content" />
 
         {/* Article Content */}
         <div className="article-body-content" style={{ fontSize: "1.05rem", lineHeight: "1.75", color: "var(--text-primary)" }}>
@@ -65,7 +69,7 @@ const ArticleReactFastApi = () => {
             1. System Architecture Overview
           </h2>
           <p>
-            In modern full-stack AI design, the React client handles state management, multi-turn UI streaming, and markdown rendering. The FastAPI server validates incoming payloads, enforces JWT session security, and dispatches prompts to high-throughput LLM engines like Groq LPUs.
+            In modern full-stack AI design, the React client handles state management, multi-turn UI streaming, and markdown rendering. The FastAPI server validates incoming payloads, enforces JWT session security, and dispatches prompts to high-throughput LLM engines like Groq LPUs. Learn more about our <Link to="/technology" style={{ color: "var(--accent)" }}>SARVA AI full-stack technology architecture</Link>.
           </p>
 
           {/* Architecture Box */}
@@ -109,7 +113,7 @@ async def handle_chat_message(payload: ChatRequest):
             3. React State & Chat Stream Hook
           </h2>
           <p>
-            On the client side, React manages conversation state using standard hooks and optimistic UI updates so the user receives instant visual feedback.
+            On the client side, React manages conversation state using standard hooks and optimistic UI updates so the user receives instant visual feedback. Explore our <Link to="/ai-chatbot" style={{ color: "var(--accent)" }}>AI chatbot features overview</Link> to see this in practice.
           </p>
 
           {/* SARVA AI Funnel CTA Banner */}
@@ -146,17 +150,17 @@ async def handle_chat_message(payload: ChatRequest):
           </ul>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "32px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            Related Engineering Articles & Guides
+            Related Engineering Articles & Product Features
           </h2>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
+            <Link to="/ai-chatbot" style={{ color: "var(--accent)", textDecoration: "none", background: "var(--bg-card)", padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.9rem", fontWeight: "500" }}>
+              AI Chatbot Feature Overview
+            </Link>
             <Link to="/blog/fastapi-groq-chatbot" style={{ color: "var(--accent)", textDecoration: "none", background: "var(--bg-card)", padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.9rem", fontWeight: "500" }}>
-              ← Groq LPU LLaMA 3.3 Integration
+              Groq LPU LLaMA 3.3 Integration →
             </Link>
             <Link to="/blog/full-stack-ai-architecture" style={{ color: "var(--accent)", textDecoration: "none", background: "var(--bg-card)", padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.9rem", fontWeight: "500" }}>
               Full-Stack System Architecture →
-            </Link>
-            <Link to="/blog/jwt-ai-chatbot" style={{ color: "var(--accent)", textDecoration: "none", background: "var(--bg-card)", padding: "10px 16px", borderRadius: "8px", border: "1px solid var(--border)", fontSize: "0.9rem", fontWeight: "500" }}>
-              JWT Security & Auth →
             </Link>
           </div>
         </div>

@@ -1,33 +1,59 @@
 import { Link } from "react-router-dom";
-import { FiCode, FiLayers, FiDatabase, FiCpu, FiArrowRight, FiZap } from "react-icons/fi";
+import { FiCode, FiLayers, FiDatabase, FiCpu, FiArrowRight, FiZap, FiHelpCircle } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
 
+const FAQS = [
+  {
+    q: "Why does SARVA AI use FastAPI for the backend microservice?",
+    a: "FastAPI offers high-performance asynchronous Python request handling built on Starlette and Pydantic, enabling low latency and automatic OpenAPI spec generation for AI completions."
+  },
+  {
+    q: "How does Groq LPU hardware accelerate AI token generation?",
+    a: "Groq Language Processing Units (LPUs) are purpose-built compute engines designed for sequential model inference, achieving speeds of >300 tokens/sec for Llama 3.3 models."
+  },
+  {
+    q: "What role does MongoDB Atlas play in the architecture?",
+    a: "MongoDB Atlas provides scalable JSON document storage for user accounts, session state metadata, message trajectories, and user feedback logs with indexing."
+  }
+];
+
 const Technology = () => {
   useSeo({
-    title: "SARVA Technology Stack — React 19, FastAPI & MongoDB Atlas",
-    description: "Full-stack engineering breakdown: React single-page frontend, FastAPI async backend, Groq LPUs, and MongoDB Atlas.",
+    title: "SARVA AI Tech Stack – React, FastAPI, MongoDB & Groq",
+    description: "Explore the SARVA AI full-stack technology architecture: React 19 single-page frontend, FastAPI async Python backend, Groq LPUs, and MongoDB Atlas database.",
     canonicalPath: "/technology",
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-            { "@type": "ListItem", "position": 2, "name": "Technology Stack", "item": "https://sarva-ai-one.vercel.app/technology" }
-          ]
-        },
-        {
-          "@type": "TechArticle",
-          "headline": "SARVA AI Technology Stack",
-          "description": "Full-stack architecture overview featuring React 19, FastAPI, MongoDB Atlas, and Groq Cloud LPUs.",
-          "author": { "@type": "Person", "name": "Karan Garg" }
-        }
-      ]
-    }
+    structuredData: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+          { "@type": "ListItem", "position": 2, "name": "Technology Stack", "item": "https://sarva-ai-one.vercel.app/technology" }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "SARVA AI Full-Stack Technology Architecture",
+        "description": "Full-stack architecture overview featuring React 19, FastAPI, MongoDB Atlas, and Groq Cloud LPUs.",
+        "author": { "@type": "Person", "name": "Karan Garg" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": FAQS.map(item => ({
+          "@type": "Question",
+          "name": item.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": item.a
+          }
+        }))
+      }
+    ]
   });
 
   return (
@@ -37,7 +63,7 @@ const Technology = () => {
       <main className="seo-page-content">
         <SeoBreadcrumbs items={[{ name: "Technology Stack", path: "/technology" }]} />
         <div className="seo-hero-badge">Modern Full-Stack Architecture</div>
-        <h1 className="seo-page-title">SARVA AI Technology Stack</h1>
+        <h1 className="seo-page-title">SARVA AI Full-Stack Technology Architecture</h1>
         <p className="seo-page-subtitle">
           SARVA AI is built on a modern, decoupled full-stack architecture optimized for ultra-low latency inference, high concurrent throughput, and rich interactive frontend experiences.
         </p>
@@ -74,7 +100,7 @@ const Technology = () => {
             <div className="seo-card-icon"><FiCode aria-hidden="true" /></div>
             <h2 className="seo-card-title">Frontend Framework</h2>
             <p className="seo-card-text">
-              Built with <strong>React 19</strong>, <strong>Vite</strong>, and <strong>Framer Motion</strong>. Provides responsive glassmorphic UI, real-time message streaming UI, syntax-highlighted code blocks, custom theme hooks, and React Router navigation.
+              Built with <strong>React 19</strong>, <strong>Vite</strong>, and <strong>Framer Motion</strong>. Provides responsive glassmorphic UI, real-time message streaming, and syntax-highlighted code blocks.
             </p>
           </div>
 
@@ -82,7 +108,7 @@ const Technology = () => {
             <div className="seo-card-icon"><FiZap aria-hidden="true" /></div>
             <h2 className="seo-card-title">Backend API Service</h2>
             <p className="seo-card-text">
-              Powered by <strong>FastAPI (Python 3.11+)</strong> and <strong>Uvicorn</strong>. Utilizes asynchronous endpoint routing, Pydantic data schemas, automatic OpenAPI documentation, CORS middleware, and custom exception handling.
+              Powered by <strong>FastAPI (Python 3.11+)</strong> and <strong>Uvicorn</strong>. Read our implementation article on <Link to="/blog/react-fastapi-ai-chatbot" style={{ color: "var(--accent)" }}>React and FastAPI AI Chatbots</Link>.
             </p>
           </div>
 
@@ -90,7 +116,7 @@ const Technology = () => {
             <div className="seo-card-icon"><FiDatabase aria-hidden="true" /></div>
             <h2 className="seo-card-title">Database & Persistence</h2>
             <p className="seo-card-text">
-              Driven by <strong>MongoDB Atlas</strong> and <strong>PyMongo</strong>. Stores user profiles, hashed credentials, organization structures, chat session metadata, message histories, and user feedback logs with optimized indexing.
+              Driven by <strong>MongoDB Atlas</strong> and <strong>PyMongo</strong>. Stores user profiles, hashed credentials, session metadata, message histories, and user feedback.
             </p>
           </div>
 
@@ -98,7 +124,7 @@ const Technology = () => {
             <div className="seo-card-icon"><FiCpu aria-hidden="true" /></div>
             <h2 className="seo-card-title">Groq LLM Inference Engine</h2>
             <p className="seo-card-text">
-              Integrated with <strong>Groq Language Processing Units (LPUs)</strong> for lightning-fast token generation. Supports dynamic runtime switching between Llama 3.3 70B, Llama 3.2 Vision, Gemma, and Mixtral models.
+              Integrated with <strong>Groq Language Processing Units (LPUs)</strong> for lightning-fast token generation. Read our guide on <Link to="/blog/fastapi-groq-chatbot" style={{ color: "var(--accent)" }}>FastAPI and Groq Acceleration</Link>.
             </p>
           </div>
         </div>
@@ -121,7 +147,7 @@ const Technology = () => {
               </tr>
               <tr style={{ borderBottom: "1px solid var(--sarva-border)" }}>
                 <td style={{ padding: "12px", fontWeight: "700", color: "var(--sarva-text-primary)" }}>Inference API</td>
-                <td style={{ padding: "12px" }}>Groq Cloud LPU API (Qwen-3.6-27b / GPT-OSS-120b, Llama-3.2-11b-vision-preview)</td>
+                <td style={{ padding: "12px" }}>Groq Cloud LPU API (Llama-3.3-70b-versatile, Llama-3.2-11b-vision-preview)</td>
               </tr>
               <tr>
                 <td style={{ padding: "12px", fontWeight: "700", color: "var(--sarva-text-primary)" }}>Hosting</td>
@@ -129,6 +155,46 @@ const Technology = () => {
               </tr>
             </tbody>
           </table>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="seo-card" style={{ marginTop: "40px" }} aria-labelledby="tech-faq-heading">
+          <h2 id="tech-faq-heading" className="seo-card-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <FiHelpCircle style={{ color: "var(--accent)" }} aria-hidden="true" /> Frequently Asked Questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
+            {FAQS.map((faq, idx) => (
+              <details key={idx} style={{
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-md)",
+                padding: "12px 16px"
+              }}>
+                <summary style={{ fontWeight: "700", cursor: "pointer", color: "var(--text-primary)" }}>
+                  {faq.q}
+                </summary>
+                <p style={{ marginTop: "8px", color: "var(--text-secondary)", lineHeight: "1.6", fontSize: "0.92rem" }}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related Technical Resources */}
+        <section className="seo-card" style={{ marginTop: "30px" }}>
+          <h2 className="seo-card-title">Related Technical Documentation & Guides</h2>
+          <ul style={{ paddingLeft: "20px", marginTop: "12px", color: "var(--text-secondary)", lineHeight: "1.8" }}>
+            <li>
+              <Link to="/case-study" style={{ color: "var(--accent)", fontWeight: "600" }}>SARVA AI Full-Stack Engineering Case Study</Link> — Benchmark metrics, challenges overcome, and system latency.
+            </li>
+            <li>
+              <Link to="/blog/full-stack-ai-architecture" style={{ color: "var(--accent)", fontWeight: "600" }}>Full-Stack AI Architecture & Deployment</Link> — System design patterns for enterprise AI platforms.
+            </li>
+            <li>
+              <Link to="/blog/chat-history-memory" style={{ color: "var(--accent)", fontWeight: "600" }}>MongoDB Session Memory Management</Link> — Designing persistent conversation stores.
+            </li>
+          </ul>
         </section>
 
         <section className="seo-card" style={{ marginTop: "40px", textAlign: "center" }}>

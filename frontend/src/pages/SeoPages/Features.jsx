@@ -7,7 +7,7 @@ import useSeo from "../../hooks/useSeo";
 
 const Features = () => {
   useSeo({
-    title: "SARVA AI Features — Conversational Suite, Documents & Memory",
+    title: "SARVA AI Features – Conversational AI, PDF Parsing & Memory",
     description: "Explore SARVA's full capability suite: multi-turn chat threads, PDF document parsing, model routing, and role-based security.",
     canonicalPath: "/features",
     jsonLd: {
