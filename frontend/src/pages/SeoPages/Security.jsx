@@ -23,30 +23,31 @@ const FAQS = [
 const Security = () => {
   useSeo({
     title: "Secure Enterprise AI & Data Protection Architecture | SARVA AI",
-    description: "Learn how SARVA AI protects enterprise data with JWT bearer tokens, bcrypt password encryption, MongoDB Atlas tenant isolation, and TLS 1.3 transport security.",
+    description: "Learn how SARVA AI protects enterprise data with JWT bearer tokens, bcrypt password encryption, MongoDB Atlas tenant isolation, TLS 1.3 transport security, and Pydantic input validation.",
     canonicalPath: "/security",
-    structuredData: [
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://sarva-ai-one.vercel.app/security" }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": FAQS.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.a
-          }
-        }))
-      }
-    ]
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://sarva-ai-one.vercel.app/security" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          }))
+        }
+      ]
+    }
   });
 
   return (

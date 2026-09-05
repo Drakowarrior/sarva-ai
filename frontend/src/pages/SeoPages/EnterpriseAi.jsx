@@ -23,30 +23,31 @@ const FAQS = [
 const EnterpriseAi = () => {
   useSeo({
     title: "Enterprise AI Solutions & Business Automation | SARVA AI",
-    description: "Deploy SARVA AI's enterprise AI solutions for secure business automation, RBAC workspace controls, FastAPI backend microservices, and private data governance.",
+    description: "Deploy SARVA AI's enterprise AI solutions for secure business automation, role-based access control, organization workspace management, FastAPI microservices, and private data governance.",
     canonicalPath: "/enterprise-ai",
-    structuredData: [
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "Enterprise AI", "item": "https://sarva-ai-one.vercel.app/enterprise-ai" }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": FAQS.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.a
-          }
-        }))
-      }
-    ]
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Enterprise AI", "item": "https://sarva-ai-one.vercel.app/enterprise-ai" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          }))
+        }
+      ]
+    }
   });
 
   return (

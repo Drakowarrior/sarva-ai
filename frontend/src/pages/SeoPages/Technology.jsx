@@ -22,38 +22,38 @@ const FAQS = [
 
 const Technology = () => {
   useSeo({
-    title: "SARVA AI Tech Stack – React, FastAPI, MongoDB & Groq",
-    description: "Explore the SARVA AI full-stack technology architecture: React 19 single-page frontend, FastAPI async Python backend, Groq LPUs, and MongoDB Atlas database.",
+    title: "SARVA AI Tech Stack – React, FastAPI, MongoDB & Groq LPU Architecture",
+    description: "Explore the SARVA AI full-stack technology architecture: React 19 single-page frontend, asynchronous FastAPI Python backend, Groq LPU hardware inference with Llama 3.3 70B, and MongoDB Atlas cloud database.",
     canonicalPath: "/technology",
-    structuredData: [
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "Technology Stack", "item": "https://sarva-ai-one.vercel.app/technology" }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        "headline": "SARVA AI Full-Stack Technology Architecture",
-        "description": "Full-stack architecture overview featuring React 19, FastAPI, MongoDB Atlas, and Groq Cloud LPUs.",
-        "author": { "@type": "Person", "name": "Karan Garg" }
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": FAQS.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.a
-          }
-        }))
-      }
-    ]
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Technology Stack", "item": "https://sarva-ai-one.vercel.app/technology" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "headline": "SARVA AI Full-Stack Technology Architecture",
+          "description": "Full-stack architecture overview featuring React 19, FastAPI, MongoDB Atlas, and Groq Cloud LPUs.",
+          "author": { "@type": "Person", "name": "Karan Garg" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          }))
+        }
+      ]
+    }
   });
 
   return (

@@ -22,31 +22,32 @@ const FAQS = [
 
 const FileAnalysis = () => {
   useSeo({
-    title: "AI File Analysis – Intelligent Document Processing | SARVA AI",
-    description: "Parse multi-page PDFs, resumes, financial reports, and technical specs with SARVA AI's intelligent document analysis and extraction tools.",
+    title: "AI File Analysis – Upload PDFs, Documents & Code for Instant AI Analysis | SARVA AI",
+    description: "Upload PDF files, Word documents, resumes, and code files to SARVA AI for instant AI-powered analysis. Extract key information, summarize reports, and ask questions about your documents using FastAPI and Groq LLMs.",
     canonicalPath: "/file-analysis",
-    structuredData: [
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "File Analysis", "item": "https://sarva-ai-one.vercel.app/file-analysis" }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": FAQS.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.a
-          }
-        }))
-      }
-    ]
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "File Analysis", "item": "https://sarva-ai-one.vercel.app/file-analysis" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          }))
+        }
+      ]
+    }
   });
 
   return (

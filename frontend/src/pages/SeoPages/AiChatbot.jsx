@@ -8,49 +8,58 @@ import useSeo from "../../hooks/useSeo";
 const FAQS = [
   {
     q: "How does SARVA AI Chatbot maintain conversation memory?",
-    a: "SARVA AI stores multi-turn conversation sessions inside MongoDB Atlas. Each user query is processed with preceding message history, allowing the AI to understand contextual follow-up questions seamlessly."
+    a: "SARVA AI stores multi-turn conversation sessions inside MongoDB Atlas. Each user query is processed with preceding message history, allowing the AI to understand contextual follow-up questions seamlessly. Sessions are automatically titled and searchable."
   },
   {
     q: "Can I upload files and PDFs directly into the chat?",
-    a: "Yes! SARVA AI supports multi-format document analysis. You can upload PDFs, text files, and images into the chat stream for instant summaries, code reviews, and document QA."
+    a: "Yes. SARVA AI supports multi-format document uploads including PDFs, DOCX files, text files, and images. Files are processed through a FastAPI extraction pipeline that injects document content directly into the AI context window."
   },
   {
     q: "Which AI models power the chatbot?",
-    a: "SARVA AI supports dynamic model switching across Groq LPU inference models including Llama 3.3 70B, Qwen 3 32B, Gemma 2 9B, and Vision models for low-latency responses exceeding 300 tokens per second."
+    a: "SARVA AI supports dynamic model switching across Groq LPU inference models including Llama 3.3 70B Versatile, Llama 3.2 Vision, and Llama 3.1 8B Instant for responses exceeding 300 tokens per second."
   },
   {
     q: "Is my chat data kept secure and private?",
-    a: "Absolutely. All user sessions and uploaded files are isolated at the database level and protected using stateless JWT bearer tokens and HTTPS transport encryption."
+    a: "Yes. All user sessions and uploaded files are isolated per user account at the MongoDB Atlas database level, protected using stateless JWT bearer tokens and TLS 1.3 transport encryption."
+  },
+  {
+    q: "What makes SARVA AI different from ChatGPT or Claude?",
+    a: "SARVA AI is a full-stack open application built with React 19 and FastAPI, featuring multi-turn persistent memory via MongoDB, organization workspace management with RBAC, and direct Groq LPU hardware acceleration. It is designed for developers and enterprises needing a deployable, customizable AI assistant — not just a chat interface."
+  },
+  {
+    q: "Can I use SARVA AI for code review and programming help?",
+    a: "Yes. SARVA AI renders markdown and syntax-highlighted code blocks natively. You can paste code snippets, upload code files, and ask the AI to review, refactor, explain, or debug. The Llama 3.3 70B model is particularly capable for programming tasks."
   }
 ];
 
 const AiChatbot = () => {
   useSeo({
-    title: "AI Chatbot for Business | Intelligent Conversations | SARVA AI",
-    description: "Explore SARVA AI's intelligent AI chatbot for multi-turn conversations, PDF document parsing, dynamic model selection, and secure enterprise workflows.",
+    title: "AI Chatbot Platform — Multi-Turn Conversations, PDF Support & Memory | SARVA AI",
+    description: "SARVA AI is an intelligent AI chatbot with persistent conversation memory, PDF document parsing, dynamic model switching across Llama 3.3 70B and Vision models, and secure enterprise-grade session isolation.",
     canonicalPath: "/ai-chatbot",
-    structuredData: [
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "AI Chatbot", "item": "https://sarva-ai-one.vercel.app/ai-chatbot" }
-        ]
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": FAQS.map(item => ({
-          "@type": "Question",
-          "name": item.q,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": item.a
-          }
-        }))
-      }
-    ]
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://sarva-ai-one.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "AI Chatbot", "item": "https://sarva-ai-one.vercel.app/ai-chatbot" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": item.a
+            }
+          }))
+        }
+      ]
+    }
   });
 
   return (
@@ -60,7 +69,7 @@ const AiChatbot = () => {
       <main className="seo-page-content">
         <SeoBreadcrumbs items={[{ name: "AI Chatbot", path: "/ai-chatbot" }]} />
         <div className="seo-hero-badge">Conversational AI Engine</div>
-        <h1 className="seo-page-title">Intelligent AI Chatbot for Modern Workflows</h1>
+        <h1 className="seo-page-title">AI Chatbot — Multi-Turn Conversations, PDF Support & Persistent Memory</h1>
         <p className="seo-page-subtitle">
           SARVA AI chatbot combines fast inference, deep contextual understanding, multi-turn memory, and document attachment capabilities to deliver human-like conversational experiences.
         </p>
@@ -77,7 +86,7 @@ const AiChatbot = () => {
             <div className="seo-card-icon"><FiClock aria-hidden="true" /></div>
             <h2 className="seo-card-title">Session History & Memory</h2>
             <p className="seo-card-text">
-              Conversations are automatically grouped into sessions stored inside MongoDB Atlas. Users can rename chat threads, search previous messages, delete old conversations, and pick up right where they left off.
+              Conversations are automatically grouped into sessions stored inside MongoDB Atlas. Users can rename chat threads, search previous messages, delete old conversations, and pick up right where they left off. Read how this works in our <Link to="/blog/chat-history-memory" style={{ color: "var(--accent)" }}>MongoDB chat memory guide</Link>.
             </p>
           </div>
 
