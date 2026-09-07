@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleFastApiGroq = () => {
   useSeo({
-    title: "How to Build an AI Chatbot with Groq LPU & LLaMA 3.3 | SARVA AI",
-    description: "Learn how to integrate Groq LPU hardware acceleration with FastAPI to build AI chatbots using Llama 3.3 70B. Covers async streaming, model selection, rate limit handling, error recovery, and 300+ tok/sec inference setup.",
+    title: "Build a Fast AI Chatbot with Groq & LLaMA | SARVA AI",
+    description: "Integrate Groq LPU hardware with FastAPI to build 300+ tok/sec AI chatbots using Llama 3.3 70B. Covers async streaming, model routing, and error handling.",
     canonicalPath: "/blog/fastapi-groq-chatbot",
     jsonLd: {
       "@context": "https://schema.org",

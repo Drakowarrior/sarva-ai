@@ -87,8 +87,8 @@ export const articlesData = [
 
 const BlogHub = () => {
   useSeo({
-    title: "AI Insights, Guides & Enterprise Technology Resources | SARVA AI",
-    description: "Explore SARVA AI technical engineering articles, software architecture breakdowns, and step-by-step guides on React, FastAPI, Groq LPUs, and AI document analysis.",
+    title: "Engineering Blog & Technical AI Guides | SARVA AI",
+    description: "Technical engineering articles, architecture breakdowns, and guides on React 19, FastAPI, Groq LPUs, and AI document analysis.",
     canonicalPath: "/blog",
     jsonLd: {
       "@context": "https://schema.org",

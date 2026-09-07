@@ -23,7 +23,7 @@ const FAQS = [
 const EnterpriseAi = () => {
   useSeo({
     title: "Enterprise AI Solutions & Business Automation | SARVA AI",
-    description: "Deploy SARVA AI's enterprise AI solutions for secure business automation, role-based access control, organization workspace management, FastAPI microservices, and private data governance.",
+    description: "Deploy enterprise AI solutions for business automation with role-based access, team workspaces, FastAPI microservices, and private data governance.",
     canonicalPath: "/enterprise-ai",
     jsonLd: {
       "@context": "https://schema.org",

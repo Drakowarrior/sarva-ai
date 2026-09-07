@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleArchitectureDeployment = () => {
   useSeo({
-    title: "React + FastAPI + MongoDB: Production Full-Stack AI Architecture Guide | SARVA AI",
-    description: "Complete guide to deploying full-stack AI applications with React on Vercel, FastAPI on Render, and MongoDB Atlas. Covers CORS configuration, SPA routing, environment variables, CI/CD, and microservice architecture patterns.",
+    title: "Full-Stack AI Architecture: React & FastAPI | SARVA AI",
+    description: "Deploy full-stack AI apps with React on Vercel, FastAPI on Render, and MongoDB Atlas. Covers CORS, SPA routing, CI/CD, and microservice patterns.",
     canonicalPath: "/blog/full-stack-ai-architecture",
     jsonLd: {
       "@context": "https://schema.org",

@@ -7,7 +7,7 @@ import useSeo from "../../hooks/useSeo";
 
 const CaseStudy = () => {
   useSeo({
-    title: "SARVA AI Case Study — Full-Stack AI Architecture & Benchmarks",
+    title: "Case Study — Full-Stack AI Architecture | SARVA AI",
     description: "Technical case study detailing system design choices, latency benchmarks, Llama 3.3 LLM streaming, and security decisions.",
     canonicalPath: "/case-study",
     jsonLd: {

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { FiMail, FiGithub, FiGlobe, FiSend, FiArrowRight } from "react-icons/fi";
 import { useState } from "react";
 import toast from "react-hot-toast";

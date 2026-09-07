@@ -1,0 +1,27 @@
+# SARVA AI
+
+> SARVA AI is a full-stack enterprise AI platform featuring multi-turn conversation memory, PDF document analysis, Groq LPU inference, and team workspace management.
+
+## Core Pages
+
+- [Home](https://sarva-ai-one.vercel.app/): Enterprise AI solutions, intelligent automation, and interactive platform overview.
+- [About](https://sarva-ai-one.vercel.app/about): Platform overview, architecture design, and mission.
+- [Features](https://sarva-ai-one.vercel.app/features): AI chatbot, PDF parsing, multi-model routing, and memory capabilities.
+- [AI Chatbot](https://sarva-ai-one.vercel.app/ai-chatbot): Conversational AI with persistent memory, streaming responses, and vision model support.
+- [Enterprise AI](https://sarva-ai-one.vercel.app/enterprise-ai): Business automation, role-based access control, and workspace management.
+- [File Analysis](https://sarva-ai-one.vercel.app/file-analysis): Document parsing and AI analysis for PDFs, documents, and code files.
+- [Security](https://sarva-ai-one.vercel.app/security): Enterprise security architecture, JWT authentication, and data protection.
+- [Technology](https://sarva-ai-one.vercel.app/technology): Full-stack technology stack covering React 19, FastAPI, MongoDB Atlas, and Groq LPUs.
+- [Case Study](https://sarva-ai-one.vercel.app/case-study): Technical system design, architecture benchmarks, and implementation details.
+- [Contact](https://sarva-ai-one.vercel.app/contact): Platform inquiries and developer support.
+
+## Engineering Blog & Guides
+
+- [Blog Hub](https://sarva-ai-one.vercel.app/blog): Technical articles, architecture breakdowns, and implementation guides.
+- [Build AI Chatbot with React & FastAPI](https://sarva-ai-one.vercel.app/blog/react-fastapi-ai-chatbot): Guide to integrating React 19 with FastAPI, SSE streaming, and MongoDB session persistence.
+- [Fast AI Chatbot with Groq & LLaMA](https://sarva-ai-one.vercel.app/blog/fastapi-groq-chatbot): Hardware-accelerated inference with Groq LPUs and Llama 3.3 70B.
+- [Chat With PDF Documents](https://sarva-ai-one.vercel.app/blog/chat-with-pdf): PDF parsing, context window injection, and document Q&A implementation.
+- [AI Document Analysis Pipeline](https://sarva-ai-one.vercel.app/blog/ai-document-analysis): Multi-format document text extraction, MIME validation, and LLM summarization.
+- [Full-Stack AI Architecture Guide](https://sarva-ai-one.vercel.app/blog/full-stack-ai-architecture): Production deployment guide for React on Vercel, FastAPI on Render, and MongoDB Atlas.
+- [JWT Authentication for AI Chatbots](https://sarva-ai-one.vercel.app/blog/jwt-ai-chatbot): JWT bearer token security, bcrypt encryption, and multi-tenant session isolation.
+- [Conversational AI Memory & History](https://sarva-ai-one.vercel.app/blog/chat-history-memory): MongoDB Atlas schema design and Motor async queries for session context persistence.

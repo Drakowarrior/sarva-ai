@@ -22,8 +22,8 @@ const FAQS = [
 
 const About = () => {
   useSeo({
-    title: "About SARVA AI — Full-Stack Conversational AI Platform Built with React & FastAPI",
-    description: "SARVA AI is a full-stack enterprise AI platform built with React 19 and FastAPI by Karan Garg. Features multi-turn conversation memory, PDF document analysis, Groq LPU inference, and organization workspace management.",
+    title: "About SARVA AI — Full-Stack Conversational AI Platform",
+    description: "Learn about SARVA AI, a full-stack enterprise AI platform with persistent memory, PDF analysis, Groq LPU inference, and team workspace management.",
     canonicalPath: "/about",
     jsonLd: {
       "@context": "https://schema.org",

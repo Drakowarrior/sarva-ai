@@ -34,8 +34,8 @@ const FAQS = [
 
 const AiChatbot = () => {
   useSeo({
-    title: "AI Chatbot Platform — Multi-Turn Conversations, PDF Support & Memory | SARVA AI",
-    description: "SARVA AI is an intelligent AI chatbot with persistent conversation memory, PDF document parsing, dynamic model switching across Llama 3.3 70B and Vision models, and secure enterprise-grade session isolation.",
+    title: "AI Chatbot Platform — Conversational AI & Memory | SARVA AI",
+    description: "Intelligent conversational AI with persistent memory, PDF parsing, dynamic Llama 3.3 routing, and secure enterprise session isolation.",
     canonicalPath: "/ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",

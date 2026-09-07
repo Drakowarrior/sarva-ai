@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleMongodbMemory = () => {
   useSeo({
-    title: "How to Build Conversational AI With Chat History & Memory | SARVA AI",
-    description: "Design MongoDB Atlas schemas for AI chatbot session memory. Learn how to build persistent multi-turn conversation threads with compound indexes, Motor async queries, session pagination, and automatic title generation.",
+    title: "Build AI Chat With Memory & Chat History | SARVA AI",
+    description: "Design MongoDB Atlas schemas for AI chatbot session memory. Build multi-turn conversation threads with compound indexes and Motor async queries.",
     canonicalPath: "/blog/chat-history-memory",
     jsonLd: {
       "@context": "https://schema.org",

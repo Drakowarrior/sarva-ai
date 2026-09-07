@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleReactFastApi = () => {
   useSeo({
-    title: "How to Build an AI Chatbot with React 19 & FastAPI | SARVA AI",
-    description: "Complete guide to building a full-stack AI chatbot with React 19 and FastAPI. Covers project setup, async REST endpoints, JWT middleware, real-time SSE streaming, MongoDB session persistence, and Vercel deployment.",
+    title: "Build an AI Chatbot with React & FastAPI | SARVA AI",
+    description: "Guide to building a full-stack AI chatbot with React 19 and FastAPI. Covers SSE streaming, JWT auth, MongoDB persistence, and Vercel deployment.",
     canonicalPath: "/blog/react-fastapi-ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",

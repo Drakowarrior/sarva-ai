@@ -33,7 +33,7 @@ const FAQS = [
 const ArticleDocumentAnalysis = () => {
   useSeo({
     title: "How to Build an AI Document Analysis Pipeline | SARVA AI",
-    description: "Build an AI document analysis pipeline with FastAPI and Python. Learn multi-format text extraction from PDFs, DOCX, and code files, MIME validation, structured output generation, and LLM-powered summarization.",
+    description: "Build an AI document analysis pipeline with FastAPI. Covers multi-format extraction for PDFs and DOCX, MIME validation, and LLM summarization.",
     canonicalPath: "/blog/ai-document-analysis",
     jsonLd: {
       "@context": "https://schema.org",

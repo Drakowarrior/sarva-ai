@@ -22,8 +22,8 @@ const FAQS = [
 
 const Technology = () => {
   useSeo({
-    title: "SARVA AI Tech Stack – React, FastAPI, MongoDB & Groq LPU Architecture",
-    description: "Explore the SARVA AI full-stack technology architecture: React 19 single-page frontend, asynchronous FastAPI Python backend, Groq LPU hardware inference with Llama 3.3 70B, and MongoDB Atlas cloud database.",
+    title: "Technology Stack — React, FastAPI & Groq | SARVA AI",
+    description: "Explore the full-stack architecture: React 19 SPA frontend, async FastAPI backend, Groq LPU inference with Llama 3.3, and MongoDB Atlas database.",
     canonicalPath: "/technology",
     jsonLd: {
       "@context": "https://schema.org",

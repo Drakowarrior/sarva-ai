@@ -22,8 +22,8 @@ const FAQS = [
 
 const Security = () => {
   useSeo({
-    title: "Secure Enterprise AI & Data Protection Architecture | SARVA AI",
-    description: "Learn how SARVA AI protects enterprise data with JWT bearer tokens, bcrypt password encryption, MongoDB Atlas tenant isolation, TLS 1.3 transport security, and Pydantic input validation.",
+    title: "Enterprise AI Security & Data Protection | SARVA AI",
+    description: "Learn how SARVA AI protects data with JWT auth, bcrypt encryption, MongoDB Atlas tenant isolation, TLS 1.3 security, and Pydantic validation.",
     canonicalPath: "/security",
     jsonLd: {
       "@context": "https://schema.org",

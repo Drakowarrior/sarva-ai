@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleJwtSecurity = () => {
   useSeo({
-    title: "How JWT Authentication Works in AI Chatbot Applications | SARVA AI",
-    description: "Implement JWT authentication in FastAPI AI chatbot applications. Complete guide to bcrypt password hashing, token generation, FastAPI dependency injection, multi-tenant session isolation, and secure API endpoint protection.",
+    title: "JWT Authentication for AI Chatbot Apps | SARVA AI",
+    description: "Implement JWT auth in FastAPI AI chatbots. Complete guide to bcrypt hashing, token generation, dependency injection, and tenant session isolation.",
     canonicalPath: "/blog/jwt-ai-chatbot",
     jsonLd: {
       "@context": "https://schema.org",

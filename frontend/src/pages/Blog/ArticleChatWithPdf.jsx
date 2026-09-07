@@ -32,8 +32,8 @@ const FAQS = [
 
 const ArticleChatWithPdf = () => {
   useSeo({
-    title: "How to Chat With PDF Documents Using AI & FastAPI | SARVA AI",
-    description: "Learn how to build a PDF chatbot with FastAPI and Python. Complete guide to pypdf text extraction, context window injection, multi-page PDF parsing, chunking strategies, and AI document Q&A implementation.",
+    title: "Chat With PDF Documents Using AI & FastAPI | SARVA AI",
+    description: "Build a PDF chatbot with FastAPI and Python. Learn pypdf extraction, context injection, document chunking, and AI Q&A implementation.",
     canonicalPath: "/blog/chat-with-pdf",
     jsonLd: {
       "@context": "https://schema.org",

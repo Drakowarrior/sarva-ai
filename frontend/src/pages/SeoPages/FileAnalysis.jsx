@@ -22,8 +22,8 @@ const FAQS = [
 
 const FileAnalysis = () => {
   useSeo({
-    title: "AI File Analysis – Upload PDFs, Documents & Code for Instant AI Analysis | SARVA AI",
-    description: "Upload PDF files, Word documents, resumes, and code files to SARVA AI for instant AI-powered analysis. Extract key information, summarize reports, and ask questions about your documents using FastAPI and Groq LLMs.",
+    title: "AI Document Analysis — Chat with PDFs & Code | SARVA AI",
+    description: "Upload PDFs, documents, and code files for instant AI analysis, summarization, and interactive Q&A powered by FastAPI and Groq LLMs.",
     canonicalPath: "/file-analysis",
     jsonLd: {
       "@context": "https://schema.org",

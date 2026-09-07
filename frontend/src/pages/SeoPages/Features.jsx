@@ -26,8 +26,8 @@ const FAQS = [
 
 const Features = () => {
   useSeo({
-    title: "SARVA AI Features — AI Chatbot, PDF Analysis, Multi-Model Routing & Memory | SARVA AI",
-    description: "Explore SARVA AI's full capability suite: multi-turn chat threads, PDF document parsing, dynamic model routing across Llama 3.3 70B, Groq LPU inference, and role-based organization security.",
+    title: "SARVA AI Features — Chatbot, PDF Analysis & Memory",
+    description: "Explore SARVA AI features: multi-turn chat memory, PDF parsing, dynamic Llama 3.3 model routing, Groq LPU speed, and role-based organization security.",
     canonicalPath: "/features",
     jsonLd: {
       "@context": "https://schema.org",
