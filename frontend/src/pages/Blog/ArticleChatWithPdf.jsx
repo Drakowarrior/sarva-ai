@@ -161,7 +161,7 @@ messages = [
           </div>
 
           <p>
-            The explicit instruction "use ONLY the document content" reduces hallucination significantly. Without it, models often supplement document answers with their pre-training knowledge in ways that are hard to detect.
+            The explicit instruction "use ONLY the document content" reduces hallucination significantly. Without it, models often supplement document answers with their pre-training knowledge in ways that are hard to detect. For Groq LPU hardware acceleration used in SARVA AI — which handles this streaming pipeline at 300+ tokens/sec — see the <Link to="/technology" style={{ color: "var(--accent)" }}>full technology architecture overview</Link>.
           </p>
 
           {/* SARVA AI Funnel CTA Banner */}

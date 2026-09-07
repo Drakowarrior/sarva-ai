@@ -39,7 +39,7 @@ const CaseStudy = () => {
         <div className="seo-hero-badge">Engineering Case Study</div>
         <h1 className="seo-page-title">SARVA AI Case Study – Building a Full-Stack Conversational AI Platform</h1>
         <p className="seo-page-subtitle">
-          An exhaustive breakdown of how SARVA AI was conceptualized, architected, built, and deployed as a high-performance enterprise conversational AI platform.
+          This case study demonstrates the full-stack architecture, engineering design decisions, and technical implementation behind SARVA AI — a production conversational AI platform built with React 19, FastAPI, MongoDB Atlas, and Groq LPU inference. It documents how each layer was built, the challenges encountered, and how they were resolved.
         </p>
 
         {/* 1. Problem */}

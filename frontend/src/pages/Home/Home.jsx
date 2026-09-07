@@ -65,6 +65,25 @@ const CAPABILITIES = [
   }
 ];
 
+const HOME_FAQS = [
+  {
+    q: "What is SARVA AI?",
+    a: "SARVA AI is a full-stack enterprise conversational AI platform built with React 19, FastAPI, MongoDB Atlas, and Groq LPU hardware acceleration. It provides multi-turn AI chat, document analysis, persistent memory, and organization workspace management in a single integrated platform."
+  },
+  {
+    q: "What can SARVA AI be used for?",
+    a: "SARVA AI is designed for software engineers, researchers, and enterprise teams. It can be used for conversational Q&A, PDF and document analysis, code review, technical documentation assistance, and collaborative AI workflows with role-based access controls."
+  },
+  {
+    q: "Which technologies power SARVA AI?",
+    a: "SARVA AI uses React 19 and Vite for the frontend, FastAPI (Python) for the backend, MongoDB Atlas for persistent session and message storage, and Groq LPUs running open-weight models like Llama 3.3 70B for fast token generation."
+  },
+  {
+    q: "How do I get access to SARVA AI?",
+    a: "You can create a free account directly through the platform. Individual accounts and organization accounts are both supported. Organization accounts include workspace management with member roles and pending approval flows."
+  }
+];
+
 function Home() {
   const { isAuthenticated } = useAuth();
   const [selectedPromptForDemo, setSelectedPromptForDemo] = useState("");
@@ -99,6 +118,14 @@ function Home() {
             "price": "0",
             "priceCurrency": "USD"
           }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": HOME_FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": { "@type": "Answer", "text": item.a }
+          }))
         }
       ]
     }
@@ -396,7 +423,32 @@ function Home() {
         </div>
       </section>
 
-      {/* 9. FINAL CONVERSION CTA */}
+      {/* 9. FREQUENTLY ASKED QUESTIONS */}
+      <section className="sarva-section" style={{ padding: "40px 24px" }}>
+        <div className="sarva-section-header">
+          <span className="sarva-section-tag">Common questions</span>
+          <h2 className="sarva-section-title">Frequently Asked Questions</h2>
+        </div>
+        <div style={{ maxWidth: "800px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "12px" }}>
+          {HOME_FAQS.map((faq, idx) => (
+            <details key={idx} style={{
+              background: "var(--bg-secondary, rgba(255,255,255,0.03))",
+              border: "1px solid var(--border, rgba(255,255,255,0.1))",
+              borderRadius: "12px",
+              padding: "16px 20px"
+            }}>
+              <summary style={{ fontWeight: "700", cursor: "pointer", color: "var(--text-primary)", fontSize: "1rem", lineHeight: "1.5" }}>
+                {faq.q}
+              </summary>
+              <p style={{ marginTop: "10px", color: "var(--text-secondary)", lineHeight: "1.65", fontSize: "0.93rem" }}>
+                {faq.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* 10. FINAL CONVERSION CTA */}
       <section style={{ padding: "0 24px" }}>
         <div className="sarva-cta-banner">
           <h2>Ready to Experience Intelligent AI Assistance?</h2>

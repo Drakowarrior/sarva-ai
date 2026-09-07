@@ -59,7 +59,7 @@ const FileAnalysis = () => {
         <div className="seo-hero-badge">Intelligent Document Comprehension</div>
         <h1 className="seo-page-title">AI-Powered Document and File Analysis</h1>
         <p className="seo-page-subtitle">
-          Transform unstructured documents into actionable insights. Upload PDF files, resumes, research papers, and technical specifications for instant parsing and context-grounded AI responses.
+          AI file analysis is the process of using artificial intelligence to extract, interpret, summarize, and answer questions about uploaded documents and files. SARVA AI applies this to PDF reports, Word documents, resumes, research papers, and technical specifications — delivering instant AI-powered answers grounded in your document content.
         </p>
 
         <div className="seo-grid-4-cards">

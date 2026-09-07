@@ -53,7 +53,7 @@ const Contact = () => {
         <div className="seo-hero-badge">Developer Contact & Support</div>
         <h1 className="seo-page-title">Get in Touch with SARVA AI</h1>
         <p className="seo-page-subtitle">
-          Have questions about our architecture, deployment options, or custom LLM integrations? Send us a message or connect via GitHub.
+          SARVA AI developer support is the primary contact channel for questions about the platform, technical implementation, collaboration, or project-related communication. Use the form below or connect via GitHub for issues, feature requests, and contributions.
         </p>
 
         <div className="seo-grid-2">

@@ -201,7 +201,7 @@ async def stream_chat(payload: ChatRequest, user_id: str = Depends(get_current_u
             4. Model Selection Strategy
           </h2>
           <p>
-            Different query types benefit from different models. SARVA AI uses a routing approach based on query characteristics:
+            Different query types benefit from different models. SARVA AI uses a routing approach based on query characteristics. This model selection layer sits inside the FastAPI backend — for a complete picture of how all services fit together, the <Link to="/blog/full-stack-ai-architecture" style={{ color: "var(--accent)" }}>full-stack AI architecture guide</Link> walks through the deployment topology:
           </p>
           <ul style={{ paddingLeft: "20px", margin: "16px 0" }}>
             <li><strong>llama-3.1-8b-instant:</strong> Simple conversational replies, quick factual questions — fastest response time.</li>

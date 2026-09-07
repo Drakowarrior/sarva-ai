@@ -65,7 +65,7 @@ const Technology = () => {
         <div className="seo-hero-badge">Modern Full-Stack Architecture</div>
         <h1 className="seo-page-title">SARVA AI Full-Stack Technology Architecture</h1>
         <p className="seo-page-subtitle">
-          SARVA AI is built on a modern, decoupled full-stack architecture optimized for ultra-low latency inference, high concurrent throughput, and rich interactive frontend experiences.
+          SARVA AI is a full-stack AI application built with React 19, FastAPI, MongoDB Atlas, and Groq LPU model acceleration. Its decoupled architecture optimizes for ultra-low latency inference, high concurrent throughput, and rich interactive frontend experiences.
         </p>
 
         {/* Visual Architecture Flow Diagram */}

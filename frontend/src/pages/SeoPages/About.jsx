@@ -1,9 +1,24 @@
 import { Link } from "react-router-dom";
-import { FiInfo, FiTarget, FiUserCheck, FiCode, FiArrowRight, FiGithub, FiGlobe } from "react-icons/fi";
+import { FiInfo, FiTarget, FiUserCheck, FiCode, FiArrowRight, FiGithub, FiGlobe, FiHelpCircle } from "react-icons/fi";
 import SeoHeader from "../../components/SeoLayout/SeoHeader";
 import SeoFooter from "../../components/SeoLayout/SeoFooter";
 import SeoBreadcrumbs from "../../components/SeoLayout/SeoBreadcrumbs";
 import useSeo from "../../hooks/useSeo";
+
+const FAQS = [
+  {
+    q: "What is SARVA AI built with?",
+    a: "SARVA AI is built with React 19 and Vite for the frontend, FastAPI (Python 3.11+) for the backend microservice, MongoDB Atlas for persistent data storage, and Groq LPU hardware acceleration for fast AI model inference."
+  },
+  {
+    q: "What problem does SARVA AI solve?",
+    a: "SARVA AI addresses the gap between raw LLM APIs and practical enterprise use. It provides a unified full-stack platform where users can chat conversationally, upload and analyze documents, maintain session memory across threads, and manage team access with role-based controls — without building this infrastructure from scratch."
+  },
+  {
+    q: "Who is SARVA AI designed for?",
+    a: "SARVA AI is designed for software engineers, AI researchers, technical teams, and enterprise organizations who need a customizable, deployable AI assistant. It is particularly useful for teams working with code analysis, document intelligence, and internal knowledge workflows."
+  }
+];
 
 const About = () => {
   useSeo({
@@ -26,6 +41,14 @@ const About = () => {
           "url": "https://sarva-ai-one.vercel.app",
           "description": "Enterprise conversational AI platform built with React 19, FastAPI, MongoDB Atlas, and Groq LPU inference.",
           "sameAs": ["https://github.com/Drakowarrior/sarva-ai"]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": FAQS.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": { "@type": "Answer", "text": item.a }
+          }))
         }
       ]
     }
@@ -37,7 +60,7 @@ const About = () => {
 
       <main className="seo-page-content">
         <SeoBreadcrumbs items={[{ name: "About", path: "/about" }]} />
-        <div className="seo-hero-badge">Platform Vision & Engineering</div>
+        <div className="seo-hero-badge">Platform Vision &amp; Engineering</div>
         <h1 className="seo-page-title">About SARVA AI — Full-Stack Conversational AI Platform</h1>
         <p className="seo-page-subtitle">
           SARVA AI is a production-ready enterprise conversational AI platform built to deliver intuitive reasoning, document intelligence, multi-model flexibility, and developer-centric workflows — engineered from the ground up with React 19 and FastAPI.
@@ -61,7 +84,7 @@ const About = () => {
 
           <div className="seo-card">
             <div className="seo-card-icon"><FiUserCheck aria-hidden="true" /></div>
-            <h2 className="seo-card-title">Developer & Enterprise Focus</h2>
+            <h2 className="seo-card-title">Developer &amp; Enterprise Focus</h2>
             <p className="seo-card-text">
               Engineered with production requirements in mind: <Link to="/security" style={{ color: "var(--accent)" }}>JWT authentication</Link>, organization dashboards with RBAC, rate-limiting protection, audit feedback logs, and cross-platform responsiveness. See the <Link to="/enterprise-ai" style={{ color: "var(--accent)" }}>enterprise AI features</Link> for workspace controls.
             </p>
@@ -69,7 +92,7 @@ const About = () => {
         </div>
 
         <section className="seo-card" style={{ marginTop: "32px" }}>
-          <h2 className="seo-card-title"><FiInfo className="seo-card-icon" /> Developer & Project</h2>
+          <h2 className="seo-card-title"><FiInfo className="seo-card-icon" /> Developer &amp; Project</h2>
           <p className="seo-card-text">
             SARVA AI was designed and built by <strong>Karan Garg</strong>, a full-stack developer and intern at IGT Solutions. The project demonstrates end-to-end engineering of a production conversational AI platform — from database schema design to frontend UX and cloud deployment.
           </p>
@@ -95,6 +118,30 @@ const About = () => {
           </ul>
         </section>
 
+        {/* FAQ Section */}
+        <section className="seo-card" style={{ marginTop: "40px" }} aria-labelledby="about-faq-heading">
+          <h2 id="about-faq-heading" className="seo-card-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <FiHelpCircle style={{ color: "var(--accent)" }} aria-hidden="true" /> Frequently Asked Questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
+            {FAQS.map((faq, idx) => (
+              <details key={idx} style={{
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-md)",
+                padding: "12px 16px"
+              }}>
+                <summary style={{ fontWeight: "700", cursor: "pointer", color: "var(--text-primary)" }}>
+                  {faq.q}
+                </summary>
+                <p style={{ marginTop: "8px", color: "var(--text-secondary)", lineHeight: "1.6", fontSize: "0.92rem" }}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
         <section className="seo-card" style={{ marginTop: "40px", textAlign: "center" }}>
           <h2 className="seo-card-title">Want to see how SARVA AI works?</h2>
           <p className="seo-card-text" style={{ marginBottom: "20px" }}>
@@ -104,7 +151,7 @@ const About = () => {
             <Link to="/features" className="seo-cta-btn" style={{ padding: "12px 24px" }}>
               Explore Features <FiArrowRight aria-hidden="true" />
             </Link>
-            <Link to="/chat" className="seo-social-link" style={{ padding: "12px 24px" }}>
+            <Link to="/auth" className="seo-social-link" style={{ padding: "12px 24px" }}>
               Try Live Demo <FiArrowRight aria-hidden="true" />
             </Link>
           </div>

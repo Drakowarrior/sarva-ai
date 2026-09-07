@@ -59,7 +59,7 @@ const EnterpriseAi = () => {
         <div className="seo-hero-badge">Enterprise Grade AI Architecture</div>
         <h1 className="seo-page-title">Enterprise AI Solutions for Business Automation</h1>
         <p className="seo-page-subtitle">
-          Engineered for scale, reliability, and corporate data governance. SARVA AI empowers organizations with private AI assistant workflows, role-based controls, and seamless cloud integrations.
+          Enterprise AI refers to AI systems designed to support business workflows, internal knowledge access, document processing, automation, and decision-support tasks with role-based workspace controls. SARVA AI applies these principles to deliver secure, scalable AI for organizations — with private assistant workflows, role-based access controls, and cloud integrations.
         </p>
 
         <div className="seo-grid-4-cards">

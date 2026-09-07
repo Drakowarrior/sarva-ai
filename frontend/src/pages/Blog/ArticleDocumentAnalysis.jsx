@@ -106,12 +106,15 @@ const ArticleDocumentAnalysis = () => {
             <li><strong>Technical documentation Q&A:</strong> Let users ask natural-language questions about internal engineering specs or API documentation.</li>
             <li><strong>Research paper summarization:</strong> Produce structured summaries with methodology, findings, limitations, and cited sources.</li>
           </ul>
+          <p>
+            If you also want to let users interact with documents conversationally — typing follow-up questions after an initial upload — see the guide on <Link to="/blog/chat-with-pdf" style={{ color: "var(--accent)" }}>building a PDF chat interface with FastAPI</Link>.
+          </p>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
             2. Document Upload & MIME Validation
           </h2>
           <p>
-            The backend validates file MIME types, sanitizes filenames, and routes files to specific parser modules depending on file extension. Security controls are applied before any parsing:
+            The backend validates file MIME types, sanitizes filenames, and routes files to specific parser modules depending on file extension. Security controls are applied before any parsing. This upload pattern fits into the broader <Link to="/blog/full-stack-ai-architecture" style={{ color: "var(--accent)" }}>full-stack AI architecture</Link> where FastAPI handles file routing and MongoDB stores session metadata.
           </p>
 
           <pre style={{ background: "#090d16", padding: "16px", borderRadius: "12px", border: "1px solid var(--border)", fontSize: "0.88rem", overflowX: "auto", color: "#ec4899" }}>
@@ -197,7 +200,7 @@ async def read_plain_text(file_path: str) -> str:
             5. Structured Output Generation with LLMs
           </h2>
           <p>
-            By combining extracted file text with clear prompt directives, the LLM produces Markdown tables, bulleted executive summaries, and action item lists automatically. The key is being explicit about the desired output format in the system prompt:
+            By combining extracted file text with clear prompt directives, the LLM produces Markdown tables, bulleted executive summaries, and action item lists automatically. The key is being explicit about the desired output format in the system prompt. You can see this pipeline in action by using <Link to="/file-analysis" style={{ color: "var(--accent)" }}>SARVA AI's file analysis feature</Link>, which applies this exact approach to uploaded documents:
           </p>
           <pre style={{ background: "#090d16", padding: "16px", borderRadius: "12px", border: "1px solid var(--border)", fontSize: "0.88rem", overflowX: "auto", color: "#ec4899" }}>
 {`SUMMARY_PROMPT = """You are a professional document analyst.

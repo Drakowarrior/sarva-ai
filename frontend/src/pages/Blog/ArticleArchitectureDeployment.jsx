@@ -94,7 +94,7 @@ const ArticleArchitectureDeployment = () => {
           </p>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            1. Microservice Architecture Overview
+            1. What Is a Full-Stack AI Architecture?
           </h2>
           <p>
             SARVA AI uses a three-tier decoupled architecture where each service is deployed independently, scaled independently, and communicates over HTTPS:
@@ -117,7 +117,7 @@ const ArticleArchitectureDeployment = () => {
           </ul>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            2. Vercel Configuration for React SPA
+            2. How Does React Communicate With FastAPI on Vercel?
           </h2>
           <p>
             Without proper Vercel configuration, refreshing the browser on any client-side route returns a 404. Add a <code>vercel.json</code> in the frontend root to handle SPA routing:
@@ -141,7 +141,7 @@ const ArticleArchitectureDeployment = () => {
           </pre>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            3. FastAPI CORS Configuration for Cross-Origin Deployment
+            3. How Does FastAPI Handle CORS for Cross-Origin Deployment?
           </h2>
           <p>
             When React runs on <code>sarva-ai-one.vercel.app</code> and FastAPI on <code>render-service.onrender.com</code>, all API calls are cross-origin. Configure <code>CORSMiddleware</code> with explicit allowed origins:
@@ -190,7 +190,7 @@ app.add_middleware(
           </div>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            4. MongoDB Atlas Connection & Connection Pooling
+            4. Why Use MongoDB Atlas for AI Application Data?
           </h2>
           <p>
             Use Motor (async PyMongo) for non-blocking database operations. Initialize the connection once at application startup using FastAPI's lifespan context manager to avoid creating new connections per request:
@@ -216,7 +216,7 @@ app = FastAPI(lifespan=lifespan)`}
           </pre>
 
           <h2 style={{ fontSize: "1.6rem", marginTop: "40px", marginBottom: "12px", color: "var(--text-primary)" }}>
-            5. Environment Variables & Secrets Management
+            5. How Should Environment Variables & Secrets Be Managed?
           </h2>
           <p>
             Never commit secrets to your repository. Use environment variables for all sensitive configuration:
