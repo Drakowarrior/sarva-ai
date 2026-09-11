@@ -6,10 +6,13 @@ import { useChat } from "../../context/ChatContext";
 import { useAuth } from "../../context/AuthContext";
 
 const MODEL_LABELS = {
-  "meta-llama/llama-4-scout-17b-16e-instruct": "Llama 4 Scout (17B)",
-  "qwen/qwen3-32b": "Qwen 3 (32B)",
-  "llama-3.1-8b-instant": "Llama 3.1 (8B)",
-  "llama-3.2-11b-vision-preview": "Llama 3.2 Vision",
+  "openai/gpt-oss-20b": "OpenAI GPT-OSS-20B",
+  "openai/gpt-oss-120b": "OpenAI GPT-OSS-120B",
+  "groq/compound-mini": "Groq Compound Mini",
+  "meta-llama/llama-4-scout-17b-16e-instruct": "OpenAI GPT-OSS-20B",
+  "qwen/qwen3-32b": "OpenAI GPT-OSS-20B",
+  "llama-3.1-8b-instant": "Groq Compound Mini",
+  "llama-3.2-11b-vision-preview": "Groq Compound Mini",
   "mixtral-8x7b-32768": "Mixtral 8x7B",
   "gemma2-9b-it": "Gemma 2 (9B)"
 };

@@ -15,21 +15,21 @@ client = AsyncGroq(api_key=GROQ_API_KEY)
 @app.post("/api/chat/stream")
 async def stream_ai_response(prompt: str):
     response = await client.chat.completions.create(
-        model="meta-llama/llama-4-scout-17b-16e-instruct",
+        model="openai/gpt-oss-20b",
         messages=[{"role": "user", "content": prompt}],
         stream=True
     )
     return StreamingResponse(response_generator(response))`;
 
 const TECHNICAL_LOG = `# Initializing async Groq LPU stream pipeline...
-[INFO] Model: meta-llama/llama-4-scout-17b-16e-instruct
+[INFO] Model: openai/gpt-oss-20b
 [INFO] Session ID: sess_94a8c1f92e
 [SUCCESS] JWT Authentication verified for user_id: 66ab91c8e
 -> Stream initialized: 314.5 tokens/sec`;
 
 export const ChatPreview = () => {
   const [copied, setCopied] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("Llama 4 Scout (17B)");
+  const [selectedModel, setSelectedModel] = useState("OpenAI GPT-OSS-20B");
 
   const handleCopy = () => {
     setCopied(true);
@@ -231,7 +231,7 @@ export const ArchitectureDiagramMockup = () => {
         <div className="arch-node llm">
           <div className="arch-icon"><FiCpu /></div>
           <h4>Groq LPUs</h4>
-          <span>Llama 4 Scout (17B)</span>
+          <span>OpenAI GPT-OSS-20B</span>
           <p>300+ tok/sec Low Latency</p>
         </div>
 

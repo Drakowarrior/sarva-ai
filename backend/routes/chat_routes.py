@@ -95,7 +95,7 @@ async def chat(
         return {"success": False, "error": "No messages in payload"}
         
     user_message = payload.messages[-1].content
-    model = payload.model or "meta-llama/llama-4-scout-17b-16e-instruct"
+    model = payload.model or "openai/gpt-oss-20b"
     files = payload.files or []
 
     # If session doesn't exist, create it

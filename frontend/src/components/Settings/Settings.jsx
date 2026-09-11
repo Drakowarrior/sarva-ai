@@ -16,9 +16,9 @@ import ImageWithFallback from "../Common/ImageWithFallback";
 import "./Settings.css";
 
 const MODELS = [
-  { id: "meta-llama/llama-4-scout-17b-16e-instruct", name: "Llama 4 Scout (17B)", version: "Latest", desc: "Meta's newest architecture for high quality responses", status: "Available" },
-  { id: "qwen/qwen3-32b", name: "Qwen 3 (32B)", version: "High Capacity", desc: "Best for complex coding, math, and reasoning tasks", status: "Available" },
-  { id: "llama-3.1-8b-instant", name: "Llama 3.1 (8B)", version: "Instant", desc: "Ultra-fast response model optimized for speed", status: "Available" }
+  { id: "openai/gpt-oss-20b", name: "OpenAI GPT-OSS-20B", version: "Latest", desc: "OpenAI's open-weight model for high quality reasoning & code", status: "Available" },
+  { id: "openai/gpt-oss-120b", name: "OpenAI GPT-OSS-120B", version: "High Capacity", desc: "Best for complex reasoning, math, and long contexts", status: "Available" },
+  { id: "groq/compound-mini", name: "Groq Compound Mini", version: "Instant", desc: "Ultra-fast response model optimized for high speed", status: "Available" }
 ];
 
 const LANGUAGES = [

@@ -252,7 +252,7 @@ function Home() {
             <span className="sarva-showcase-tag">01 · Conversational engine</span>
             <h2 className="sarva-showcase-title">High-throughput token generation at 300+ tok/sec.</h2>
             <p className="sarva-showcase-desc">
-              Experience instant answers powered by Groq LPU hardware acceleration. Switch between Llama 4 Scout (17B), Qwen 3 (32B), and instant fast models seamlessly.
+              Experience instant answers powered by Groq LPU hardware acceleration. Switch between OpenAI GPT-OSS-20B, OpenAI GPT-OSS-120B, and instant fast models seamlessly.
             </p>
             <div className="sarva-showcase-bullets">
               <div className="sarva-showcase-bullet-item"><FiCheck className="sarva-bullet-icon" /> Multi-turn persistent thread memory</div>
@@ -330,7 +330,7 @@ function Home() {
           <div className="sarva-timeline-card">
             <span className="sarva-step-badge">STEP 03</span>
             <h3 className="sarva-step-title">3. Groq LPU Inference</h3>
-            <p className="sarva-step-desc">Llama 4 Scout stream generates high-speed responses at over 300 tokens per second.</p>
+            <p className="sarva-step-desc">OpenAI GPT-OSS-20B stream generates high-speed responses at over 300 tokens per second.</p>
           </div>
 
           <div className="sarva-timeline-card">

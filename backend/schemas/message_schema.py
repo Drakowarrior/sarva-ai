@@ -11,7 +11,7 @@ class MessageCreate(BaseModel):
     messages: List[MessageItem]
     sessionId: str
     userId: str
-    model: Optional[str] = "meta-llama/llama-4-scout-17b-16e-instruct"
+    model: Optional[str] = "openai/gpt-oss-20b"
     files: Optional[List[Dict[str, Any]]] = None
     messageId: Optional[str] = None
     requestId: Optional[str] = None

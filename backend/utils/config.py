@@ -8,6 +8,8 @@ class Settings:
     APP_NAME = "SARVA AI"
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b").strip()
+    MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", "800"))
 
     MONGO_URI = os.getenv("MONGO_URI")
 

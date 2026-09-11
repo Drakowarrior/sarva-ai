@@ -29,6 +29,8 @@ You assist with:
 
 Always provide structured, clear, and helpful responses. Use markdown formatting and code block syntax highlighting when appropriate."""
 
+from utils.config import settings
+
 def encode_image_to_base64(file_path: str) -> str:
     """Encode a local image file to base64 string."""
     try:
@@ -40,25 +42,30 @@ def encode_image_to_base64(file_path: str) -> str:
 
 async def generate_ai_response(
     messages_history: list,
-    model: str = "meta-llama/llama-4-scout-17b-16e-instruct",
+    model: str = None,
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
 ) -> str:
-    # Model mapping dictionary to resolve mock model IDs to active Groq endpoints
+    primary_model = settings.GROQ_MODEL or "openai/gpt-oss-20b"
+    max_output_tokens = settings.MAX_OUTPUT_TOKENS or 800
+
+    # Model mapping dictionary to resolve request keys to active Groq endpoints
     model_mapping = {
-        "meta-llama/llama-4-scout-17b-16e-instruct": "qwen/qwen3.6-27b",
-        "qwen/qwen3-32b": "qwen/qwen3.6-27b",
-        "qwen-3.6-27b": "qwen/qwen3.6-27b",
-        "qwen/qwen3.6-27b": "qwen/qwen3.6-27b",
+        "meta-llama/llama-4-scout-17b-16e-instruct": primary_model,
+        "qwen/qwen3-32b": primary_model,
+        "qwen-3.6-27b": primary_model,
+        "qwen/qwen3.6-27b": primary_model,
         "gpt-oss-120b": "openai/gpt-oss-120b",
         "openai/gpt-oss-120b": "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b": "openai/gpt-oss-20b",
         "llama-3.1-8b-instant": "groq/compound-mini",
-        "groq/compound-mini": "groq/compound-mini"
+        "groq/compound-mini": "groq/compound-mini",
+        "groq/compound": "groq/compound",
+        "allam-2-7b": "allam-2-7b"
     }
-    resolved_model = model_mapping.get(model, "qwen/qwen3.6-27b")
+
+    resolved_model = model_mapping.get(model, primary_model) if model else primary_model
 
     try:
-        # Check if we have any image file attachments in the messages
-        # Groq vision model should be used if images are present
         has_images = False
         processed_messages = []
         
@@ -108,10 +115,9 @@ async def generate_ai_response(
                                     })
                                     has_images = True
                     else:
-                        # It's a text document (PDF, DOCX, TXT), prepend its text to content
+                        # Text document (PDF, DOCX, TXT), prepend its text to content
                         extracted_text = file_info.get("extracted_text", "")
                         if not extracted_text or extracted_text == "[Image File]":
-                            # Fallback: Read and parse the file from the local filesystem on the fly
                             saved_filename = file_info.get("saved_filename")
                             user_id_sub = ""
                             url_parts = file_info.get("file_url", "").split("/")
@@ -133,7 +139,6 @@ async def generate_ai_response(
                         if extracted_text and extracted_text != "[Image File]":
                             text_context += f"\n\n[Content of attached file: {filename}]\n{extracted_text}\n[End of file content]\n"
 
-            # If there are images and we are the user, format as content list
             if images_in_msg and role == "user":
                 message_content = [{"type": "text", "text": text_context + content}]
                 message_content.extend(images_in_msg)
@@ -142,26 +147,39 @@ async def generate_ai_response(
                     "content": message_content
                 })
             else:
-                # Regular text message
                 processed_messages.append({
                     "role": role,
                     "content": text_context + content
                 })
 
-        # Switch to vision model if images are present
-        if has_images:
-            resolved_model = "qwen/qwen3.6-27b"
+        # Switch to compound-mini if images are present or as fallback
+        if has_images and resolved_model not in {"openai/gpt-oss-20b", "groq/compound-mini"}:
+            resolved_model = "groq/compound-mini"
 
-        # Call Groq API (async)
-        completion = await async_client.chat.completions.create(
-            model=resolved_model,
-            messages=processed_messages,
-            temperature=0.7,
-            max_tokens=4096
-        )
-
-        return completion.choices[0].message.content
+        # Attempt primary model call with max_tokens cap
+        try:
+            completion = await async_client.chat.completions.create(
+                model=resolved_model,
+                messages=processed_messages,
+                temperature=0.7,
+                max_tokens=max_output_tokens
+            )
+            return completion.choices[0].message.content
+        except Exception as primary_err:
+            print(f"[GROQ SERVICE] Primary model '{resolved_model}' call failed: {primary_err}")
+            # Safe Fallback to groq/compound-mini if primary model hits rate limit or error
+            fallback_model = "groq/compound-mini"
+            if resolved_model != fallback_model:
+                print(f"[GROQ SERVICE] Attempting fallback model '{fallback_model}'...")
+                fallback_completion = await async_client.chat.completions.create(
+                    model=fallback_model,
+                    messages=processed_messages,
+                    temperature=0.7,
+                    max_tokens=max_output_tokens
+                )
+                return fallback_completion.choices[0].message.content
+            raise primary_err
 
     except Exception as e:
-        print(f"Groq API Error: {e}")
-        return f"Sorry, I encountered an error. Details: {str(e)}"
+        print(f"[GROQ SERVICE ERROR] LLM inference failed: {e}")
+        return "I'm receiving high traffic right now. Please try again in a moment."

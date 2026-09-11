@@ -36,12 +36,12 @@ export const ChatProvider = ({ children }) => {
   // Model & Language choices
   const [selectedModel, setSelectedModel] = useState(() => {
     const stored = localStorage.getItem("selectedModel");
-    const validModels = ["meta-llama/llama-4-scout-17b-16e-instruct", "qwen/qwen3-32b", "llama-3.1-8b-instant"];
+    const validModels = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "groq/compound-mini"];
     if (stored && validModels.includes(stored)) {
       return stored;
     }
-    localStorage.setItem("selectedModel", "meta-llama/llama-4-scout-17b-16e-instruct");
-    return "meta-llama/llama-4-scout-17b-16e-instruct";
+    localStorage.setItem("selectedModel", "openai/gpt-oss-20b");
+    return "openai/gpt-oss-20b";
   });
   const [selectedLanguage, setSelectedLanguage] = useState(
     localStorage.getItem("selectedLanguage") || "English"
