@@ -17,7 +17,8 @@ class Settings:
 
     _raw_max_tokens = os.getenv("MAX_OUTPUT_TOKENS", "")
     try:
-        MAX_OUTPUT_TOKENS = min(int(_raw_max_tokens), 800) if _raw_max_tokens else 800
+        parsed_tokens = int(_raw_max_tokens) if _raw_max_tokens else 800
+        MAX_OUTPUT_TOKENS = parsed_tokens if (1 <= parsed_tokens <= 800) else 800
     except ValueError:
         MAX_OUTPUT_TOKENS = 800
 
