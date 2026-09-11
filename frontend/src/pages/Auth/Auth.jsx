@@ -32,6 +32,25 @@ function Auth() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const modeParam = params.get("mode");
+    const emailParam = params.get("email");
+    const tokenParam = params.get("token");
+
+    if (modeParam === "reset" || modeParam === "forgot") {
+      setAuthMode(modeParam);
+    }
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+    if (tokenParam) {
+      setResetToken(tokenParam.toUpperCase());
+    }
+  }, []);
 
   // Robot Mascot Interaction States
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -180,7 +199,13 @@ function Auth() {
       try {
         const response = await api.post("/auth/forgot-password", { email });
         if (response.data.success) {
-          toast.success("Security reset code generated successfully.");
+          toast.success(response.data.message || "Security reset code generated.");
+          if (response.data.demo_token) {
+            setResetToken(response.data.demo_token);
+            toast.success(`Demo reset code: ${response.data.demo_token}`, { duration: 8000 });
+          }
+          setAuthMode("reset");
+          setError("");
         } else {
           setError(response.data.error || "Failed to generate security code.");
         }
@@ -739,16 +764,16 @@ function Auth() {
                       className="auth-input-field"
                       placeholder=" "
                       value={resetToken}
-                      onChange={(e) => setResetToken(e.target.value)}
+                      onChange={(e) => setResetToken(e.target.value.toUpperCase())}
                       required
                     />
                     <label htmlFor="resetToken" className="auth-floating-label">Security Reset Code</label>
-                    <FiKey className="auth-field-icon" />
+                    <FiKey className="auth-field-icon" aria-hidden="true" />
                   </div>
 
                   <div className="auth-input-group">
                     <input
-                      type="password"
+                      type={showNewPassword ? "text" : "password"}
                       id="newPassword"
                       className="auth-input-field"
                       placeholder=" "
@@ -757,7 +782,39 @@ function Auth() {
                       required
                     />
                     <label htmlFor="newPassword" className="auth-floating-label">New Password</label>
-                    <FiLock className="auth-field-icon" />
+                    <FiLock className="auth-field-icon" aria-hidden="true" />
+                    <button
+                      type="button"
+                      className="auth-right-icon-btn"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      tabIndex="-1"
+                      aria-label={showNewPassword ? "Hide new password" : "Show new password"}
+                    >
+                      {showNewPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                    </button>
+                  </div>
+
+                  <div className="auth-input-group">
+                    <input
+                      type={showConfirmNewPassword ? "text" : "password"}
+                      id="confirmNewPassword"
+                      className="auth-input-field"
+                      placeholder=" "
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      required
+                    />
+                    <label htmlFor="confirmNewPassword" className="auth-floating-label">Confirm New Password</label>
+                    <FiLock className="auth-field-icon" aria-hidden="true" />
+                    <button
+                      type="button"
+                      className="auth-right-icon-btn"
+                      onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                      tabIndex="-1"
+                      aria-label={showConfirmNewPassword ? "Hide confirm new password" : "Show confirm new password"}
+                    >
+                      {showConfirmNewPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                    </button>
                   </div>
                 </>
               )}

@@ -15,4 +15,8 @@ class Settings:
 
     SECRET_KEY = os.getenv("SECRET_KEY", "super_secret_fallback_key")
 
+    ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
+    IS_PROD = ENVIRONMENT in ("production", "prod") or bool(os.getenv("RENDER"))
+    INCLUDE_DEMO_TOKEN = os.getenv("INCLUDE_DEMO_TOKEN", "false" if IS_PROD else "true").lower() == "true"
+
 settings = Settings()

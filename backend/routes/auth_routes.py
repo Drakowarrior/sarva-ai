@@ -455,10 +455,11 @@ async def forgot_password(payload: ForgotPasswordRequest):
     email_clean = payload.email.strip().lower()
     user = await db.users.find_one({"email": email_clean})
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No user registered with this email address."
-        )
+        # Prevent user enumeration: return generic success message
+        return {
+            "success": True,
+            "message": "If an account exists for this email address, password reset instructions have been issued."
+        }
     
     # Generate random 6-character uppercase alphanumeric code
     reset_token = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -474,14 +475,23 @@ async def forgot_password(payload: ForgotPasswordRequest):
         }
     )
     
-    # Log it to backend stdout for administrative verification
-    print(f"\n[SECURITY] Password reset requested for {email_clean}. Reset Token: {reset_token}\n")
+    # Audit log (redact live reset token in production environments)
+    if settings.INCLUDE_DEMO_TOKEN:
+        print(f"\n[DEMO/DEV] Password reset requested for {email_clean}. Reset Token: {reset_token}\n")
+    else:
+        masked_email = f"{email_clean[:3]}***@{email_clean.split('@')[-1]}" if "@" in email_clean else "***"
+        print(f"\n[SECURITY AUDIT] Password reset requested for {masked_email} at {datetime.utcnow().isoformat()}Z\n")
     
-    return {
+    response_data = {
         "success": True,
-        "message": "Password reset token generated.",
-        "demo_token": reset_token  # Expose directly for demo/local environment ease-of-use
+        "message": "If an account exists for this email address, password reset instructions have been issued."
     }
+
+    # Only expose demo_token in local/development environments if configured
+    if settings.INCLUDE_DEMO_TOKEN:
+        response_data["demo_token"] = reset_token
+
+    return response_data
 
 @router.post("/reset-password")
 async def reset_password(payload: ResetPasswordRequest):
