@@ -8,8 +8,18 @@ class Settings:
     APP_NAME = "SARVA AI"
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b").strip()
-    MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", "800"))
+    
+    _raw_groq_model = os.getenv("GROQ_MODEL", "").strip()
+    if not _raw_groq_model or "qwen" in _raw_groq_model.lower() or "scout" in _raw_groq_model.lower():
+        GROQ_MODEL = "openai/gpt-oss-20b"
+    else:
+        GROQ_MODEL = _raw_groq_model
+
+    _raw_max_tokens = os.getenv("MAX_OUTPUT_TOKENS", "")
+    try:
+        MAX_OUTPUT_TOKENS = min(int(_raw_max_tokens), 800) if _raw_max_tokens else 800
+    except ValueError:
+        MAX_OUTPUT_TOKENS = 800
 
     MONGO_URI = os.getenv("MONGO_URI")
 
