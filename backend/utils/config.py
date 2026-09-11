@@ -19,4 +19,11 @@ class Settings:
     IS_PROD = ENVIRONMENT in ("production", "prod") or bool(os.getenv("RENDER"))
     INCLUDE_DEMO_TOKEN = os.getenv("INCLUDE_DEMO_TOKEN", "false" if IS_PROD else "true").lower() == "true"
 
+    RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+    EMAIL_FROM = os.getenv("EMAIL_FROM", "SARVA AI <onboarding@resend.dev>")
+    FRONTEND_URL = os.getenv(
+        "FRONTEND_URL",
+        "https://sarva-ai-one.vercel.app" if IS_PROD else "http://localhost:5173"
+    ).rstrip("/")
+
 settings = Settings()

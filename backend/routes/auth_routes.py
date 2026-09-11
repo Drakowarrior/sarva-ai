@@ -11,6 +11,7 @@ from pydantic import BaseModel, EmailStr, Field
 from database.mongodb import db
 from utils.config import settings
 from middleware.auth import get_user_id
+from services.email_service import send_password_reset_email
 
 router = APIRouter(
     prefix="/api/auth",
@@ -474,7 +475,17 @@ async def forgot_password(payload: ForgotPasswordRequest):
             }
         }
     )
-    
+
+    # Construct frontend reset URL matching React Router route: /auth?mode=reset&email=...&token=...
+    reset_url = f"{settings.FRONTEND_URL}/auth?mode=reset&email={email_clean}&token={reset_token}"
+
+    # Dispatch password reset email via Resend
+    await send_password_reset_email(
+        recipient_email=email_clean,
+        reset_code=reset_token,
+        reset_url=reset_url
+    )
+
     # Audit log (redact live reset token in production environments)
     if settings.INCLUDE_DEMO_TOKEN:
         print(f"\n[DEMO/DEV] Password reset requested for {email_clean}. Reset Token: {reset_token}\n")
