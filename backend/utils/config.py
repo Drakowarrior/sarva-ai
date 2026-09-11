@@ -16,14 +16,18 @@ class Settings:
     SECRET_KEY = os.getenv("SECRET_KEY", "super_secret_fallback_key")
 
     ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
-    IS_PROD = ENVIRONMENT in ("production", "prod") or bool(os.getenv("RENDER"))
+    IS_PROD = ENVIRONMENT in ("production", "prod") or bool(os.getenv("RENDER")) or bool(os.getenv("RENDER_SERVICE_ID")) or bool(os.getenv("VERCEL"))
     INCLUDE_DEMO_TOKEN = os.getenv("INCLUDE_DEMO_TOKEN", "false" if IS_PROD else "true").lower() == "true"
 
     RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
     EMAIL_FROM = os.getenv("EMAIL_FROM", "SARVA AI <onboarding@resend.dev>")
-    FRONTEND_URL = os.getenv(
-        "FRONTEND_URL",
-        "https://sarva-ai-one.vercel.app" if IS_PROD else "http://localhost:5173"
-    ).rstrip("/")
+
+    _raw_frontend_url = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
+    if _raw_frontend_url:
+        FRONTEND_URL = _raw_frontend_url
+    elif IS_PROD:
+        FRONTEND_URL = "https://sarva-ai-one.vercel.app"
+    else:
+        FRONTEND_URL = "http://localhost:5173"
 
 settings = Settings()

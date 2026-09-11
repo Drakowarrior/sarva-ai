@@ -133,6 +133,20 @@ async def send_password_reset_email(recipient_email: str, reset_code: str, reset
     </html>
     """
 
+    text_content = f"""Hello,
+
+We received a request to reset your SARVA AI password.
+
+Your security reset code is: {reset_code}
+
+You can also reset your password directly by visiting this link:
+{reset_url}
+
+This link and code will expire in 15 minutes.
+
+If you did not request a password reset, you can safely ignore this email.
+"""
+
     headers = {
         "Authorization": f"Bearer {settings.RESEND_API_KEY}",
         "Content-Type": "application/json"
@@ -142,7 +156,8 @@ async def send_password_reset_email(recipient_email: str, reset_code: str, reset
         "from": settings.EMAIL_FROM,
         "to": [recipient_email],
         "subject": "Reset your SARVA AI password",
-        "html": html_content
+        "html": html_content,
+        "text": text_content
     }
 
     try:
