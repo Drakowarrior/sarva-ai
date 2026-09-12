@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-static-meta.mjs",
+    "build:vite": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

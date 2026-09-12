@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# Private application routes — not relevant for search
+Disallow: /auth
+Disallow: /chat
+Disallow: /org-dashboard
+Disallow: /pending-approval
+
 Sitemap: https://sarva-ai-one.vercel.app/sitemap.xml

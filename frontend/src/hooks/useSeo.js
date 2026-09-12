@@ -1,13 +1,16 @@
 import { useEffect } from "react";
+import { SITE_URL, DEFAULT_OG_IMAGE } from "../config/seo.config";
 
 /**
  * Single-source-of-truth Hook to manage document title, meta descriptions, canonical URLs,
  * OpenGraph & Twitter Card tags, and JSON-LD structured data dynamically.
+ *
+ * Domain migration: update SITE_URL in src/config/seo.config.js — no changes needed here.
  */
 export const useSeo = ({ 
   title, 
   description, 
-  canonicalPath = "", 
+  canonicalPath = "",
   canonical = "",
   jsonLd = null,
   structuredData = null,
@@ -17,7 +20,7 @@ export const useSeo = ({
   robots = null
 }) => {
   useEffect(() => {
-    const baseUrl = "https://sarva-ai-one.vercel.app";
+    const baseUrl = SITE_URL;
     const rawPath = canonical || canonicalPath || window.location.pathname;
     const pathWithoutOrigin = rawPath.startsWith("http")
       ? rawPath.replace(baseUrl, "")
@@ -30,7 +33,9 @@ export const useSeo = ({
       : (strippedPath.startsWith("/") ? strippedPath : `/${strippedPath}`);
 
     const targetUrl = `${baseUrl}${normalizedPath === "/" ? "/" : normalizedPath}`;
-    const targetImage = image ? (image.startsWith("http") ? image : `${baseUrl}${image.startsWith("/") ? "" : "/"}${image}`) : `${baseUrl}/logo.jpg`;
+    const targetImage = image
+      ? (image.startsWith("http") ? image : `${baseUrl}${image.startsWith("/") ? "" : "/"}${image}`)
+      : DEFAULT_OG_IMAGE;
 
     // 1. Set Document Title
     if (title) {

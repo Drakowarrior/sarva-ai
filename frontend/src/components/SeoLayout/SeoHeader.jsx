@@ -46,7 +46,7 @@ const SeoHeader = () => {
         {/* Brand Logo & Name */}
         <Link to="/" className="seo-brand">
           <div className="seo-brand-logo-wrapper">
-            <img src="/logo.jpg" alt="SARVA AI Logo" className="seo-brand-logo" />
+            <img src="/logo.jpg" alt="SARVA AI Logo" className="seo-brand-logo" width="32" height="32" />
             <span className="seo-brand-glow" />
           </div>
           <span className="seo-brand-text">SARVA AI</span>

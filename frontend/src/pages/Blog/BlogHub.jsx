@@ -157,6 +157,12 @@ const BlogHub = () => {
                   <p className="seo-card-text" style={{ marginTop: "8px", fontSize: "var(--sarva-text-sm)" }}>
                     {article.description}
                   </p>
+                  <time
+                    dateTime={article.date}
+                    style={{ display: "block", marginTop: "10px", fontSize: "var(--sarva-text-xs)", color: "var(--sarva-text-tertiary)" }}
+                  >
+                    {article.date}
+                  </time>
                 </div>
 
                 <div className="seo-card-action" style={{ marginTop: "auto", paddingTop: "20px", display: "flex", alignItems: "center", gap: "6px", fontWeight: "600", fontSize: "var(--sarva-text-sm)", color: "var(--sarva-text-accent)" }}>

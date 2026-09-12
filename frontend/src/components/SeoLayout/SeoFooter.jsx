@@ -31,7 +31,7 @@ const SeoFooter = () => {
 
         {/* Column 2: Platform Links */}
         <div className="seo-footer-col">
-          <h2 className="seo-footer-title">Platform</h2>
+          <h3 className="seo-footer-title">Platform</h3>
           <ul className="seo-footer-links">
             <li><Link to="/ai-chatbot">AI Chatbot</Link></li>
             <li><Link to="/enterprise-ai">Enterprise AI</Link></li>
@@ -43,7 +43,7 @@ const SeoFooter = () => {
 
         {/* Column 3: Architecture & Security */}
         <div className="seo-footer-col">
-          <h2 className="seo-footer-title">Architecture</h2>
+          <h3 className="seo-footer-title">Architecture</h3>
           <ul className="seo-footer-links">
             <li><Link to="/technology">Technology Stack</Link></li>
             <li><Link to="/security">Security & Privacy</Link></li>
@@ -59,7 +59,7 @@ const SeoFooter = () => {
 
         {/* Column 4: Engineering Articles (Top 5 + View All link) */}
         <div className="seo-footer-col">
-          <h2 className="seo-footer-title">Engineering Articles</h2>
+          <h3 className="seo-footer-title">Engineering Articles</h3>
           <ul className="seo-footer-links">
             <li><Link to="/blog/react-fastapi-ai-chatbot">React + FastAPI Chatbot</Link></li>
             <li><Link to="/blog/fastapi-groq-chatbot">Groq LPU LLaMA 3.3</Link></li>
@@ -76,7 +76,7 @@ const SeoFooter = () => {
 
         {/* Column 5: Key Capabilities */}
         <div className="seo-footer-col">
-          <h2 className="seo-footer-title">Key Capabilities</h2>
+          <h3 className="seo-footer-title">Key Capabilities</h3>
           <ul className="seo-footer-badges">
             <li><FiCpu className="seo-footer-icon" aria-hidden="true" /> Multi-LLM Engine (Llama 3.3, Gemma)</li>
             <li><FiFileText className="seo-footer-icon" aria-hidden="true" /> PDF & Vision Multimodal Parsing</li>
