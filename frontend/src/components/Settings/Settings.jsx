@@ -227,7 +227,7 @@ function Settings({ isOpen, onClose }) {
         avatar
       });
       if (res.data.success) {
-        toast.success("Profile details saved!");
+        toast.success("Profile updated");
         if (checkAuthStatus) {
           await checkAuthStatus();
         }
@@ -464,7 +464,14 @@ function Settings({ isOpen, onClose }) {
 
                     {/* Profile Hero Card */}
                     <div className="profile-hero-card">
-                      <div className="profile-avatar-container" onClick={() => fileInputRef.current?.click()}>
+                      <div
+                          className="profile-avatar-container"
+                          onClick={() => fileInputRef.current?.click()}
+                          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && fileInputRef.current?.click()}
+                          tabIndex={0}
+                          role="button"
+                          aria-label="Upload profile photo"
+                        >
                         <ImageWithFallback
                           src={avatar}
                           alt={fullName || user?.fullName}
@@ -515,10 +522,9 @@ function Settings({ isOpen, onClose }) {
                       </div>
                     </div>
 
-                    {/* Profile Fields (2-Column Grid) */}
-                    <div className="settings-section-header">
-                      <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: "700" }}>PROFILE INFORMATION</h4>
-                    </div>
+                    {/* Profile Fields — Section Divider */}
+                    <div className="settings-form-section">
+                      <div className="settings-form-section-heading"><span>Profile Information</span></div>
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                       <div className="settings-field-group">
@@ -587,8 +593,9 @@ function Settings({ isOpen, onClose }) {
                       />
                     </div>
 
-                    {/* Workspace Membership Card */}
-                    <div style={{ padding: "16px 20px", borderRadius: "14px", background: "rgba(0,0,0,0.12)", border: "1px solid var(--border)", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", fontSize: "0.8rem" }}>
+                    {/* Workspace Membership — Section Divider */}
+                    <div className="settings-form-section-heading"><span>Workspace Membership</span></div>
+                    <div style={{ padding: "16px 20px", borderRadius: "var(--radius-lg)", background: "var(--bg-secondary)", border: "1px solid var(--border)", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", fontSize: "0.8rem" }}>
                       <div>
                         <span style={{ color: "var(--text-tertiary)", display: "block", fontSize: "0.72rem" }}>ORGANIZATION</span>
                         <strong style={{ color: "var(--text-primary)" }}>{user?.organizationName || "Personal Account"}</strong>
@@ -607,13 +614,14 @@ function Settings({ isOpen, onClose }) {
                       </div>
                     </div>
 
+                    </div>
+
                     <button
                       type="submit"
                       disabled={updatingProfile}
-                      className="btn-secondary-sm"
-                      style={{ background: "var(--accent)", color: "#ffffff", border: "none", padding: "12px 24px", height: "auto", borderRadius: "12px", fontWeight: "750", fontSize: "0.88rem", width: "fit-content" }}
+                      className="btn-primary-settings"
                     >
-                      {updatingProfile ? "Saving Profile..." : "Save Profile Details"}
+                      {updatingProfile ? "Saving..." : "Save Profile"}
                     </button>
                   </form>
                 )}
@@ -906,8 +914,7 @@ function Settings({ isOpen, onClose }) {
                         <button
                           type="submit"
                           disabled={updatingOrg}
-                          className="btn-secondary-sm"
-                          style={{ background: "var(--accent)", color: "#ffffff", border: "none", width: "fit-content", padding: "10px 18px", borderRadius: "10px" }}
+                          className="btn-primary-settings"
                         >
                           {updatingOrg ? "Saving..." : "Save Workspace Details"}
                         </button>

@@ -56,32 +56,25 @@ function Navbar({ onToggleSidebar, onOpenSettings, onOpenShare }) {
         </button>
         
         {!searchOpen ? (
-          <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px", minWidth: 0 }}>
+            {/* Session title */}
             <span style={{
               fontSize: "0.92rem",
               fontWeight: "600",
               color: "var(--text-primary)",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
+              whiteSpace: "nowrap",
+              lineHeight: 1.2
             }}>
               {activeTitle}
             </span>
-            <span style={{
-              fontSize: "0.72rem",
-              color: "var(--text-secondary)",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              marginTop: "2px"
-            }}>
-              <span className="model-status-dot" />
-              <FiCpu style={{ fontSize: "0.8rem" }} />
-              {MODEL_LABELS[selectedModel] || selectedModel}
-            </span>
+            {/* Model pill — visually interactive chip */}
+            <div className="model-pill" title={`Active model: ${MODEL_LABELS[selectedModel] || selectedModel}`} aria-label={`Using ${MODEL_LABELS[selectedModel] || selectedModel}`}>
+              <span className="model-status-dot" aria-hidden="true" />
+              <FiCpu style={{ fontSize: "0.72rem", flexShrink: 0 }} aria-hidden="true" />
+              <span className="model-pill-name">{MODEL_LABELS[selectedModel] || selectedModel}</span>
+            </div>
           </div>
         ) : (
           <div style={{ display: "flex", alignItems: "center", width: "100%", maxWidth: "320px", position: "relative" }}>

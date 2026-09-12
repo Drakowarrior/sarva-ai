@@ -264,127 +264,173 @@ function Sidebar({ isOpen, onClose, onOpenSettings, onOpenShare }) {
         </select>
       </div>
 
-      {/* Sessions list */}
+      {/* Sessions list — grouped by recency using real timestamps */}
       <div className="sidebar-sessions">
-        {sortedSessions.length === 0 ? (
-          <p style={{
-            textAlign: "center",
-            color: "var(--text-secondary)",
-            fontSize: "0.85rem",
-            marginTop: "20px"
-          }}>
-            {searchQuery ? "No matches found" : "No sessions yet"}
-          </p>
-        ) : (
-          sortedSessions.map((session) => {
-            const isActive = session.session_id === currentSession;
-            const isEditing = session.session_id === editingSessionId;
-
+        {(() => {
+          if (sortedSessions.length === 0) {
             return (
-              <div
-                key={session.session_id}
-                className={`session-item ${isActive ? "active" : ""}`}
-                onClick={() => !isEditing && handleSelectSession(session.session_id)}
-                onContextMenu={(e) => handleContextMenu(e, session)}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "stretch",
-                  gap: "3px",
-                  padding: "8px 12px"
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                  <div className="session-title-wrapper" style={{ flex: 1, marginRight: "8px" }}>
-                    <FiMessageSquare style={{ flexShrink: 0, fontSize: "0.9rem", opacity: 0.7 }} />
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        className="session-rename-input"
-                        value={renameText}
-                        onChange={(e) => setRenameText(e.target.value)}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") saveRename(e, session.session_id);
-                          if (e.key === "Escape") cancelRename(e);
-                        }}
-                        autoFocus
-                      />
-                    ) : (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "1px", overflow: "hidden" }}>
-                        <span className="session-title" style={{ fontWeight: isActive ? "600" : "400" }}>
-                          {cleanText(session.title, "New Chat")}
-                        </span>
-                        {session.isShared && (
-                          <span style={{
-                            fontSize: "0.62rem",
-                            background: "rgba(168, 85, 247, 0.12)",
-                            color: "#c084fc",
-                            border: "1px solid rgba(168, 85, 247, 0.2)",
-                            padding: "1px 5px",
-                            borderRadius: "var(--sarva-radius-xs)",
-                            fontWeight: "600",
-                            alignSelf: "flex-start",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "3px"
-                          }}>
-                            Shared{session.sharedBy ? ` by ${session.sharedBy}` : ""}
-                          </span>
+              <p style={{
+                textAlign: "center",
+                color: "var(--text-secondary)",
+                fontSize: "0.85rem",
+                marginTop: "20px"
+              }}>
+                {searchQuery ? "No matches found" : "No sessions yet"}
+              </p>
+            );
+          }
+
+          // Group sessions by real timestamp
+          const now = new Date();
+          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          const startOf7DaysAgo = new Date(startOfToday);
+          startOf7DaysAgo.setDate(startOf7DaysAgo.getDate() - 7);
+
+          const groups = [
+            { label: "Today", items: [] },
+            { label: "Previous 7 Days", items: [] },
+            { label: "Older", items: [] }
+          ];
+
+          sortedSessions.forEach(session => {
+            const ts = session.updated_at || session.created_at;
+            const date = ts ? new Date(ts) : null;
+            if (date && date >= startOfToday) {
+              groups[0].items.push(session);
+            } else if (date && date >= startOf7DaysAgo) {
+              groups[1].items.push(session);
+            } else {
+              groups[2].items.push(session);
+            }
+          });
+
+          // Only render groups that have items, and suppress group labels
+          // when search is active (search flattens grouping for clarity)
+          const visibleGroups = groups.filter(g => g.items.length > 0);
+          const showGroupLabels = !searchQuery && sortBy === "recent";
+
+          return visibleGroups.map((group, gIdx) => (
+            <div key={group.label}>
+              {showGroupLabels && (
+                <div
+                  className="session-group-label"
+                  style={gIdx === 0 ? { borderTop: "none", paddingTop: "var(--space-2)" } : {}}
+                >
+                  {group.label}
+                </div>
+              )}
+              {group.items.map((session) => {
+                const isActive = session.session_id === currentSession;
+                const isEditing = session.session_id === editingSessionId;
+
+                return (
+                  <div
+                    key={session.session_id}
+                    className={`session-item ${isActive ? "active" : ""}`}
+                    onClick={() => !isEditing && handleSelectSession(session.session_id)}
+                    onContextMenu={(e) => handleContextMenu(e, session)}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "stretch",
+                      gap: "3px",
+                      padding: "8px 12px",
+                      paddingLeft: "14px"
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                      <div className="session-title-wrapper" style={{ flex: 1, marginRight: "8px" }}>
+                        <FiMessageSquare style={{ flexShrink: 0, fontSize: "0.9rem", opacity: 0.7 }} />
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            className="session-rename-input"
+                            value={renameText}
+                            onChange={(e) => setRenameText(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") saveRename(e, session.session_id);
+                              if (e.key === "Escape") cancelRename(e);
+                            }}
+                            autoFocus
+                          />
+                        ) : (
+                          <div style={{ display: "flex", flexDirection: "column", gap: "1px", overflow: "hidden" }}>
+                            <span className="session-title" style={{ fontWeight: isActive ? "600" : "400" }}>
+                              {cleanText(session.title, "New Chat")}
+                            </span>
+                            {session.isShared && (
+                              <span style={{
+                                fontSize: "0.62rem",
+                                background: "rgba(168, 85, 247, 0.12)",
+                                color: "#c084fc",
+                                border: "1px solid rgba(168, 85, 247, 0.2)",
+                                padding: "1px 5px",
+                                borderRadius: "var(--sarva-radius-xs)",
+                                fontWeight: "600",
+                                alignSelf: "flex-start",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "3px"
+                              }}>
+                                Shared{session.sharedBy ? ` by ${session.sharedBy}` : ""}
+                              </span>
+                            )}
+                          </div>
                         )}
+                      </div>
+
+                      {/* Badges and timestamp */}
+                      {!isEditing && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+                          {session.pinned && <FiBookmark style={{ fontSize: "0.72rem", color: "var(--accent)" }} title="Pinned" />}
+                          {session.favorite && <FiStar style={{ fontSize: "0.72rem", color: "#f59e0b" }} title="Favorite" />}
+                          <span style={{ fontSize: "0.65rem", color: "var(--text-tertiary)" }}>
+                            {formatRelativeTime(session.updated_at)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Last Message Preview */}
+                    {!isEditing && (
+                      <div style={{
+                        fontSize: "0.72rem",
+                        color: "var(--text-tertiary)",
+                        paddingLeft: "24px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
+                      }}>
+                        {cleanText(session.last_message, "No messages yet")}
+                      </div>
+                    )}
+
+                    {/* Rename actions row */}
+                    {isEditing && (
+                      <div className="session-actions" style={{ opacity: 1, paddingLeft: "24px" }}>
+                        <button
+                          className="session-action-btn"
+                          onClick={(e) => saveRename(e, session.session_id)}
+                          title="Save"
+                        >
+                          <FiCheck style={{ fontSize: "0.8rem", color: "var(--success)" }} />
+                        </button>
+                        <button
+                          className="session-action-btn"
+                          onClick={cancelRename}
+                          title="Cancel"
+                        >
+                          <FiX style={{ fontSize: "0.8rem", color: "var(--danger)" }} />
+                        </button>
                       </div>
                     )}
                   </div>
-
-                  {/* Badges and timestamp */}
-                  {!isEditing && (
-                    <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
-                      {session.pinned && <FiBookmark style={{ fontSize: "0.72rem", color: "var(--accent)" }} title="Pinned" />}
-                      {session.favorite && <FiStar style={{ fontSize: "0.72rem", color: "#f59e0b" }} title="Favorite" />}
-                      <span style={{ fontSize: "0.65rem", color: "var(--text-tertiary)" }}>
-                        {formatRelativeTime(session.updated_at)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Last Message Preview */}
-                {!isEditing && (
-                  <div style={{
-                    fontSize: "0.72rem",
-                    color: "var(--text-tertiary)",
-                    paddingLeft: "24px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap"
-                  }}>
-                    {cleanText(session.last_message, "No messages yet")}
-                  </div>
-                )}
-
-                {/* Rename actions row */}
-                {isEditing && (
-                  <div className="session-actions" style={{ opacity: 1, paddingLeft: "24px" }}>
-                    <button
-                      className="session-action-btn"
-                      onClick={(e) => saveRename(e, session.session_id)}
-                      title="Save"
-                    >
-                      <FiCheck style={{ fontSize: "0.8rem", color: "var(--success)" }} />
-                    </button>
-                    <button
-                      className="session-action-btn"
-                      onClick={cancelRename}
-                      title="Cancel"
-                    >
-                      <FiX style={{ fontSize: "0.8rem", color: "var(--danger)" }} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
+                );
+              })}
+            </div>
+          ));
+        })()}
       </div>
 
       {/* Floating Context Menu */}

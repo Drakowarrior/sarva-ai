@@ -44,49 +44,58 @@ html, body {
 
 /* ─── Theme Tokens ─── */
 :root {
-  /* Core Surfaces (Dark Theme Default) */
-  --bg-primary: #080B12;
-  --bg-secondary: #0F141D;
-  --bg-card: #151B26;
-  --text-primary: #F5F7FA;
-  --text-secondary: #98A2B3;
+  /* Core Design Tokens (Dark Theme Default) */
+  --bg: #131316;
+  --surface: #1C1C21;
+  --surface-2: #26262C;
+  --border: #2C2C33;
+  --text-primary: #EDEDEF;
+  --text-secondary: #9A9AA2;
   --text-tertiary: #667085;
 
-  /* Accent System — Restrained SARVA Blue & Secondary Teal (Zero Pink) */
-  --accent: #3B82F6;
-  --accent-hover: #2563EB;
-  --accent-soft: rgba(59, 130, 246, 0.10);
-  --sarva-secondary-teal: #14B8A6;
-  --accent-gradient: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-  --accent-gradient-subtle: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(20,184,166,0.08));
+  /* Backward Compatibility Aliases */
+  --bg-primary: var(--bg);
+  --bg-secondary: var(--surface);
+  --bg-card: var(--surface);
+  --border-strong: #3F3F46;
+  --border-accent: rgba(91, 91, 240, 0.4);
 
-  /* Borders */
-  --border: #202938;
-  --border-strong: #2D3748;
-  --border-accent: rgba(59, 130, 246, 0.35);
+  /* Code Block Tokens (Intentionally Dark in BOTH Themes) */
+  --code-bg: #0D1117;
+  --code-border: #30363D;
+  --code-text: #E6EDF3;
+
+  /* Accent System — Unified SARVA Indigo-Purple Gradient */
+  --accent: #5B5BF0;
+  --accent-hover: #4A4AE2;
+  --accent-soft: rgba(91, 91, 240, 0.12);
+  --sarva-secondary-teal: #14B8A6;
+  --accent-gradient: linear-gradient(135deg, #5B5BF0 0%, #8B5CF6 100%);
+  --accent-gradient-subtle: linear-gradient(135deg, rgba(91,91,240,0.12), rgba(139,92,246,0.08));
 
   /* Glass Surface */
-  --glass-bg: rgba(15, 20, 29, 0.85);
+  --glass-bg: rgba(28, 28, 33, 0.85);
   --glass-border: rgba(255, 255, 255, 0.08);
 
   /* Shadows — Structured & Restrained */
+  --shadow-floating: 0 4px 24px rgba(0, 0, 0, 0.24);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
   --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.55);
-  --shadow-glow-accent: 0 4px 16px rgba(59, 130, 246, 0.15);
+  --shadow-glow-accent: 0 4px 16px rgba(91, 91, 240, 0.15);
 
   /* Chat Bubbles */
-  --chat-user-bg: #102A45;
-  --chat-user-border: rgba(59, 130, 246, 0.3);
-  --chat-user-text: #F5F7FA;
-  --chat-ai-bg: #151B26;
+  --chat-user-bg: var(--surface-2);
+  --chat-user-border: var(--border);
+  --chat-user-text: var(--text-primary);
+  --chat-ai-bg: transparent;
 
   /* Scrollbar */
-  --scrollbar-track: #080B12;
-  --scrollbar-thumb: #202938;
-  --scrollbar-thumb-hover: #2D3748;
+  --scrollbar-track: var(--bg);
+  --scrollbar-thumb: var(--border);
+  --scrollbar-thumb-hover: #3F3F46;
 
   /* Status Colors */
   --danger: #ef4444;
@@ -96,13 +105,13 @@ html, body {
   --success-soft: rgba(16, 185, 129, 0.1);
   --warning: #f59e0b;
   --warning-soft: rgba(245, 158, 11, 0.1);
-  --info: #3b82f6;
+  --info: #5b5bf0;
 
   /* ─── Typography Scale ─── */
   --sarva-text-xs: 0.75rem;      /* 12px */
-  --sarva-text-sm: 0.875rem;     /* 14px */
-  --sarva-text-base: 1rem;       /* 16px */
-  --sarva-text-md: 1.125rem;     /* 18px */
+  --sarva-text-sm: 0.8125rem;    /* 13px */
+  --sarva-text-base: 0.875rem;   /* 14px */
+  --sarva-text-md: 1rem;         /* 16px */
   --sarva-text-lg: 1.25rem;      /* 20px */
 
   --sarva-heading-sm: 1.5rem;    /* 24px */
@@ -111,18 +120,18 @@ html, body {
   --sarva-heading-xl: 3.5rem;    /* 56px */
 
   /* ─── SARVA Semantic Token Mapping ─── */
-  --sarva-bg: var(--bg-primary);
-  --sarva-bg-secondary: var(--bg-secondary);
-  --sarva-surface: var(--bg-secondary);
-  --sarva-surface-elevated: var(--bg-card);
-  --sarva-surface-hover: rgba(59, 130, 246, 0.06);
-  --sarva-text-primary: #F5F7FA;
-  --sarva-text-secondary: #98A2B3;
-  --sarva-text-tertiary: #667085;
-  --sarva-text-inverse: #101828;
-  --sarva-text-accent: #3B82F6;
+  --sarva-bg: var(--bg);
+  --sarva-bg-secondary: var(--surface);
+  --sarva-surface: var(--surface);
+  --sarva-surface-elevated: var(--surface-2);
+  --sarva-surface-hover: rgba(91, 91, 240, 0.08);
+  --sarva-text-primary: var(--text-primary);
+  --sarva-text-secondary: var(--text-secondary);
+  --sarva-text-tertiary: var(--text-tertiary);
+  --sarva-text-inverse: #18181B;
+  --sarva-text-accent: var(--accent);
   --sarva-text-teal: #14B8A6;
-  --sarva-text-muted: var(--text-tertiary);
+  --sarva-text-muted: var(--text-secondary);
   --sarva-text-disabled: rgba(255, 255, 255, 0.25);
   --sarva-accent: var(--accent);
   --sarva-accent-hover: var(--accent-hover);
@@ -172,9 +181,9 @@ html, body {
   --sarva-transition-slow: 0.4s var(--ease-out);
 
   /* ─── Layout Tokens ─── */
-  --sarva-sidebar-width: 280px;
-  --sarva-header-height: 60px;
-  --sarva-composer-max-width: 960px;
+  --sarva-sidebar-width: 260px;
+  --sarva-header-height: 56px;
+  --sarva-composer-max-width: 760px;
 
   /* ─── Layer Stacking Hierarchy (Z-Index Tokens) ─── */
   --z-base: 1;
@@ -193,12 +202,18 @@ html, body {
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 
-  /* ─── Technical Utility Gradients (Restrained & Functional) ─── */
-  --primary-gradient: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-  --purple-gradient: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-  --blue-gradient: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+  /* ─── Technical Utility Gradients ─── */
+  --primary-gradient: linear-gradient(135deg, #5B5BF0 0%, #8B5CF6 100%);
+  --purple-gradient: linear-gradient(135deg, #5B5BF0 0%, #8B5CF6 100%);
+  --blue-gradient: linear-gradient(135deg, #5B5BF0 0%, #8B5CF6 100%);
   --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+
+  /* ─── Semantic Overlay (Modal/Backdrop) ─── */
+  --overlay: rgba(0, 0, 0, 0.55);
+
+  /* ─── Primary alias (= accent, for compatibility with Phase 3 sidebar active bar) ─── */
+  --primary: var(--accent);
 }
 
 /* ─── Global Focus-Visible & Accessibility Utility ─── */
@@ -373,6 +388,12 @@ textarea:focus-visible {
   --sarva-border: var(--border);
   --sarva-border-strong: var(--border-strong);
   --sarva-border-subtle: rgba(0, 0, 0, 0.03);
+
+  /* ─── Semantic Overlay — light mode ─── */
+  --overlay: rgba(0, 0, 0, 0.35);
+
+  /* ─── Primary alias (light mode) ─── */
+  --primary: var(--accent);
 }
 
 /* ─── Signature SARVA Grid Background Motif ─── */
@@ -601,7 +622,7 @@ body.modal-open {
   -webkit-backdrop-filter: blur(20px);
 }
 
-/* Model status dot */
+/* Model status dot — green pulse indicator */
 .model-status-dot {
   display: inline-block;
   width: 6px;
@@ -610,13 +631,41 @@ body.modal-open {
   background: var(--success);
   margin-right: 4px;
   vertical-align: middle;
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--success) 55%, transparent);
   animation: pulse-dot 2.5s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* ─── Model Pill — interactive model selector chip ─── */
+.model-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px 10px 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: default;                            /* display-only; selection is in Settings */
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.model-pill .model-pill-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════
@@ -708,7 +757,7 @@ body.modal-open {
 .chat-input-container {
   display: flex;
   flex-direction: column;
-  border-radius: var(--sarva-radius-xl);
+  border-radius: var(--radius-lg);            /* ✅ was --sarva-radius-xl (16px) → 12px per Phase 5 brief */
   border: 1px solid var(--border);
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
@@ -721,8 +770,8 @@ body.modal-open {
 }
 
 .chat-input-container:focus-within {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-md), 0 0 0 3px rgba(56, 189, 248, 0.12);
+  border-color: var(--accent);               /* ✅ was --border-accent; now directly accent for clarity */
+  box-shadow: var(--shadow-md), 0 0 0 3px var(--accent-soft); /* ✅ was rgba(56,189,248,0.12) hardcoded */
 }
 
 .chat-input-textarea-row {
@@ -778,7 +827,7 @@ body.modal-open {
 .chat-input-action-btn:hover {
   color: var(--accent);
   background: var(--accent-soft);
-  transform: translateY(-1px);
+  /* No translateY — keeping hover static per Phase 5 polish */
 }
 
 .chat-input-action-btn.active {
@@ -806,7 +855,7 @@ body.modal-open {
 .send-btn:hover:not(:disabled) {
   background-position: right center;
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.3);
+  box-shadow: var(--shadow-glow-accent);       /* ✅ was rgba(56,189,248,0.3) hardcoded */
 }
 
 .send-btn:active:not(:disabled) {
@@ -824,74 +873,135 @@ body.modal-open {
    CHAT WINDOW & MESSAGE BUBBLES
    ═══════════════════════════════════════════ */
 
+/* ─── Chat Window — message column constrained to ~720px ─── */
 .chat-window {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-6);
+  /* Top/bottom padding; no horizontal padding — wrappers handle that */
+  padding: var(--space-6) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  max-width: 960px;
+  /* Tighter vertical rhythm between message pairs */
+  gap: var(--space-5);
   width: 100%;
-  margin: 0 auto;
 }
 
+/* ─── Message Entrance Animation ─── */
+@keyframes msg-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Constrains each message row to ~720px centered */
 .message-wrapper {
   display: flex;
   width: 100%;
-  gap: var(--space-3);
-  max-width: 920px;
+  max-width: 720px;
   margin: 0 auto;
+  gap: var(--space-3);
   min-width: 0;
+  /* Subtle entrance — only applies to newly added messages */
+  animation: msg-enter 160ms var(--ease-out) both;
 }
 
 .message-wrapper.user {
   flex-direction: row-reverse;
 }
 
+/* ─── Avatars ─── */
 .avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   flex-shrink: 0;
+  /* Align avatar with first text line */
+  margin-top: 2px;
 }
 
+/* User avatar: solid accent circle */
 .avatar.user {
   background: var(--accent);
-  color: white;
+  color: #ffffff;
   box-shadow: var(--shadow-xs);
 }
 
+/* Assistant avatar: SARVA logo mark */
 .avatar.assistant {
-  background: var(--accent-soft);
-  border: 1px solid rgba(56, 189, 248, 0.12);
-  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  padding: 0;
+  /* Slightly muted at rest, more visible on parent hover */
+  opacity: 0.82;
+  transition: opacity var(--sarva-transition-fast);
 }
 
-[data-theme="light"] .avatar.assistant {
-  background: rgba(14, 165, 233, 0.08);
-  border: 1px solid rgba(14, 165, 233, 0.12);
+.message-wrapper:hover .avatar.assistant {
+  opacity: 1;
 }
 
+.avatar.assistant img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-pill);
+}
+
+/* ─── Message Bubble Container ─── */
 .message-bubble {
   flex: 1;
-  max-width: calc(100% - 50px);
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-.message-content {
+/* ─── Assistant message: open, no fill ─── */
+.assistant .message-content {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 0.9375rem; /* 15px */
+}
+
+/* ─── User message: compact filled bubble, right-aligned ─── */
+.user .message-bubble {
+  /* Push bubble to right side naturally via row-reverse on parent */
+  align-items: flex-end;
+}
+
+.user .message-content {
+  background: var(--chat-user-bg);
+  color: var(--chat-user-text);
+  border: 1px solid var(--chat-user-border);
+  /* Tighter radius: --radius-lg on all corners, one corner nipped */
+  border-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--sarva-radius-xl);
   line-height: 1.65;
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
+  /* Limit width so short messages don't stretch full column */
+  max-width: 78%;
+  /* White-space preserves user newlines */
+  word-break: break-word;
+}
+
+/* ─── Shared message-content typography ─── */
+.message-content {
+  min-width: 0;
 }
 
 .message-content h1,
@@ -899,7 +1009,7 @@ body.modal-open {
 .message-content h3,
 .message-content h4 {
   margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   font-weight: 700;
   line-height: 1.35;
   color: var(--text-primary);
@@ -910,21 +1020,23 @@ body.modal-open {
 .message-content h3 { font-size: 1.05rem; }
 
 .message-content p {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.65;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
 }
+
+.message-content p:last-child { margin-bottom: 0; }
 
 .message-content ul,
 .message-content ol {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
   padding-left: 1.4rem;
 }
 
 .message-content li {
-  margin-bottom: 0.25rem;
-  line-height: 1.6;
+  margin-bottom: 0.3rem;
+  line-height: 1.65;
 }
 
 .message-content blockquote {
@@ -942,22 +1054,7 @@ body.modal-open {
   margin: 1.25rem 0;
 }
 
-.user .message-content {
-  background: var(--chat-user-bg);
-  color: var(--chat-user-text);
-  border: 1px solid var(--chat-user-border);
-  border-top-right-radius: var(--sarva-radius-xs);
-  align-self: flex-end;
-}
-
-.assistant .message-content {
-  background: var(--chat-ai-bg);
-  color: var(--text-primary);
-  border-top-left-radius: var(--sarva-radius-xs);
-  border: 1px solid var(--border);
-}
-
-/* Message Actions */
+/* ─── Message Actions ─── */
 .message-actions {
   display: flex;
   gap: var(--space-2);
@@ -970,7 +1067,7 @@ body.modal-open {
   opacity: 1;
 }
 
-/* On touch devices, always show actions on last message */
+/* On touch devices, always show actions */
 @media (hover: none) {
   .message-actions { opacity: 1; }
 }
@@ -994,7 +1091,7 @@ body.modal-open {
 .message-action-btn:hover {
   color: var(--accent);
   background: var(--accent-soft);
-  transform: translateY(-1px);
+  /* No translateY — static surface, consistent with Phase 5 action-btn decision */
 }
 
 .message-action-btn.success {
@@ -1091,16 +1188,15 @@ body.modal-open {
 .message-content h3 { font-size: 1.05rem; }
 .message-content h4 { font-size: 0.95rem; }
 
+/* Inline code — uses fixed dark code tokens, not theme tokens */
 .message-content code {
-  font-family: 'Fira Code', 'Courier New', Courier, monospace;
-  font-size: 0.84em;
-  padding: 2px 6px;
-  border-radius: var(--sarva-radius-xs);
-  background: rgba(0, 0, 0, 0.18);
-}
-
-[data-theme="light"] .message-content code {
-  background: rgba(0, 0, 0, 0.06);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 0.82em;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--code-border);
 }
 
 .message-content ul,
@@ -1123,30 +1219,48 @@ body.modal-open {
 }
 
 /* ─── Markdown Tables (GFM) ─── */
+/* Scroll wrapper — applied via JS in ReactMarkdown or wrapping parent */
+.message-content .md-table-wrapper {
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  /* Prevents the rounded border from being cut by the overflow */
+  -webkit-overflow-scrolling: touch;
+}
+
 .message-content table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 16px 0;
-  border-radius: var(--sarva-radius-md, 8px);
-  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  /* Reset margin — wrapper handles spacing */
+  margin: 0;
+}
+
+/* Fallback for tables NOT inside .md-table-wrapper */
+.message-content > table,
+.message-content p + table,
+.message-content ul + table {
   display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  font-size: 0.88rem;
+  margin: var(--space-4) 0;
 }
 
 .message-content th {
-  background: rgba(0, 0, 0, 0.04);
+  /* Uses --surface-2 token — the established elevated surface level */
+  background: var(--surface-2);
   color: var(--text-primary);
   font-weight: 700;
+  font-size: 0.8125rem;
   text-align: left;
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
-}
-
-[data-theme="dark"] .message-content th {
-  background: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
 }
 
 .message-content th:last-child {
@@ -1154,7 +1268,7 @@ body.modal-open {
 }
 
 .message-content td {
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-bottom: 1px solid var(--border);
   border-right: 1px solid var(--border);
   color: var(--text-primary);
@@ -1170,37 +1284,54 @@ body.modal-open {
   border-bottom: none;
 }
 
+/* Subtle alternating row — uses surface token, not raw rgba */
 .message-content tr:nth-child(even) td {
-  background: rgba(0, 0, 0, 0.015);
-}
-
-[data-theme="dark"] .message-content tr:nth-child(even) td {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
 }
 
 .message-content tr:hover td {
   background: var(--accent-soft);
+  transition: background 0.12s ease;
 }
 
-/* Code block header with gradient accent bar */
+/* ─── Code Block Component ─── */
+/* Outer wrapper: border + radius, overflow:hidden clips the children */
 .code-block-wrapper {
-  border-radius: var(--sarva-radius-md);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid var(--code-border);
+  background: var(--code-bg);
+  color: var(--code-text);
   max-width: 100%;
   min-width: 0;
+  margin: var(--space-3) 0;
 }
 
+/* Scrollable code body — scroll is here, NOT on the outer wrapper */
 .code-block-wrapper pre,
-.message-content pre {
+.code-block-wrapper > div > div {
   overflow-x: auto !important;
   max-width: 100%;
   min-width: 0;
   white-space: pre;
+  background: var(--code-bg) !important;
+  color: var(--code-text) !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  /* Smooth horizontal scroll on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
+/* Thin accent bar + dark header surface */
 .code-block-header {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 8px 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border-bottom: 1px solid var(--code-border);
   overflow: hidden;
 }
 
@@ -1212,6 +1343,46 @@ body.modal-open {
   right: 0;
   height: 2px;
   background: var(--accent-gradient);
+  pointer-events: none;
+}
+
+/* Language label */
+.code-lang-label {
+  text-transform: lowercase;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+/* Copy / Collapse action buttons */
+.code-action-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  min-height: 26px;
+}
+
+.code-action-btn:hover {
+  color: var(--code-text);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--code-border);
+}
+
+/* Copied success state */
+.code-action-btn.copied {
+  color: var(--success);
 }
 
 /* ═══════════════════════════════════════════
@@ -1285,8 +1456,8 @@ body.modal-open {
 }
 
 .attachment-badge:hover {
-  border-color: var(--border-accent);
-  background: rgba(56, 189, 248, 0.14);
+  border-color: var(--accent);
+  background: var(--accent-soft);             /* ✅ was rgba(56,189,248,0.14) hardcoded */
 }
 
 .attachment-image-preview {
@@ -1359,7 +1530,7 @@ body.modal-open {
 .new-chat-btn:hover {
   background-position: right center;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+  box-shadow: var(--shadow-glow-accent);       /* ✅ was rgba(56,189,248,0.3) hardcoded */
 }
 
 .new-chat-btn:active {
@@ -1387,8 +1558,8 @@ body.modal-open {
 }
 
 .search-input-container input:focus {
-  border-color: var(--border-accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+  border-color: var(--accent);                /* ✅ was --border-accent */
+  box-shadow: 0 0 0 3px var(--accent-soft);   /* ✅ was rgba(56,189,248,0.1) hardcoded */
 }
 
 .search-icon {
@@ -1410,6 +1581,24 @@ body.modal-open {
   gap: 2px;
 }
 
+/* Session Group Headers (Today / Previous 7 Days / Older) */
+.session-group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-tertiary);
+  padding: var(--space-3) var(--space-3) var(--space-1);
+  /* Subtle top separator for groups after the first */
+  user-select: none;
+}
+
+.session-group-label:not(:first-child) {
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
 /* Session Items */
 .session-item {
   display: flex;
@@ -1418,23 +1607,32 @@ body.modal-open {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--sarva-radius-md);
   cursor: pointer;
+  /* Left indicator slot — uses padding-left to offset content from the 2px bar */
+  padding-left: calc(var(--space-3) + 2px);
   position: relative;
-  transition: all var(--sarva-transition-fast);
+  transition: background 120ms ease-out, color 120ms ease-out;
   color: var(--text-secondary);
+  /* No translateX — no layout shifting */
 }
 
 .session-item:hover {
-  background: var(--sarva-surface-hover);
+  background: var(--surface-2);
   color: var(--text-primary);
-  transform: translateX(2px);
 }
 
-/* Active Session — Gradient Pill with Glow */
-.session-item.active {
-  background: var(--accent-gradient-subtle);
-  border: 1px solid var(--border-accent);
+.session-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  background: var(--surface-2);
   color: var(--text-primary);
-  box-shadow: var(--shadow-glow-accent);
+}
+
+/* Active Session — clear surface + 2px left accent indicator */
+.session-item.active {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  /* Left indicator via box-shadow inset (no layout shift) */
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .session-item.active .session-title {
@@ -1476,7 +1674,7 @@ body.modal-open {
   border: none;
   color: var(--text-secondary);
   padding: 4px;
-  border-radius: var(--sarva-radius-xs);
+  border-radius: var(--radius-sm);            /* ✅ was --sarva-radius-xs (undefined token) */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1484,7 +1682,7 @@ body.modal-open {
 }
 
 .session-action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-2);               /* ✅ was rgba(255,255,255,0.08) dark-only */
   color: var(--text-primary);
 }
 
@@ -1497,7 +1695,7 @@ body.modal-open {
   background: var(--bg-primary);
   border: 1px solid var(--accent);
   color: var(--text-primary);
-  border-radius: var(--sarva-radius-xs);
+  border-radius: var(--radius-sm);            /* ✅ was --sarva-radius-xs (undefined token) */
   padding: 2px 6px;
   font-size: 0.85rem;
   width: 100%;
@@ -1631,13 +1829,13 @@ body.modal-open {
 }
 
 .settings-select:focus, .settings-input:focus {
-  border-color: var(--border-accent);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+  border-color: var(--accent);                /* ✅ was --border-accent */
+  box-shadow: 0 0 0 3px var(--accent-soft);   /* ✅ was rgba(56,189,248,0.12) hardcoded */
 }
 
 .settings-group input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 0 2px var(--accent-soft);   /* ✅ was rgba(56,189,248,0.15) hardcoded */
 }
 
 .settings-options-grid {
@@ -1714,7 +1912,7 @@ body.modal-open {
 
 .settings-btn.danger {
   background: var(--danger-soft);
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: color-mix(in srgb, var(--danger) 25%, transparent); /* ✅ was rgba hardcoded */
   color: var(--danger);
 }
 
@@ -1834,7 +2032,7 @@ body.modal-open {
 
 .badge-pill {
   background: var(--accent-soft);
-  border: 1px solid rgba(56, 189, 248, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent); /* ✅ was rgba hardcoded */
   color: var(--accent);
   padding: 5px 14px;
   border-radius: var(--sarva-radius-full);
@@ -1880,7 +2078,7 @@ body.modal-open {
 .landing-cta-btn:hover {
   background-position: right center;
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(56, 189, 248, 0.35);
+  box-shadow: var(--shadow-glow-accent);      /* ✅ was rgba(56,189,248,0.35) hardcoded */
 }
 
 .landing-features {
@@ -1998,7 +2196,13 @@ body.modal-open {
   .prompt-grid { grid-template-columns: 1fr; }
   .landing-title { font-size: 2.2rem; }
   .landing-features { grid-template-columns: 1fr; }
-  .message-wrapper { padding: 0 var(--space-3); }
+  /* On mobile, message wrapper takes full viewport width with small gutters */
+  .message-wrapper {
+    max-width: 100%;
+    padding: 0 var(--space-2);
+  }
+  /* User bubble max-width relaxed on small screens */
+  .user .message-content { max-width: 88%; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .settings-options-grid { grid-template-columns: 1fr; }
 
@@ -2013,6 +2217,7 @@ body.modal-open {
   .chat-window { padding: var(--space-4) var(--space-2); }
   .stats-grid { grid-template-columns: 1fr; }
   .landing-title { font-size: 1.9rem; }
+  .user .message-content { max-width: 92%; }
 }
 
 @media (max-width: 375px) {

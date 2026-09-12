@@ -72,7 +72,7 @@ function ChatInput() {
               const isImage = ["png", "jpg", "jpeg", "webp"].includes(file.file_type?.toLowerCase());
               return (
                 <div key={file.file_id} className="upload-bubble">
-                  {isImage ? <FiImage style={{ color: "#38bdf8" }} /> : <FiFileText style={{ color: "#38bdf8" }} />}
+                  {isImage ? <FiImage style={{ color: "var(--accent)" }} /> : <FiFileText style={{ color: "var(--accent)" }} />}
                   <span>{file.filename}</span>
                   <button
                     type="button"

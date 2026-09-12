@@ -38,72 +38,47 @@ function parseThoughtProcess(rawText) {
 
 function CodeBlock({ children, language, ...props }) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [copied, setCopied] = useState(false);
   const codeText = String(children).replace(/\n$/, "");
   const lineCount = codeText.split("\n").length;
   const isLong = lineCount > 18;
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeText);
+    setCopied(true);
+    toast.success("Code copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div style={{ position: "relative" }} className="code-block-wrapper">
-      <div
-        className="code-block-header"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          background: "#1e293b",
-          padding: "6px 12px",
-          borderTopLeftRadius: "8px",
-          borderTopRightRadius: "8px",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
-          fontSize: "0.75rem",
-          color: "#94a3b8"
-        }}
-      >
-        <span style={{ textTransform: "uppercase" }}>{language}</span>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+    <div className="code-block-wrapper">
+      <div className="code-block-header">
+        <span className="code-lang-label">{language || "text"}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           {isLong && (
             <button
               type="button"
+              className="code-action-btn"
               onClick={() => setIsExpanded(!isExpanded)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#94a3b8",
-                cursor: "pointer",
-                fontSize: "0.75rem",
-                outline: "none"
-              }}
             >
               {isExpanded ? "Collapse" : "Expand"}
             </button>
           )}
           <button
-            className="code-copy-btn"
-            onClick={() => {
-              navigator.clipboard.writeText(codeText);
-              toast.success("Code copied!");
-            }}
-            style={{
-              background: "transparent",
-              border: "none",
-              color: "#94a3b8",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px"
-            }}
+            type="button"
+            className={`code-action-btn${copied ? " copied" : ""}`}
+            onClick={handleCopy}
           >
-            <FiCopy /> Copy
+            {copied ? <FiCheck /> : <FiCopy />}
+            {copied ? "Copied!" : "Copy"}
           </button>
         </div>
       </div>
 
-      <div style={{ 
-        maxHeight: isExpanded ? "none" : "120px", 
-        overflow: "hidden", 
-        position: "relative",
-        borderBottomLeftRadius: "8px",
-        borderBottomRightRadius: "8px"
+      <div style={{
+        maxHeight: isExpanded ? "none" : "120px",
+        overflow: "hidden",
+        position: "relative"
       }}>
         <SyntaxHighlighter
           style={atomDark}
@@ -111,17 +86,14 @@ function CodeBlock({ children, language, ...props }) {
           PreTag="div"
           customStyle={{
             margin: 0,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            borderBottomLeftRadius: isExpanded ? "8px" : 0,
-            borderBottomRightRadius: isExpanded ? "8px" : 0,
-            background: "#0f172a"
+            borderRadius: 0,
+            background: "var(--code-bg, #0D1117)"
           }}
           {...props}
         >
           {codeText}
         </SyntaxHighlighter>
-        
+
         {!isExpanded && (
           <div style={{
             position: "absolute",
@@ -129,7 +101,7 @@ function CodeBlock({ children, language, ...props }) {
             left: 0,
             right: 0,
             height: "50px",
-            background: "linear-gradient(transparent, #0f172a)",
+            background: "linear-gradient(transparent, var(--code-bg, #0D1117))",
             pointerEvents: "none"
           }} />
         )}
@@ -303,7 +275,10 @@ function ChatBubble({ message, messageIndex, isLast, onRegenerate }) {
       className={`message-wrapper ${role}`}
     >
       <div className={`avatar ${role}`}>
-        {isUser ? <FiUser /> : "S"}
+        {isUser
+          ? <FiUser />
+          : <img src="/logo.jpg" alt="SARVA AI" draggable="false" />
+        }
       </div>
 
       <div className="message-bubble">
