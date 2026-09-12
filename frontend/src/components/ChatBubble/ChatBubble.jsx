@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { atomDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { FiCopy, FiCheck, FiRotateCw, FiFileText, FiImage, FiCpu, FiUser, FiThumbsUp, FiThumbsDown, FiChevronDown } from "react-icons/fi";
 import { useSession } from "../../context/SessionContext";
+import { useTheme } from "../../context/ThemeContext";
 import DislikeFeedbackModal from "../DislikeFeedbackModal/DislikeFeedbackModal";
 import api from "../../services/api";
 import toast from "react-hot-toast";
@@ -37,6 +38,7 @@ function parseThoughtProcess(rawText) {
 }
 
 function CodeBlock({ children, language, ...props }) {
+  const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(true);
   const [copied, setCopied] = useState(false);
   const codeText = String(children).replace(/\n$/, "");
@@ -81,7 +83,7 @@ function CodeBlock({ children, language, ...props }) {
         position: "relative"
       }}>
         <SyntaxHighlighter
-          style={atomDark}
+          style={theme === "light" ? oneLight : atomDark}
           language={language}
           PreTag="div"
           customStyle={{

@@ -333,6 +333,9 @@ textarea:focus-visible {
 
 /* ─── Light Theme (Warm Technical Surface #F6F6F2) ─── */
 [data-theme="light"] {
+  --bg: #F6F6F2;
+  --surface: #FFFFFF;
+  --surface-2: #E8EBF0;
   --bg-primary: #F6F6F2;
   --bg-secondary: #FFFFFF;
   --bg-card: #FFFFFF;
@@ -347,6 +350,12 @@ textarea:focus-visible {
   --border: #D9DDE5;
   --border-strong: #C4C9D4;
   --border-accent: rgba(37, 99, 235, 0.3);
+
+  /* Code Block Tokens (Light Mode Variant) */
+  --code-bg: #F8FAFC;
+  --code-border: #E2E8F0;
+  --code-text: #0F172A;
+
   --glass-bg: rgba(255, 255, 255, 0.92);
   --glass-border: rgba(0, 0, 0, 0.06);
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -372,7 +381,7 @@ textarea:focus-visible {
   --sarva-bg: var(--bg-primary);
   --sarva-bg-secondary: var(--bg-secondary);
   --sarva-surface: var(--bg-secondary);
-  --sarva-surface-elevated: var(--bg-card);
+  --sarva-surface-elevated: var(--surface-2);
   --sarva-surface-hover: rgba(37, 99, 235, 0.05);
   --sarva-text-primary: #101828;
   --sarva-text-secondary: #667085;
@@ -394,6 +403,16 @@ textarea:focus-visible {
 
   /* ─── Primary alias (light mode) ─── */
   --primary: var(--accent);
+}
+
+[data-theme="light"] .code-block-header {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .code-action-btn:hover {
+  color: var(--code-text);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--code-border);
 }
 
 /* ─── Signature SARVA Grid Background Motif ─── */
