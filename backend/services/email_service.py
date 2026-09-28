@@ -1,19 +1,45 @@
 import logging
+import smtplib
+import asyncio
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import httpx
 from utils.config import settings
 
 logger = logging.getLogger("sarva_ai.email_service")
 
-async def send_password_reset_email(recipient_email: str, reset_code: str, reset_url: str) -> bool:
-    """
-    Dispatches password reset email to recipient_email via Resend API.
-    Renders a crisp, professional light-themed email template compatible across all email clients.
-    """
-    if not settings.RESEND_API_KEY:
-        logger.warning("[EMAIL SERVICE] RESEND_API_KEY not configured. Skipping email dispatch.")
-        print("[EMAIL SERVICE] RESEND_API_KEY missing in environment. Email dispatch skipped.")
+def _send_via_smtp(recipient_email: str, subject: str, html_content: str, text_content: str) -> bool:
+    """Synchronous helper function to send email via SMTP (e.g. Gmail SMTP)."""
+    try:
+        sender_email = settings.SMTP_USERNAME or settings.EMAIL_FROM
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = sender_email
+        msg["To"] = recipient_email
+
+        part1 = MIMEText(text_content, "plain")
+        part2 = MIMEText(html_content, "html")
+        msg.attach(part1)
+        msg.attach(part2)
+
+        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10) as server:
+            server.starttls()
+            server.login(settings.SMTP_USERNAME, settings.SMTP_PASSWORD)
+            server.sendmail(sender_email, [recipient_email], msg.as_string())
+
+        logger.info(f"[EMAIL SERVICE] Password reset email successfully sent via SMTP to {recipient_email}")
+        print(f"[EMAIL SERVICE] Password reset email successfully sent via SMTP.")
+        return True
+    except Exception as e:
+        logger.error(f"[EMAIL SERVICE] SMTP dispatch error: {str(e)}")
+        print(f"[EMAIL SERVICE] SMTP dispatch error: {str(e)}")
         return False
 
+async def send_password_reset_email(recipient_email: str, reset_code: str, reset_url: str) -> bool:
+    """
+    Dispatches password reset email to recipient_email via SMTP (if configured) or Resend API.
+    Renders a crisp, professional light-themed email template compatible across all email clients.
+    """
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -147,35 +173,53 @@ This link and code will expire in 15 minutes.
 If you did not request a password reset, you can safely ignore this email.
 """
 
-    headers = {
-        "Authorization": f"Bearer {settings.RESEND_API_KEY}",
-        "Content-Type": "application/json"
-    }
+    subject = "Reset your SARVA AI password"
 
-    payload = {
-        "from": settings.EMAIL_FROM,
-        "to": [recipient_email],
-        "subject": "Reset your SARVA AI password",
-        "html": html_content,
-        "text": text_content
-    }
+    # Priority 1: Send via SMTP if SMTP credentials are provided
+    if settings.SMTP_USERNAME and settings.SMTP_PASSWORD:
+        logger.info(f"[EMAIL SERVICE] Attempting email dispatch via SMTP ({settings.SMTP_HOST})...")
+        return await asyncio.to_thread(
+            _send_via_smtp,
+            recipient_email,
+            subject,
+            html_content,
+            text_content
+        )
 
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(
-                "https://api.resend.com/emails",
-                headers=headers,
-                json=payload
-            )
-            if response.status_code in (200, 201):
-                logger.info(f"[EMAIL SERVICE] Password reset email successfully dispatched to {recipient_email}")
-                print(f"[EMAIL SERVICE] Password reset email successfully sent via Resend.")
-                return True
-            else:
-                logger.error(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
-                print(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
-                return False
-    except Exception as e:
-        logger.error(f"[EMAIL SERVICE] Failed to send password reset email: {str(e)}")
-        print(f"[EMAIL SERVICE] Exception during email dispatch: {str(e)}")
-        return False
+    # Priority 2: Fallback to Resend API if API Key is configured
+    if settings.RESEND_API_KEY:
+        logger.info("[EMAIL SERVICE] Attempting email dispatch via Resend API...")
+        headers = {
+            "Authorization": f"Bearer {settings.RESEND_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "from": settings.EMAIL_FROM,
+            "to": [recipient_email],
+            "subject": subject,
+            "html": html_content,
+            "text": text_content
+        }
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.post(
+                    "https://api.resend.com/emails",
+                    headers=headers,
+                    json=payload
+                )
+                if response.status_code in (200, 201):
+                    logger.info(f"[EMAIL SERVICE] Password reset email successfully dispatched to {recipient_email} via Resend")
+                    print(f"[EMAIL SERVICE] Password reset email successfully sent via Resend.")
+                    return True
+                else:
+                    logger.error(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
+                    print(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
+                    return False
+        except Exception as e:
+            logger.error(f"[EMAIL SERVICE] Failed to send password reset email via Resend: {str(e)}")
+            print(f"[EMAIL SERVICE] Exception during Resend email dispatch: {str(e)}")
+            return False
+
+    logger.warning("[EMAIL SERVICE] Neither SMTP nor RESEND_API_KEY configured. Skipping email dispatch.")
+    print("[EMAIL SERVICE] Neither SMTP nor RESEND_API_KEY configured in environment. Skipping email dispatch.")
+    return False

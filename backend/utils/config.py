@@ -35,6 +35,12 @@ class Settings:
     RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
     EMAIL_FROM = os.getenv("EMAIL_FROM", "SARVA AI <onboarding@resend.dev>")
 
+    # SMTP Configuration (Optional: Gmail SMTP or transactional SMTP provider)
+    SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
+    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+
     _raw_frontend_url = os.getenv("FRONTEND_URL", "").strip().rstrip("/")
     if _raw_frontend_url:
         FRONTEND_URL = _raw_frontend_url

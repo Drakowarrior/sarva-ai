@@ -1,3 +1,4 @@
+import logging
 import bcrypt
 import jwt
 import random
@@ -12,6 +13,8 @@ from database.mongodb import db
 from utils.config import settings
 from middleware.auth import get_user_id
 from services.email_service import send_password_reset_email
+
+logger = logging.getLogger("sarva_ai.auth")
 
 router = APIRouter(
     prefix="/api/auth",
@@ -479,15 +482,19 @@ async def forgot_password(payload: ForgotPasswordRequest):
     # Construct frontend reset URL matching React Router route: /auth?mode=reset&email=...&token=...
     reset_url = f"{settings.FRONTEND_URL}/auth?mode=reset&email={email_clean}&token={reset_token}"
 
-    # Dispatch password reset email via Resend
-    email_dispatched = await send_password_reset_email(
-        recipient_email=email_clean,
-        reset_code=reset_token,
-        reset_url=reset_url
-    )
+    # Dispatch password reset email safely without breaking response flow
+    email_dispatched = False
+    try:
+        email_dispatched = await send_password_reset_email(
+            recipient_email=email_clean,
+            reset_code=reset_token,
+            reset_url=reset_url
+        )
+    except Exception as exc:
+        logger.error(f"[AUTH] Exception while attempting to dispatch password reset email: {str(exc)}")
 
     if not email_dispatched:
-        logger.warning(f"[AUTH] Password reset email dispatch failed for {email_clean}. Verify RESEND_API_KEY and sender configuration.")
+        logger.warning(f"[AUTH] Password reset email was not dispatched successfully. Check email service configuration.")
 
     # Audit log (redact live reset token in production environments)
     if settings.INCLUDE_DEMO_TOKEN:
