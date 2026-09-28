@@ -173,9 +173,9 @@ If you did not request a password reset, you can safely ignore this email.
                 return True
             else:
                 logger.error(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
-                print(f"[EMAIL SERVICE] Resend API error ({response.status_code}).")
+                print(f"[EMAIL SERVICE] Resend API error (Status {response.status_code}): {response.text}")
                 return False
     except Exception as e:
         logger.error(f"[EMAIL SERVICE] Failed to send password reset email: {str(e)}")
-        print(f"[EMAIL SERVICE] Exception during email dispatch.")
+        print(f"[EMAIL SERVICE] Exception during email dispatch: {str(e)}")
         return False

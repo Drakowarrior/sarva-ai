@@ -480,18 +480,21 @@ async def forgot_password(payload: ForgotPasswordRequest):
     reset_url = f"{settings.FRONTEND_URL}/auth?mode=reset&email={email_clean}&token={reset_token}"
 
     # Dispatch password reset email via Resend
-    await send_password_reset_email(
+    email_dispatched = await send_password_reset_email(
         recipient_email=email_clean,
         reset_code=reset_token,
         reset_url=reset_url
     )
 
+    if not email_dispatched:
+        logger.warning(f"[AUTH] Password reset email dispatch failed for {email_clean}. Verify RESEND_API_KEY and sender configuration.")
+
     # Audit log (redact live reset token in production environments)
     if settings.INCLUDE_DEMO_TOKEN:
-        print(f"\n[DEMO/DEV] Password reset requested for {email_clean}. Reset Token: {reset_token}\n")
+        print(f"\n[DEMO/DEV] Password reset requested for {email_clean}. Reset Token: {reset_token}. Email Dispatched: {email_dispatched}\n")
     else:
         masked_email = f"{email_clean[:3]}***@{email_clean.split('@')[-1]}" if "@" in email_clean else "***"
-        print(f"\n[SECURITY AUDIT] Password reset requested for {masked_email} at {datetime.utcnow().isoformat()}Z\n")
+        print(f"\n[SECURITY AUDIT] Password reset requested for {masked_email} (Dispatched: {email_dispatched}) at {datetime.utcnow().isoformat()}Z\n")
     
     response_data = {
         "success": True,
